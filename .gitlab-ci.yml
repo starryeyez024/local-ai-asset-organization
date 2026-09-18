@@ -1,0 +1,13 @@
+pages:
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp "AI Asset Management Methodology.html" public/index.html
+    - cp ai-asset-mess.jpeg public/ || true
+    - cp ai-assets-sot.jpeg public/ || true
+    - cp ai-asset-methodology-favicon.svg public/ || true
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
