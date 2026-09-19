@@ -727,31 +727,60 @@
       all of it. Everywhere else a tool expects to find these assets becomes a symlink pointing
       back into this one root, never a second copy.
     </p>
-    <div class="card" style="margin-top: 24px;">
-      <h3>The rule, stated precisely</h3>
-      <ul class="styled-list">
-        <li><strong>Flat, one level deep.</strong> No org sub-folders, no nested
-          <code class="inline">category/project</code> structure. Every entry sits directly at
-          the top level of the root.</li>
-        <li><strong>One entry per repository, no exceptions.</strong> A repo containing twenty
-          unrelated skills is still exactly one entry — all twenty stay nested inside it at
-          their existing relative paths. A repo that <em>is</em> a single skill is also exactly
-          one entry. There is no "is this a project repo or a skill-collection repo?" judgment
-          call to make, because the answer never changes the outcome.</li>
-        <li><strong>Named <code class="inline">@org--repo-name</code> in this page's
-          examples.</strong> A literal double-dash separates the owning org/user from the
-          repository name — not a real sub-folder, just a naming prefix a human can scan in a
-          flat directory listing. Prefer nested org folders instead? That works too — the naming
-          syntax is a matter of taste; deriving the org/owner from the git remote, not the local
-          folder, is the part that isn't (see below).</li>
-      </ul>
-    </div>
+    <h3 style="margin-top: 24px;">One example: flat, org-prefixed folders</h3>
+    <p>
+      This page's own examples use one specific layout, and it's worth stating precisely so the
+      rest of the diagrams make sense — but it's an example convention, not the only correct
+      one. Here's how it works:
+    </p>
+    <ul class="styled-list">
+      <li><strong>Flat, one level deep.</strong> No org sub-folders, no nested
+        <code class="inline">category/project</code> structure. Every entry sits directly at
+        the top level of the root.</li>
+      <li><strong>One entry per repository, no exceptions.</strong> A repo containing twenty
+        unrelated skills is still exactly one entry — all twenty stay nested inside it at
+        their existing relative paths. A repo that <em>is</em> a single skill is also exactly
+        one entry. There is no "is this a project repo or a skill-collection repo?" judgment
+        call to make, because the answer never changes the outcome.</li>
+      <li><strong>Named <code class="inline">@org--repo-name</code>.</strong> A literal
+        double-dash separates the owning org/user from the repository name — not a real
+        sub-folder, just a naming prefix a human can scan in a flat directory listing.</li>
+    </ul>
+
+    <p style="margin-top:20px;">
+      A nested layout is an equally valid way to organize the same root. Instead of prefixing
+      the org onto the folder name, make the org a real parent folder and put each of its repos
+      underneath it:
+    </p>
+    <pre class="code-block">~/AI Assets/ixd-firefly/ai-first-program-management/
+~/AI Assets/ixd-firefly/some-other-repo/
+~/AI Assets/platform-org/build-automation/</pre>
+    <p>
+      instead of the flat <code class="inline">~/AI Assets/@ixd-firefly--ai-first-program-management/</code>.
+      Same repos, same one-entry-per-repo rule, same requirement that the org/owner is derived
+      from <code class="inline">git remote -v</code> rather than guessed — just a folder
+      hierarchy instead of a naming prefix to express the org boundary. If your mental model is
+      "group by team, then by repo," nested folders will feel more natural than scanning a flat
+      list of double-dashed names, and there's no cost to picking it.
+    </p>
+    <p style="margin-top:20px;">
+      The core spirit matters more than which of these two you pick: organize the physical root
+      however matches how things are actually structured in git — flat with prefixes, nested by
+      org, or something else entirely — as long as every folder can be traced back to a real git
+      remote. The one place this flexibility runs out is downstream, at the tool-facing consumption
+      points like <code class="inline">~/.agents/skills</code>. Those have to stay a flat list of
+      symlinks, one per skill name, with no nesting, because that's the layout AI agent tools
+      actually read — they discover skills by scanning one directory level, not by walking an
+      arbitrary tree. Whichever way you organize the physical root, the symlinks you fan out from
+      it into <code class="inline">~/.agents/skills</code> (and any other tool's skills directory)
+      still land flat.
+    </p>
 
     <p style="margin-top:20px;">
       Because every repo is one entry with its internal layout left untouched, "where does this
       live" always has exactly one answer, and a two-line <code class="inline">git status</code>
       inside the root is enough to catch drift — no separate manifest file or audit script is
-      needed to track what the flat structure already makes self-evident. (The naming rule's
+      needed to track what the structure already makes self-evident. (The naming rule's
       "no git remote" fallback and the "same repo, different apparent org" case are both covered
       with real examples in the case studies just below; the concrete directory layout itself is
       shown in the physical-root-vs-hub diagram further down this page, so it isn't repeated

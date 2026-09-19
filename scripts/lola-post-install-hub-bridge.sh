@@ -7,7 +7,7 @@
 # =============================================================================
 # A best-effort bridge between the `lola` CLI ("AI Skills Package Manager")
 # and the "flat physical root + symlink hub" AI-asset organization pattern
-# documented in this repo's `AI Asset Management Methodology.html`.
+# documented in this repo's `index.html`.
 #
 # `lola install` is a COPY-based installer: it writes a fresh, real copy of
 # each skill's files straight into a tool's skill directory (e.g.
@@ -341,7 +341,7 @@ fi
 if [[ ! -d "$PHYSICAL_ROOT" ]]; then
   log_error "Physical root does not exist: $PHYSICAL_ROOT"
   log_error "Refusing to create it automatically -- set it up first (see"
-  log_error "this repo's AI Asset Management Methodology.html), or point"
+  log_error "this repo's index.html), or point"
   log_error "PHYSICAL_ROOT at the right place via env var."
   exit 1
 fi
