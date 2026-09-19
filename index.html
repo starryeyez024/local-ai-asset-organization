@@ -147,43 +147,6 @@
     .hero-grid { grid-template-columns: 1fr; gap: 24px; }
   }
 
-  /* ---------- Stat tiles ---------- */
-  .stat-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-  }
-  .stat-tile {
-    background: var(--white);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    padding: 18px 16px;
-  }
-  .stat-tile.highlight {
-    border-color: var(--accent);
-    border-width: 2px;
-    background: var(--accent-bg-light);
-  }
-  .stat-tile .stat-label {
-    text-transform: uppercase;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-  }
-  .stat-tile .stat-value {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: 30px;
-    font-weight: 800;
-    color: var(--ink);
-    margin-top: 4px;
-  }
-  .stat-tile .stat-sub {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-
   /* ---------- Section band alternation ---------- */
   .band { background: var(--band-bg); }
 
@@ -241,9 +204,6 @@
     gap: 20px;
   }
 
-  /* Stacked (single-column) variant of .case-grid — used where two case
-     study callouts should sit full-width, one above the other, instead
-     of side by side. */
   .case-stack {
     display: grid;
     grid-template-columns: 1fr;
@@ -295,8 +255,6 @@
     font-size: 14px;
     line-height: 1.55;
   }
-  .code-block .comment { color: #9a97b0; }
-  .code-block .literal { color: var(--navy-accent-text); }
 
   code.inline {
     background: var(--band-bg);
@@ -304,7 +262,7 @@
     border-radius: 4px;
     padding: 1px 6px;
   }
-  .white code.inline { background: #f4f4f4; }
+  .white code.inline { background: #fff; }
 
   /* ---------- Diagrams ---------- */
   .diagram {
@@ -320,76 +278,6 @@
     color: var(--muted);
     text-align: center;
     margin-bottom: 20px;
-  }
-
-  .root-box {
-    background: var(--navy);
-    color: var(--navy-text);
-    border-radius: 8px;
-    padding: 14px 20px;
-    text-align: center;
-    max-width: 480px;
-    margin: 0 auto;
-    font-weight: 700;
-  }
-  .root-box .mono { color: var(--navy-accent-text); display: block; margin-top: 4px; font-weight: 400; }
-
-  .connector {
-    height: 28px;
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-  }
-  .connector::before {
-    content: "";
-    width: 2px;
-    background: var(--card-border);
-    margin: 0 auto;
-  }
-
-  .fan-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-    position: relative;
-  }
-  .fan-row::before {
-    content: "";
-    position: absolute;
-    top: -14px;
-    left: 16.66%;
-    right: 16.66%;
-    height: 2px;
-    background: var(--card-border);
-  }
-  .fan-node {
-    background: var(--accent-bg-box);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    padding: 12px 14px;
-    text-align: center;
-    font-size: 14px;
-    color: var(--ink);
-    position: relative;
-  }
-  .fan-node::before {
-    content: "";
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    width: 2px;
-    height: 14px;
-    background: var(--card-border);
-  }
-  .fan-node strong { display: block; font-size: 14px; }
-  .fan-node .tag {
-    display: inline-block;
-    margin-top: 6px;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--accent);
-    font-weight: 700;
   }
 
   .arrow-note {
@@ -408,27 +296,12 @@
     font-family: "SFMono-Regular", Consolas, monospace;
     font-size: 13.5px;
     line-height: 1.7;
-    /* This is meant to render as literal terminal/tree output: never let a
-       long path reflow onto a second line like prose. If a line is wider
-       than the panel, scroll horizontally instead of wrapping. */
     white-space: pre;
     overflow-x: auto;
     margin: 0;
   }
-  .flat-listing .org { color: var(--navy-accent-text); font-weight: 700; }
-  .flat-listing .comment { color: #9a97b0; }
   .flat-listing .filerow { color: #f0c98a; }
 
-  /* ---------- Stacked root vs. tool-facing comparison ---------- */
-  /* Full-width, stacked vertically (not narrow 50% columns) so every
-     directory/symlink line stays on one row instead of wrapping. */
-  .root-compare-label {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--muted);
-    margin: 0 0 8px;
-  }
   .root-compare-arrow-vert {
     display: flex;
     flex-direction: column;
@@ -502,24 +375,6 @@
     border-bottom: 2px solid var(--card-border);
   }
 
-  .tag-pill {
-    display: inline-block;
-    background: var(--band-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 999px;
-    padding: 2px 10px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  /* ---------- "Five moves" numbered step labels ---------- */
-  /* Number + label render as one consistent text run: same color,
-     size, weight, and font-family for both, using the page's
-     existing blue accent (var(--accent), reused from links/eyebrows/
-     callout borders for consistency). */
   .move-num {
     font-weight: 700;
     font-size: 13px;
@@ -574,25 +429,18 @@
     font-size: 14px;
     text-align: center;
   }
-  footer a { color: var(--navy-accent-text); }
 
   /* ---------- Responsive ---------- */
   @media (max-width: 768px) {
     .hero h1 { font-size: 32px; }
     .hero .lede { font-size: 17px; }
-    .stat-row { grid-template-columns: 1fr 1fr; }
     .case-grid { grid-template-columns: 1fr; }
-    .fan-row { grid-template-columns: 1fr; }
-    .fan-row::before { display: none; }
-    .fan-node::before { display: none; }
     section { padding-top: 40px; padding-bottom: 40px; }
     section.tight { padding-top: 28px; padding-bottom: 28px; }
   }
 
   @media (max-width: 375px) {
     .wrap { padding: 0 16px; }
-    .stat-row { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .stat-tile .stat-value { font-size: 24px; }
     .hero { padding: 48px 0 40px; }
     .hero h1 { font-size: 26px; }
   }
@@ -644,8 +492,7 @@
           <td>One canonical hub directory (e.g. <code class="inline">~/.agents/skills</code>)
             holds the real per-repo symlinks; every other tool points a single symlink at that
             hub instead of rebuilding its own — moving or renaming touches symlinks only, never
-            file contents. See the concrete directory checklist in the symlink fan-out section
-            below for exactly which folders to check.</td>
+            file contents.</td>
         </tr>
         <tr>
           <td><span class="move-num">3)</span><span class="move-label">Split MCP</span></td>
@@ -655,7 +502,7 @@
         <tr>
           <td><span class="move-num">4)</span><span class="move-label">Override safely</span></td>
           <td>Copy → edit → re-point instead of editing vendor/team skills in place, backed by
-            a real, downloadable agent-facing safeguard skill as defense-in-depth (see below).</td>
+            a real, downloadable agent-facing safeguard skill as defense-in-depth.</td>
         </tr>
         <tr>
           <td><span class="move-num">5)</span><span class="move-label">Match tooling to mechanism</span></td>
@@ -690,204 +537,36 @@
     </div>
     <ul class="styled-list">
       <li><strong>No single source of truth.</strong> The same skill might exist as a real
-        directory in one tool's folder, a copy tracked by a different tool's own installer, and
+        directory in one tool's folder, a copy tracked by a different tool's installer, and
         a symlink somewhere else — three different "current" versions with no way to tell
         which one is authoritative.</li>
       <li><strong>Symlinks that break on a move.</strong> A symlink points at an absolute path.
         Rename or relocate the folder it targets — even for an unrelated reason — and every
-        symlink pointing at it silently goes dark. Nothing errors loudly; tools just stop
-        finding the skill.</li>
+        symlink pointing at it silently goes dark.</li>
       <li><strong>Finder-style aliases masquerading as symlinks.</strong> On macOS in
-        particular, it's easy to end up with alias files instead of real symlinks (e.g. dragging
-        a file with the wrong modifier key). They look identical in a folder listing, but no
-        command-line tool or agent runtime follows them — they're dead weight that quietly
-        never resolves.</li>
-      <li><strong>Drift against git remotes.</strong> Several of these assets are git
-        repositories with a real upstream remote. Once copies and symlinks are mixed together
+        particular, it's easy to end up with alias files instead of real symlinks. They look
+        identical in a folder listing, but no command-line tool or agent runtime follows them.</li>
+      <li><strong>Drift against git remotes.</strong> Once copies and symlinks are mixed together
         across tools, it becomes unclear which physical location is safe to <code class="inline">git
         pull</code> or edit, and which is a derived copy that will get silently overwritten or
         left stale.</li>
     </ul>
     <p>
       None of this is caused by any one tool doing something wrong. It's the natural result of
-      three or more independent tools (a general-purpose IDE agent, a terminal-based coding
-      agent, a chat-style coding assistant) each shipping their own convention for "where skills
-      live," with no shared layer underneath them.
+      independent tools each shipping their own convention for "where skills live," with no shared layer underneath them.
     </p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <p class="eyebrow-label">The core decision</p>
-    <h2>One flat physical root — every asset lives here, and only here</h2>
+    <p class="eyebrow-label">The architecture</p>
+    <h2>One physical root, one canonical hub, and symlink views</h2>
     <p class="lead-text">
       The fix is architectural, not procedural: pick exactly one folder on disk that is the
-      real, physical home for every AI-related git repository you use — skills, MCP servers,
-      all of it. Everywhere else a tool expects to find these assets becomes a symlink pointing
-      back into this one root, never a second copy.
+      real physical home for every AI repository you use. Everywhere else a tool expects to find
+      these assets becomes a symlink pointing back into this structure, never a second copy.
     </p>
-    <h3 style="margin-top: 24px;">One example: flat, org-prefixed folders</h3>
-    <p>
-      This page's own examples use one specific layout, and it's worth stating precisely so the
-      rest of the diagrams make sense — but it's an example convention, not the only correct
-      one. Here's how it works:
-    </p>
-    <ul class="styled-list">
-      <li><strong>Flat, one level deep.</strong> No org sub-folders, no nested
-        <code class="inline">category/project</code> structure. Every entry sits directly at
-        the top level of the root.</li>
-      <li><strong>One entry per repository, no exceptions.</strong> A repo containing twenty
-        unrelated skills is still exactly one entry — all twenty stay nested inside it at
-        their existing relative paths. A repo that <em>is</em> a single skill is also exactly
-        one entry. There is no "is this a project repo or a skill-collection repo?" judgment
-        call to make, because the answer never changes the outcome.</li>
-      <li><strong>Named <code class="inline">@org--repo-name</code>.</strong> A literal
-        double-dash separates the owning org/user from the repository name — not a real
-        sub-folder, just a naming prefix a human can scan in a flat directory listing.</li>
-    </ul>
-
-    <p style="margin-top:20px;">
-      A nested layout is an equally valid way to organize the same root. Instead of prefixing
-      the org onto the folder name, make the org a real parent folder and put each of its repos
-      underneath it:
-    </p>
-    <pre class="code-block">~/AI Assets/ixd-firefly/ai-first-program-management/
-~/AI Assets/ixd-firefly/some-other-repo/
-~/AI Assets/platform-org/build-automation/</pre>
-    <p>
-      instead of the flat <code class="inline">~/AI Assets/@ixd-firefly--ai-first-program-management/</code>.
-      Same repos, same one-entry-per-repo rule, same requirement that the org/owner is derived
-      from <code class="inline">git remote -v</code> rather than guessed — just a folder
-      hierarchy instead of a naming prefix to express the org boundary. If your mental model is
-      "group by team, then by repo," nested folders will feel more natural than scanning a flat
-      list of double-dashed names, and there's no cost to picking it.
-    </p>
-    <p style="margin-top:20px;">
-      The core spirit matters more than which of these two you pick: organize the physical root
-      however matches how things are actually structured in git — flat with prefixes, nested by
-      org, or something else entirely — as long as every folder can be traced back to a real git
-      remote. The one place this flexibility runs out is downstream, at the tool-facing consumption
-      points like <code class="inline">~/.agents/skills</code>. Those have to stay a flat list of
-      symlinks, one per skill name, with no nesting, because that's the layout AI agent tools
-      actually read — they discover skills by scanning one directory level, not by walking an
-      arbitrary tree. Whichever way you organize the physical root, the symlinks you fan out from
-      it into <code class="inline">~/.agents/skills</code> (and any other tool's skills directory)
-      still land flat.
-    </p>
-
-    <p style="margin-top:20px;">
-      Because every repo is one entry with its internal layout left untouched, "where does this
-      live" always has exactly one answer, and a two-line <code class="inline">git status</code>
-      inside the root is enough to catch drift — no separate manifest file or audit script is
-      needed to track what the structure already makes self-evident. (The naming rule's
-      "no git remote" fallback and the "same repo, different apparent org" case are both covered
-      with real examples in the case studies just below; the concrete directory layout itself is
-      shown in the physical-root-vs-hub diagram further down this page, so it isn't repeated
-      here.)
-    </p>
-  </div>
-</section>
-
-<section class="band">
-  <div class="wrap">
-    <p class="eyebrow-label">Why the naming convention matters</p>
-    <h2>Organize it however you like — just derive names from the git remote, not the local folder</h2>
-    <p class="lead-text">
-      How you physically organize things is up to you. Nested folders by org
-      (<code class="inline">~/AI-Assets/org-name/repo-name/</code>), a flat
-      <code class="inline">@org--repo-name</code> naming prefix (what this page's own examples
-      use), or another scheme entirely — pick whatever's easiest for you to scan, and put the
-      root wherever you want (<code class="inline">~/Sites</code>, <code class="inline">~/AI
-      Assets</code>, <code class="inline">~/projects</code>, anywhere). The folder name and
-      location of the root itself isn't the point.
-    </p>
-    <p class="lead-text" style="margin-top: 12px;">
-      What doesn't bend, whichever scheme you pick: the org/owner identity has to come from the
-      repository's actual <code class="inline">git remote -v</code> output — never from
-      assumptions, and never from whatever the local folder happened to be called before you
-      organized it. Local folder names and container paths are hints at best; they drift from
-      reality more often than you'd expect, as the case studies below show.
-    </p>
-
-    <div class="case-stack" style="margin-top: 24px;">
-      <div class="callout blue">
-        <h4>Case study — misleading container folders</h4>
-        <p>
-          A repo sat inside a container folder implying it belonged to one team's namespace —
-          call it <code >team-a-tools/internal-tools-cli</code> on disk. Running
-          <code class="inline">git remote -v</code> against it resolved to an entirely different
-          owner: <code class="inline">git@example.com:platform-org/internal-tools-cli.git</code>.
-          The correct flat entry is <code class="inline">@platform-org--internal-tools-cli</code>,
-          not <code class="inline">@team-a-tools--internal-tools-cli</code> — the local
-          container folder's name reflected where someone happened to clone it, not who
-          actually owns the code.
-        </p>
-      </div>
-      <div class="callout green">
-        <h4>Case study — no <code class="inline">.git</code> at all</h4>
-        <p>
-          A folder that looked exactly like every other project — full of scripts and skill
-          definitions — turned out to have no <code class="inline">.git</code> directory at
-          all. <code class="inline">git remote -v</code> failed outright with "not a git
-          repository." There's no remote to derive a name from, so the naming rule needs an
-          explicit fallback: treat it as a personal, ungitted folder and prefix it with a
-          default personal namespace (e.g. <code class="inline">@personal--</code>) rather than
-          blocking the whole migration on "first go turn this into a real repo."
-        </p>
-      </div>
-    </div>
-
-    <p style="margin-top: 24px;">
-      The general lesson: any naming scheme that derives identity from an external, verifiable
-      source (the git remote) will occasionally disagree with local, human-assigned context
-      (the folder it happened to be cloned into). Spot-check a meaningful sample before trusting
-      the naming wholesale, and decide the fallback rule for "no remote exists" <em>before</em>
-      you hit the first ungitted folder, not while migrating it.
-    </p>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="eyebrow-label">The mechanism</p>
-    <h2>Symlink fan-out: tool directories become pure views</h2>
-    <p class="lead-text">
-      Every AI tool still reads skills from wherever it natively expects to find them. What
-      changes is that those tool-specific directories stop holding real files. In practice, only
-      <strong>one</strong> directory does the real work — a canonical hub (e.g.
-      <code class="inline">~/.agents/skills</code>) holding one symlink per skill, pointing back
-      into the flat root. Every other tool's directory becomes a single symlink pointing <em>at
-      that hub</em>, not a second farm of its own.
-    </p>
-
-    <div class="callout" style="margin-top: 24px;">
-      <h4>Why not skip the root and put real files straight in the hub?</h4>
-      <p>
-        Because the two folders group things differently, and collapsing them breaks one
-        grouping to satisfy the other. The physical root groups by <strong>repository</strong> —
-        that's the git unit: one remote, one commit history, one <code class="inline">git
-        pull</code>. The hub groups by <strong>individual skill</strong> — that's what a tool
-        actually scans for. Most repos hold more than one skill, so a repo's name and any one
-        skill's name inside it are usually different things. Put the real files directly in
-        <code class="inline">~/.agents/skills</code> and you either lose the repo-level grouping
-        (git operations get harder to reason about) or lose the flat per-skill list a tool needs
-        (nested skills stop being discoverable) — you can't have both in the same folder.
-      </p>
-      <p>
-        There's a second reason: <code class="inline">~/.agents/skills</code> is one specific
-        tool's own naming convention for where it looks, not a general storage standard. If your
-        real, git-tracked files lived there directly, your canonical project storage would be
-        coupled to that tool's implementation choice — replace or rename the tool later and your
-        actual storage location's name no longer makes sense. Keeping the root separate and
-        generically named keeps it independent of any single tool's convention: hub folders are
-        cheap, disposable pointers; the physical root isn't. (The dot-prefix on
-        <code class="inline">~/.agents</code> isn't about hiding anything — it's the standard
-        Unix convention for machine-facing config, the same category as <code class="inline">.git</code>
-        or <code class="inline">.ssh</code>. The physical root is deliberately not dot-prefixed,
-        because it's meant to be the plainly visible, human-browsable "real projects" location.)
-      </p>
-    </div>
 
     <div class="diagram" style="margin-top: 28px;">
       <p class="diagram-title">Physical root vs. tool-facing symlink views</p>
@@ -914,73 +593,14 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
       <pre class="flat-listing">skills                     <span class="symlink-arrow">&rarr;</span> <span class="symlink-a">~/.agents/skills</span></pre>
 
       <p class="arrow-note">
-        Every line in the top panel is a symlink (matching colors mark the same repo); the
-        physical root above is the only place real files exist. <code class="inline">~/.agents/skills</code>
-        is the one canonical hub folder holding all of those per-repo symlinks — every other
-        tool directory, like <code class="inline">~/.codeassist-ide/skills</code> here, doesn't
-        rebuild its own farm; it's a single symlink pointing <em>at the hub</em>, not at the
-        physical root directly. The middle repo shows a nested <code class="inline">/skills</code>
-        folder — the hub's symlink points at the individual skill folder, not the whole repo. Not
-        every tool needs even that one symlink: a CLI agent that reads the flat physical root
-        natively skips the hub entirely and needs no symlink at all — nothing below the root line
-        is ever a real file, only symlinks or native reads.
-      </p>
-    </div>
-
-    <div class="callout amber" style="margin-top: 24px;">
-      <h4>What if two different repos ship the same skill name?</h4>
-      <p>
-        Say <code class="inline">@org-a--repo-one</code> and <code class="inline">@org-b--repo-two</code>
-        each happened to contain a skill folder literally named
-        <code class="inline">example-skill-name</code>. Both want the exact same flat entry,
-        <code class="inline">~/.agents/skills/example-skill-name</code> — and a flat hub can only
-        ever point one name at one target. (Lola's lack of org-aware naming, covered above, is
-        one way a collision like this gets introduced in the first place; it's not the only way
-        one can arise.)
-      </p>
-      <p>
-        This is a naming conflict to resolve, not something the hub can silently sort out on its
-        own. Fix it at the source by renaming the skill folder in whichever repo you actually
-        control, or make an explicit call: pick which one keeps the plain name in the hub, and if
-        you need both live at once, symlink the other in under a disambiguated name (e.g.
-        prefixed with its org) instead of letting either one overwrite the other. Either way, the
-        one you don't pick still physically exists at its own entry in the physical root — it's
-        just not currently symlinked into the hub under that name.
-      </p>
-      <p>
-        Any tooling that builds or rebuilds the hub's symlinks — walking the physical root and
-        making sure each skill has a hub symlink — should follow the same rule: warn and skip on
-        a detected name collision rather than silently overwriting one skill's symlink with
-        another. Surface it for a human to resolve; don't auto-pick a winner.
-      </p>
-    </div>
-
-    <p style="margin-top: 24px;">
-      This is why the mechanism generalizes well: moving or renaming an asset only ever means
-      updating <em>where the symlinks point</em>, never touching file contents. Once every other
-      tool collapses its entire skill directory to one symlink pointing at the same canonical
-      hub, that tool needs zero further maintenance when new skills are added — it inherits them
-      automatically through the one symlink it already has.
-    </p>
-
-    <div class="callout" style="margin-top: 24px;">
-      <h4>Key property</h4>
-      <p>
-        A flat root plus a symlink layer turns an <var>N</var>-tools × <var>M</var>-skills
-        maintenance problem into a one-time, <var>M</var>-sized setup. Adding a new tool later
-        means pointing one new symlink at the existing hub, not re-copying every existing skill
-        again.
+        Every line in the top panel is a symlink; the physical root above is the only place real files exist.
+        <code class="inline">~/.agents/skills</code> is the one canonical hub folder holding all of those per-repo symlinks — every other
+        tool directory is a single symlink pointing <em>at the hub</em>.
       </p>
     </div>
 
     <div class="card" style="margin-top: 24px;">
       <h3>Concrete directories to check on your own machine</h3>
-      <p>
-        The fan-out above stays abstract until you know which real, on-disk folders it's
-        talking about. These are the tool-specific skill directories worth checking or
-        creating on a typical setup — each one should end up as either the hub itself or a
-        single symlink pointing at it, never its own farm of individual per-skill symlinks.
-      </p>
       <table style="margin-top: 16px;">
         <thead>
           <tr>
@@ -991,107 +611,105 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
         <tbody>
           <tr>
             <td><code class="inline">~/.agents/skills</code></td>
-            <td>The hub itself. Holds the real, per-repo symlinks into the flat physical
-              root. Followed by Codex CLI and other tools that adopt this shared convention.</td>
+            <td>The hub itself. Holds the real, per-repo symlinks into the flat physical root. Followed by Codex CLI and other shared tools.</td>
           </tr>
           <tr>
             <td><code class="inline">~/.claude/skills</code></td>
-            <td>Claude Code CLI's skill directory. Collapses to a single symlink pointing at
-              the hub above, instead of its own separate farm.</td>
+            <td>Claude Code CLI's skill directory. Collapses to a single symlink pointing at the hub above.</td>
           </tr>
           <tr>
-            <td>Cursor's own skills directory</td>
-            <td>Cursor reads skills from its own tool-specific location on disk (naming and
-              exact path can vary by install/version — check yours). Same treatment applies:
-              collapse it to a single symlink pointing at the hub.</td>
+            <td>Cursor's skills directory</td>
+            <td>Cursor's tool-specific location on disk. Collapses to a single symlink pointing at the hub.</td>
           </tr>
           <tr>
             <td><code class="inline">.claude/skills</code> <em>(project-local)</em></td>
-            <td>A related but distinct case — a skills folder living inside one specific
-              repo, rather than a global, home-directory one. Same principle, per-project
-              scope: check for these separately, repo by repo.</td>
+            <td>Project-scoped skill folder inside one repository. Same principle applies on a per-project scope.</td>
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="callout amber" style="margin-top: 24px;">
+      <h4>What if two different repos ship the same skill name?</h4>
+      <p>
+        Say <code class="inline">@org-a--repo-one</code> and <code class="inline">@org-b--repo-two</code>
+        each contain a skill folder literally named <code class="inline">example-skill-name</code>.
+        A flat hub can only ever point one name at one target.
+      </p>
+      <p>
+        Fix it at the source by renaming the skill folder in whichever repo you control, or pick which one keeps the plain name in the hub. If you need both live at once, symlink the second under an org-prefixed name (e.g. <code class="inline">org-b--example-skill-name</code>). Any tooling that builds the hub should warn and skip on collisions rather than silently overwriting.
+      </p>
     </div>
   </div>
 </section>
 
 <section class="band">
   <div class="wrap">
+    <p class="eyebrow-label">Physical Root & Identity</p>
+    <h2>Organize however you like — just derive names from the git remote</h2>
+    <p class="lead-text">
+      Use nested org directories <span class="white"><code class="inline">/org-name/repo-name/</code></span> or an <span class="white"><code class="inline">@org--</code></span> prefix, pick whatever is easiest to scan for you!
+    </p>
+
+    <div class="case-stack" style="margin-top: 24px;">
+      <div class="callout blue">
+        <h4>Gotcha: Container folder names can be mismatched with the actual git remote</h4>
+        <p>Local folder names reflect where someone cloned a repo, not who owns the code:</p>
+        <ul class="styled-list" style="margin-top: 10px;">
+          <li><strong>Local path on disk:</strong> <code>team-a-tools/internal-tools-cli</code></li>
+          <li><strong>Actual Git remote:</strong> <code>git@example.com:platform-org/internal-tools-cli.git</code></li>
+          <li><strong>Correct flat entry:</strong> <code>@platform-org--internal-tools-cli</code></li>
+        </ul>
+      </div>
+      <div class="callout green">
+        <h4>What about custom homemade skills?</h4>
+        <p>
+          If there is no remote to derive a name from, simply prefix it with a default namespace (<code class="inline">@personal--</code>).
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
     <p class="eyebrow-label">MCP servers</p>
     <h2>Two kinds of MCP server need two different treatments</h2>
     <p class="lead-text">
-      MCP servers aren't discovered by directory-scanning the way skills are. Every tool's MCP
-      config file has an explicit, named block pointing at either a local command to launch or
-      a remote URL to call — so "symlinking an MCP server" means something narrower than it does
-      for skills, and it splits into two distinct cases.
+      MCP servers are configured via explicit file paths rather than scanned directories. Because config files hardcode exact paths, a stable indirection symlink layer is critical to prevent path breakage when a repository reorganizes.
     </p>
 
     <div class="case-grid" style="margin-top: 24px;">
       <div class="card">
         <h4 style="color:var(--accent);">Real local code checkout</h4>
         <p>
-          If the MCP server is a project you actually cloned — source code, a virtual
-          environment, a launch script — it gets a normal flat physical entry in the root, the
-          same as any other repo (<code class="inline">@vendor-org--example-mcp-server/</code>).
-          There's real code to move and real internal structure to preserve.
+          Local code, virtual environments, or launch scripts get a normal flat physical entry in the root (<code class="inline">@vendor-org--example-mcp-server/</code>).
         </p>
       </div>
       <div class="card">
         <h4 style="color:var(--amber-accent);">Documentation-only / vendor-hosted</h4>
         <p>
-          If the server is a remote URL, or a globally-installed binary launched from
-          <code class="inline">PATH</code>, there's no local code to move at all — only setup
-          notes worth keeping close by. That case gets a lone symlinked markdown file sitting
-          directly at the root's top level (<code class="inline">@acme-team--docs-mcp.md</code>),
-          not a folder. Wrapping one file in a folder that will never hold a second file is pure
-          ceremony; a bare file is a more honest representation of "there's nothing here but
-          notes."
+          Remote URLs or globally installed binaries get a lone symlinked markdown file at the root's top level (<code class="inline">@acme-team--docs-mcp.md</code>), avoiding unnecessary folder overhead.
         </p>
       </div>
     </div>
-
-    <p style="margin-top: 24px;">
-      Because config files hardcode a path rather than scanning a directory, the stable-symlink
-      layer matters <em>more</em> for MCP servers than it does for skills, not less. A skill's
-      tool-facing directory can silently absorb a rename because the tool re-scans it.       An MCP
-      config's <code class="inline">command</code>/<code class="inline">args</code> fields do not
-      re-scan anything — they only re-resolve at launch time, so a moved or renamed real checkout
-      breaks every config file that hardcodes the old path until each one is edited by hand.
-    </p>
-    <p>
-      The fix is one extra layer of indirection: a small set of stable-path symlinks (grouped
-      separately from the skill symlinks) that every config file references instead of the real
-      checkout path directly. If the physical root ever reorganizes again, exactly one symlink
-      target needs updating per server — not every config file that mentions it.
-    </p>
   </div>
 </section>
 
-<section>
+<section class="band">
   <div class="wrap">
     <p class="eyebrow-label">The override problem</p>
     <h2>Never edit a vendor or team skill in place</h2>
     <p class="lead-text">
-      The moment you tweak a skill you don't own — a team-shared skill, a vendor's published
-      one — directly inside its source repository, you've created uncommitted drift in a
-      checkout other people also rely on. The next <code class="inline">git pull</code> either
-      conflicts or silently discards your edit. The fix is a small, repeatable procedure instead
-      of a habit to remember.
+      Editing a shared or vendor skill directly inside its source repo creates uncommitted drift that gets overwritten on the next <code class="inline">git pull</code>.
     </p>
 
     <div class="card" style="margin-top: 24px;">
       <h3>Copy → edit → re-point</h3>
       <ol class="steps">
-        <li>Copy the <strong>whole skill folder</strong> — not just its main definition file,
-          but every supporting script, asset, and reference inside it — into a dedicated
-          overrides area of the physical root, mirroring the original's internal path.</li>
-        <li>Make the requested edit in the copy. The original, upstream-owned folder is never
-          touched.</li>
-        <li>Re-point the one tool-facing symlink for that skill's name at the new override
-          location instead of the original. Because tool directories are already collapsed to a
-          single symlink layer, this is one symlink update, not one per tool.</li>
+        <li>Copy the <strong>whole skill folder</strong> into a dedicated overrides area of the physical root.</li>
+        <li>Make your edits in the copy. The original upstream folder is left untouched.</li>
+        <li>Re-point the single tool-facing hub symlink for that skill's name at the new override location.</li>
       </ol>
     </div>
 
@@ -1106,172 +724,56 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
 
       <h4><code class="inline">~/.agents/skills/</code> — the tool-facing symlink re-pointed off the vendor copy</h4>
       <pre class="flat-listing">fiddlewidget               <span class="symlink-arrow">&rarr;</span> <span class="symlink-c">~/AI Assets/@personal--fiddlewidget/skills/fiddlewidget/</span></pre>
-      <p class="arrow-note">
-        <strong>This is the override case, not a new pattern.</strong> The vendor's original,
-        <code class="inline">@org-a--fiddlewidget/</code>, stays on disk exactly as published —
-        untouched, and still worth keeping around for future diffing against upstream updates.
-        The hub symlink no longer points at it: after the copy → edit → re-point steps above, it
-        points at <code class="inline">@personal--fiddlewidget/skills/fiddlewidget/</code>
-        instead, the edited copy. Same flat-root-plus-hub mechanism as the diagrams earlier in
-        this section — the only difference here is that two physical copies of the same skill
-        name now exist side by side, and the symlink picks which one is "live."
-      </p>
     </div>
 
     <div class="callout red" style="margin-top: 24px;">
       <h4>Skill-override-safeguard: an agent-facing guardrail</h4>
       <p>
-        Because this procedure depends on remembering to follow it every single time, it can be
-        encoded as a standing instruction file that any agent reads before editing a skill —
-        this exists as a real, working skill named <strong>skill-override-safeguard</strong>,
-        not just a description of an idea. Its job: whenever an agent is asked to edit or modify
-        a skill that lives outside the designated overrides area, it must <strong>stop</strong>,
-        run the copy → edit → re-point procedure above instead, and never touch the original in
-        place.
-      </p>
-      <p>
-        This is a defense-in-depth layer, not a hard guarantee. There is no OS-level permission
-        lock and no technical enforcement — it works only if the agent actually consults the
-        safeguard skill before editing. A determined or simply confused agent that skips it can
-        still edit the original directly, exactly as before. Treat it as one layer alongside
-        others (like periodically checking <code class="inline">git status</code> in
-        vendor-owned checkouts to catch drift that slipped through anyway), not a replacement
-        for them.
+        To keep agents from editing vendor code directly, you can install the <strong>skill-override-safeguard</strong> skill. It instructs agents to stop and execute the Copy → Edit → Re-point workflow automatically whenever an edit is requested outside the designated overrides folder.
       </p>
       <div class="download-cta">
         <a class="btn-download" href="./skill-override-safeguard.zip" download>&#8681; Download the skill (.zip)</a>
         <p class="download-cta-note">
-          This page's override-safety guardrail isn't just theoretical — download the actual
-          <code class="inline">skill-override-safeguard</code> skill (a <code class="inline">SKILL.md</code>
-          any Cursor, Claude Code, or Codex agent can read) and drop the unzipped folder into your
-          own skills directory.
+          Download the actual <code class="inline">skill-override-safeguard</code> skill and drop it into your skills directory.
         </p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="band">
+<section>
   <div class="wrap">
-    <p class="eyebrow-label">General lessons</p>
-    <h2>What this reveals about tool behavior more broadly</h2>
-
-    <h3>Copy-based installers and symlinks don't mix safely by default</h3>
-    <p>
-      Many skill/package installers are fundamentally <strong>copy-based</strong>: installing
-      means writing a fresh copy of the source into the destination directory, with no
-      concept of "this destination is already a symlink to something else." If you've
-      replaced an installed copy with a symlink back to your own source checkout — a
-      reasonable thing to do once you're managing a flat root — a naive copy-based installer
-      can do one of two bad things: silently skip the write and report success anyway
-      (leaving you with stale content and false confidence), or write straight through the
-      symlink and corrupt the file back at the symlink's real target.
-    </p>
-    <p>
-      The safe behavior an installer should have is to detect that its destination is a
-      symlink and treat that as an explicit conflict requiring confirmation, then unlink and
-      replace the symlink outright rather than writing through it. If a tool you depend on
-      doesn't do this, verify its behavior in a throwaway test before trusting it against a
-      symlinked destination for real.
+    <p class="eyebrow-label">Tooling & Case Studies</p>
+    <h2>Bridging copy-based tools like Lola with the hub</h2>
+    <p class="lead-text">
+      Many skill package managers are <strong>copy-based</strong>: installing writes a fresh copy straight into the destination directory without recognizing symlinks.
     </p>
 
     <div class="callout amber" style="margin-top: 24px;">
-      <h4>Bridging Lola with the hub</h4>
+      <h4>Case Study: Lola (AI Skills Package Manager CLI)</h4>
       <p>
-        Lola (the AI Skills Package Manager CLI) is exactly this copy-based case:
-        <code class="inline">lola install</code> writes a fresh, real copy of each skill straight
-        into a tool's skill directory (e.g. <code class="inline">~/.claude/skills/&lt;skill&gt;/</code>),
-        and has no config option or flag for redirecting that write to a different physical
-        location or for handling an existing symlink at the destination. Left alone, every
-        Lola-installed module becomes an orphaned real-file duplicate sitting outside the flat
-        root.
+        <code class="inline">lola install</code> writes a fresh copy of each skill into a tool's skill folder (e.g. <code class="inline">~/.claude/skills/&lt;skill&gt;/</code>). If a symlink already exists there, it unlinks it and converts it back into an unlinked copy.
       </p>
       <p>
-        This repo carries a small bridge script for that gap,
-        <code class="inline">scripts/lola-post-install-hub-bridge.sh</code>. Run right after
-        <code class="inline">lola install</code> finishes, it walks the tool's skill directory,
-        moves every newly-copied real (non-symlink) skill folder into
-        <code class="inline">~/AI Assets/@lola--&lt;module-name&gt;/&lt;skill-name&gt;/</code>,
-        and replaces the original location with a symlink back to it. It's idempotent (an
-        already-symlinked skill is skipped on a re-run) and never overwrites an existing
-        destination — a real collision is logged and left for manual resolution instead of
-        guessed at.
+        To bridge this gap until native symlink resolution exists, this repository carries a bridge script:
+        <code class="inline">scripts/lola-post-install-hub-bridge.sh</code>.
       </p>
       <p>
-        Lola's only documented hook surface (confirmed against <code class="inline">lola install
-        --help</code> on this machine) is <code class="inline">--pre-install PATH</code> /
-        <code class="inline">--post-install PATH</code>, with no documentation of what gets
-        passed to the hook script. Wiring the bridge in as a post-install hook looks like:
+        Triggered after installation, it moves newly-copied skill folders into <code class="inline">~/AI Assets/@lola--&lt;module-name&gt;/&lt;skill-name&gt;/</code> and replaces the original path with a symlink back to the hub.
       </p>
       <pre class="code-block" style="margin: var(--paragraph-spacing) 0 0;">lola install my-module ./my-project -a claude-code -s user \
   --post-install "$HOME/AI Assets/@ktotten--local-ai-asset-organization/scripts/lola-post-install-hub-bridge.sh"</pre>
-      <p>
-        One gap worth knowing before relying on that flag: Lola resolves
-        <code class="inline">--post-install</code>'s path <em>relative to the module's own local
-        copy directory</em> and requires the result stay inside it — a script living in its own
-        repo, outside any module, can trigger "post-install script outside module directory," and
-        because post-install failures are only logged as a warning, the install still reports
-        success while the hook silently never runs. If that happens, skip
-        <code class="inline">--post-install</code> and run the script by hand right after install
-        instead, e.g. <code class="inline">./lola-post-install-hub-bridge.sh --skills-dir
-        ~/.claude/skills --module-name my-module --dry-run</code> first, then for real once the
-        plan looks right.
-      </p>
-      <p>
-        This is a workaround maintained alongside this methodology, not an official Lola
-        feature — its hook contract could change or disappear without notice. Re-verify against
-        <code class="inline">lola install --help</code> and the script's own header comments
-        (which document exactly which assumptions came from reading Lola's source rather than its
-        docs) before trusting it in a new environment.
-      </p>
     </div>
-
-    <h3>Discovery mechanism determines how much a stable-path layer matters</h3>
-    <p>
-      Skills are typically <strong>discovered</strong> — a tool scans a known directory and
-      picks up whatever's there, symlink or not, so a rename mostly self-heals the moment
-      the tool re-scans. MCP servers are typically <strong>configured</strong> — an explicit
-      path or command sits hardcoded in a config file that is read once at connection time
-      and never re-scanned. That difference is why a stable indirection symlink is optional
-      convenience for skills but load-bearing for MCP servers: without it, every
-      reorganization of the physical root means editing every config file that references an
-      MCP server's old path by hand, across every tool that has its own separate config file.
-    </p>
-
-    <h3>The pattern worth generalizing</h3>
-    <p>
-      Whenever a single logical asset needs to be visible to several independent tools, ask
-      two questions before designing the sync: <strong>(1)</strong> does each tool discover
-      the asset by scanning a directory, or does it require an explicit, hardcoded reference to
-      it, and <strong>(2)</strong> does whatever writes to that asset understand symlinks, or
-      does it only know how to copy? The answers determine whether one flat root and a thin
-      symlink layer is sufficient, or whether you also need a stable indirection point and
-      careful handling around any copy-based tooling in the mix.
-    </p>
 
     <div class="callout blue" style="margin-top: 24px;">
       <h4>AI-asset-auditor: putting this methodology into practice</h4>
       <p>
-        Working out the discovery-vs-configured and copy-vs-symlink questions above by hand,
-        repo by repo, is exactly the kind of repeatable audit that's easy to get wrong under
-        time pressure — this exists as a real, working skill named
-        <strong>ai-asset-auditor</strong>, not just a description of an idea. Its job: scan your
-        tool-specific directories for the symptoms this page describes — duplicated skills, dead
-        symlinks, Finder aliases masquerading as symlinks, git remotes that no longer match local
-        folder names — and propose a flat-root migration plan.
-      </p>
-      <p>
-        It runs discover-then-confirm: it always presents its plan and asks clarifying questions
-        before touching any file, and never executes a move, rename, delete, or symlink change
-        without explicit per-plan confirmation. Treat it as the operational counterpart to the
-        methodology on this page, not a substitute for reading it.
+        You can automate auditing your existing setup using the <strong>ai-asset-auditor</strong> skill. It scans your tool directories for duplicated skills, broken symlinks, and macOS Finder aliases, then proposes a clean migration plan.
       </p>
       <div class="download-cta">
         <a class="btn-download" href="./ai-asset-auditor.zip" download>&#8681; Download the skill (.zip)</a>
         <p class="download-cta-note">
-          Download the actual <code class="inline">ai-asset-auditor</code> skill (a
-          <code class="inline">SKILL.md</code> any Cursor, Claude Code, or Codex agent can read)
-          and drop the unzipped folder into your own skills directory.
+          Download the <code class="inline">ai-asset-auditor</code> skill to automatically scan and organize your AI skills directory.
         </p>
       </div>
     </div>
