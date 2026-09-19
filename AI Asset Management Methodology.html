@@ -898,6 +898,34 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
       </p>
     </div>
 
+    <div class="callout amber" style="margin-top: 24px;">
+      <h4>What if two different repos ship the same skill name?</h4>
+      <p>
+        Say <code class="inline">@org-a--repo-one</code> and <code class="inline">@org-b--repo-two</code>
+        each happened to contain a skill folder literally named
+        <code class="inline">example-skill-name</code>. Both want the exact same flat entry,
+        <code class="inline">~/.agents/skills/example-skill-name</code> — and a flat hub can only
+        ever point one name at one target. (Lola's lack of org-aware naming, covered above, is
+        one way a collision like this gets introduced in the first place; it's not the only way
+        one can arise.)
+      </p>
+      <p>
+        This is a naming conflict to resolve, not something the hub can silently sort out on its
+        own. Fix it at the source by renaming the skill folder in whichever repo you actually
+        control, or make an explicit call: pick which one keeps the plain name in the hub, and if
+        you need both live at once, symlink the other in under a disambiguated name (e.g.
+        prefixed with its org) instead of letting either one overwrite the other. Either way, the
+        one you don't pick still physically exists at its own entry in the physical root — it's
+        just not currently symlinked into the hub under that name.
+      </p>
+      <p>
+        Any tooling that builds or rebuilds the hub's symlinks — walking the physical root and
+        making sure each skill has a hub symlink — should follow the same rule: warn and skip on
+        a detected name collision rather than silently overwriting one skill's symlink with
+        another. Surface it for a human to resolve; don't auto-pick a winner.
+      </p>
+    </div>
+
     <p style="margin-top: 24px;">
       This is why the mechanism generalizes well: moving or renaming an asset only ever means
       updating <em>where the symlinks point</em>, never touching file contents. Once every other
