@@ -742,23 +742,15 @@
       </ul>
     </div>
 
-    <div class="diagram" style="margin-top: 24px;">
-      <p class="diagram-title">Illustrative flat root listing</p>
-      <h4><code class="inline">~/AI Assets/</code> directory — every entry represents a git repo</h4>
-      <pre class="flat-listing"><span class="org">@personal</span>--writing-skills/          <span class="comment"># a personal skill collection, several skills nested inside</span>
-<span class="org">@personal</span>--utilities/               <span class="comment"># no git remote — falls back to a personal-namespace prefix</span>
-<span class="org">@acme-team</span>--internal-tools-cli/     <span class="comment"># a team-owned repo, one flat entry regardless of size</span>
-<span class="org">@vendor-org</span>--shared-skills-pack/    <span class="comment"># a vendor/community repo, read-only by convention</span>
-<span class="org">@platform-org</span>--build-automation/    <span class="comment"># same repo as above — remote proved a different org (see case study)</span>
-<span class="filerow">@acme-team--docs-mcp.md</span>              <span class="comment"># doc-only MCP server — a lone FILE, not a folder</span>
-<span class="org">@vendor-org</span>--example-mcp-server/    <span class="comment"># MCP server WITH a real local code checkout</span></pre>
-    </div>
-
     <p style="margin-top:20px;">
       Because every repo is one entry with its internal layout left untouched, "where does this
       live" always has exactly one answer, and a two-line <code class="inline">git status</code>
       inside the root is enough to catch drift — no separate manifest file or audit script is
-      needed to track what the flat structure already makes self-evident.
+      needed to track what the flat structure already makes self-evident. (The naming rule's
+      "no git remote" fallback and the "same repo, different apparent org" case are both covered
+      with real examples in the case studies just below; the concrete directory layout itself is
+      shown in the physical-root-vs-hub diagram further down this page, so it isn't repeated
+      here.)
     </p>
   </div>
 </section>
@@ -857,8 +849,7 @@
     <div class="diagram" style="margin-top: 28px;">
       <p class="diagram-title">Physical root vs. tool-facing symlink views</p>
 
-      <p class="root-compare-label">Physical root — real files, once</p>
-      <h4><code class="inline">~/AI Assets/</code> — the physical root holding the real files</h4>
+      <h4><code class="inline">~/AI Assets/</code> — real files live here, once</h4>
       <pre class="flat-listing"><span class="symlink-a">@org-a--repo-one/</span>
 <span class="symlink-b">@org-b--repo-two/</span>
 <span class="symlink-arrow">└── </span><span class="symlink-b">skills/</span>
@@ -871,7 +862,6 @@
         <span class="caption">symlinked into every tool's directory</span>
       </div>
 
-      <p class="root-compare-label">Tool-facing directories — one hub, everything else symlinks to it</p>
       <h4><code class="inline">~/.agents/skills/</code> — the canonical hub: every skill's symlink is listed here by name, once</h4>
       <pre class="flat-listing">repo-one                   <span class="symlink-arrow">&rarr;</span> <span class="symlink-a">~/AI Assets/@org-a--repo-one/</span>
 example-skill-name         <span class="symlink-arrow">&rarr;</span> <span class="symlink-b">~/AI Assets/@org-b--repo-two/skills/example-skill-name/</span>
@@ -887,36 +877,10 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
         tool directory, like <code class="inline">~/.codeassist-ide/skills</code> here, doesn't
         rebuild its own farm; it's a single symlink pointing <em>at the hub</em>, not at the
         physical root directly. The middle repo shows a nested <code class="inline">/skills</code>
-        folder — the hub's symlink points at the individual skill folder, not the whole repo.
-      </p>
-    </div>
-
-    <div class="diagram" style="margin-top: 28px;">
-      <p class="diagram-title">Fan-out from the physical root to each tool</p>
-      <div class="root-box">
-        Physical root — real files live here, once
-        <span class="mono">~/AI Assets/@org--repo-name/skills/&lt;skill-name&gt;/</span>
-      </div>
-      <div class="connector"></div>
-      <div class="fan-row">
-        <div class="fan-node">
-          <strong>The hub — e.g. <code class="inline">~/.agents/skills</code></strong>
-          one symlink per skill
-          <span class="tag">canonical symlink farm</span>
-        </div>
-        <div class="fan-node">
-          <strong>Every other tool's skill directory</strong>
-          collapsed to a single symlink → the hub
-          <span class="tag">single symlink</span>
-        </div>
-        <div class="fan-node">
-          <strong>Tool C (CLI agent)</strong>
-          reads the flat root natively
-          <span class="tag">no symlink needed</span>
-        </div>
-      </div>
-      <p class="arrow-note">
-        Nothing below the root line is ever a real file — only symlinks or native reads.
+        folder — the hub's symlink points at the individual skill folder, not the whole repo. Not
+        every tool needs even that one symlink: a CLI agent that reads the flat physical root
+        natively skips the hub entirely and needs no symlink at all — nothing below the root line
+        is ever a real file, only symlinks or native reads.
       </p>
     </div>
 
@@ -1139,6 +1103,57 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
       doesn't do this, verify its behavior in a throwaway test before trusting it against a
       symlinked destination for real.
     </p>
+
+    <div class="callout amber" style="margin-top: 24px;">
+      <h4>Bridging Lola with the hub</h4>
+      <p>
+        Lola (the AI Skills Package Manager CLI) is exactly this copy-based case:
+        <code class="inline">lola install</code> writes a fresh, real copy of each skill straight
+        into a tool's skill directory (e.g. <code class="inline">~/.claude/skills/&lt;skill&gt;/</code>),
+        and has no config option or flag for redirecting that write to a different physical
+        location or for handling an existing symlink at the destination. Left alone, every
+        Lola-installed module becomes an orphaned real-file duplicate sitting outside the flat
+        root.
+      </p>
+      <p>
+        This repo carries a small bridge script for that gap,
+        <code class="inline">scripts/lola-post-install-hub-bridge.sh</code>. Run right after
+        <code class="inline">lola install</code> finishes, it walks the tool's skill directory,
+        moves every newly-copied real (non-symlink) skill folder into
+        <code class="inline">~/AI Assets/@lola--&lt;module-name&gt;/&lt;skill-name&gt;/</code>,
+        and replaces the original location with a symlink back to it. It's idempotent (an
+        already-symlinked skill is skipped on a re-run) and never overwrites an existing
+        destination — a real collision is logged and left for manual resolution instead of
+        guessed at.
+      </p>
+      <p>
+        Lola's only documented hook surface (confirmed against <code class="inline">lola install
+        --help</code> on this machine) is <code class="inline">--pre-install PATH</code> /
+        <code class="inline">--post-install PATH</code>, with no documentation of what gets
+        passed to the hook script. Wiring the bridge in as a post-install hook looks like:
+      </p>
+      <pre class="code-block" style="margin: var(--paragraph-spacing) 0 0;">lola install my-module ./my-project -a claude-code -s user \
+  --post-install "$HOME/AI Assets/@ktotten--local-ai-asset-organization/scripts/lola-post-install-hub-bridge.sh"</pre>
+      <p>
+        One gap worth knowing before relying on that flag: Lola resolves
+        <code class="inline">--post-install</code>'s path <em>relative to the module's own local
+        copy directory</em> and requires the result stay inside it — a script living in its own
+        repo, outside any module, can trigger "post-install script outside module directory," and
+        because post-install failures are only logged as a warning, the install still reports
+        success while the hook silently never runs. If that happens, skip
+        <code class="inline">--post-install</code> and run the script by hand right after install
+        instead, e.g. <code class="inline">./lola-post-install-hub-bridge.sh --skills-dir
+        ~/.claude/skills --module-name my-module --dry-run</code> first, then for real once the
+        plan looks right.
+      </p>
+      <p>
+        This is a workaround maintained alongside this methodology, not an official Lola
+        feature — its hook contract could change or disappear without notice. Re-verify against
+        <code class="inline">lola install --help</code> and the script's own header comments
+        (which document exactly which assumptions came from reading Lola's source rather than its
+        docs) before trusting it in a new environment.
+      </p>
+    </div>
 
     <h3>Discovery mechanism determines how much a stable-path layer matters</h3>
     <p>
