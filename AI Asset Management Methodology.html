@@ -10,7 +10,7 @@
     --font-size: 16px;
     --line-height: 1.6;
     --paragraph-spacing: 16px;
-    --heading-space-before: 32px;
+    --heading-space-before: 20px;
 
     --ink: #1c1c1c;
     --muted: #4a4a4a;
@@ -64,7 +64,9 @@
     margin-top: var(--paragraph-spacing);
     margin-bottom: 0;
   }
-
+  h2 {
+    font-size: 26px;
+  }
   h2, h3, h4 {
     margin-top: var(--heading-space-before);
     margin-bottom: var(--paragraph-spacing);
@@ -188,7 +190,7 @@
   .eyebrow-label {
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--accent);
     margin: 0;
@@ -196,7 +198,7 @@
   .band .eyebrow-label { color: #084b87; }
 
   .lead-text {
-    font-size: 19px;
+    font-size: 17px;
     color: var(--muted);
     max-width: 720px;
   }
@@ -736,9 +738,12 @@
           their existing relative paths. A repo that <em>is</em> a single skill is also exactly
           one entry. There is no "is this a project repo or a skill-collection repo?" judgment
           call to make, because the answer never changes the outcome.</li>
-        <li><strong>Named <code class="inline">@org--repo-name</code>.</strong> A literal
-          double-dash separates the owning org/user from the repository name — not a real
-          sub-folder, just a naming prefix a human can scan in a flat directory listing.</li>
+        <li><strong>Named <code class="inline">@org--repo-name</code> in this page's
+          examples.</strong> A literal double-dash separates the owning org/user from the
+          repository name — not a real sub-folder, just a naming prefix a human can scan in a
+          flat directory listing. Prefer nested org folders instead? That works too — the naming
+          syntax is a matter of taste; deriving the org/owner from the git remote, not the local
+          folder, is the part that isn't (see below).</li>
       </ul>
     </div>
 
@@ -758,21 +763,30 @@
 <section class="band">
   <div class="wrap">
     <p class="eyebrow-label">Why the naming convention matters</p>
-    <h2>Name entries from the git remote, never from the local folder</h2>
+    <h2>Organize it however you like — just derive names from the git remote, not the local folder</h2>
     <p class="lead-text">
-      The org prefix in <code class="inline">@org--repo-name</code> has to come from the
+      How you physically organize things is up to you. Nested folders by org
+      (<code class="inline">~/AI-Assets/org-name/repo-name/</code>), a flat
+      <code class="inline">@org--repo-name</code> naming prefix (what this page's own examples
+      use), or another scheme entirely — pick whatever's easiest for you to scan, and put the
+      root wherever you want (<code class="inline">~/Sites</code>, <code class="inline">~/AI
+      Assets</code>, <code class="inline">~/projects</code>, anywhere). The folder name and
+      location of the root itself isn't the point.
+    </p>
+    <p class="lead-text" style="margin-top: 12px;">
+      What doesn't bend, whichever scheme you pick: the org/owner identity has to come from the
       repository's actual <code class="inline">git remote -v</code> output — never from
-      assumptions, and never from whatever the local folder happened to be called before the
-      migration. Local folder names are hints at best; they drift from reality more often than
-      you'd expect.
+      assumptions, and never from whatever the local folder happened to be called before you
+      organized it. Local folder names and container paths are hints at best; they drift from
+      reality more often than you'd expect, as the case studies below show.
     </p>
 
     <div class="case-stack" style="margin-top: 24px;">
       <div class="callout blue">
-        <h4>Case study — the container folder lied</h4>
+        <h4>Case study — misleading container folders</h4>
         <p>
           A repo sat inside a container folder implying it belonged to one team's namespace —
-          call it <code class="inline">team-a-tools/internal-tools-cli</code> on disk. Running
+          call it <code >team-a-tools/internal-tools-cli</code> on disk. Running
           <code class="inline">git remote -v</code> against it resolved to an entirely different
           owner: <code class="inline">git@example.com:platform-org/internal-tools-cli.git</code>.
           The correct flat entry is <code class="inline">@platform-org--internal-tools-cli</code>,
