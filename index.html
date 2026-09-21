@@ -484,8 +484,9 @@
       <tbody>
         <tr>
           <td><span class="move-num">1)</span><span class="move-label">Flatten</span></td>
-          <td>One physical root, one entry per repo, named from the git remote — eliminates
-            "which copy is real" and folder-name-vs-owner mismatches.</td>
+          <td>One physical root, one entry per repo, named from the git remote. This eliminates the problem of
+            "which copy is real" and folder-name-vs-owner mismatches. This could be a folder named 
+            <code class="inline">/Sites</code>  or <code class="inline">/AI Assets</code>, whatever you like. <a href="#architecture">See an example of the architecture.</a></td> </td>
         </tr>
         <tr>
           <td><span class="move-num">2)</span><span class="move-label">Symlink</span></td>
@@ -560,7 +561,7 @@
 
 <section>
   <div class="wrap">
-    <p class="eyebrow-label">The architecture</p>
+    <p class="eyebrow-label" id="architecture">The architecture</p>
     <h2>One physical root, one canonical hub, and symlink views</h2>
     <p class="lead-text">
       The fix is architectural, not procedural: pick exactly one folder on disk that is the
