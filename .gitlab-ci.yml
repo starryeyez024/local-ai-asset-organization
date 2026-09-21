@@ -1,5 +1,7 @@
 pages:
   stage: deploy
+  tags:
+    - itup-alm-x86
   script:
     - mkdir -p public
     - cp index.html public/index.html
