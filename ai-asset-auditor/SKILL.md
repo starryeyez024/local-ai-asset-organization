@@ -27,14 +27,23 @@ agent actually follows, and git repos whose local folder name has quietly
 drifted from what their remote says they should be called.
 
 The fix is architectural: pick exactly one folder on disk (the "physical
-root") that holds the real files for every AI-related asset, organized as
-nested `<org>/<repo-name>/` folders derived from each repo's actual git
-remote — one entry per repo, nested under its owning org, no per-skill
-splitting. See "Physical Root & Identity" in the companion `index.html`
-writeup for the reasoning. Every tool-facing directory then becomes a pure
-symlink view into that root. Moving or renaming an asset
-afterward only ever means updating where a symlink points, never touching file
-contents.
+root") that holds the real files for every asset you personally curate and
+version-control, organized as nested `<org>/<repo-name>/` folders derived from
+each repo's actual git remote — one entry per repo, nested under its owning
+org, no per-skill splitting. See "Physical Root & Identity" in the companion
+`index.html` writeup for the reasoning. Your own tracked skills and
+vendor-fork overrides get symlinked from that physical root into
+`~/.agents/skills` — a canonical, cross-tool-recognized location that OpenAI
+Codex CLI, Cursor, OpenCode, Google Gemini CLI, and GitHub Copilot all read
+natively. That hub is not required to be pure symlinks, though: every one of
+those tools discovers skills by resolving whatever sits at each entry, real
+directory or symlink, with no restriction on mixing the two. Content a tool
+writes directly into the hub (Cursor's own built-ins, Codex's own built-ins, a
+third-party skills-CLI installer's output) legitimately coexists there as
+real files — that's expected, not drift, and forcing it into a symlink risks
+it being silently overwritten on the next tool sync anyway. Moving or
+renaming one of your own tracked assets afterward only ever means updating
+where its symlink points, never touching file contents.
 
 This skill operationalizes that methodology as a **read-first, ask-often
 audit**, not a script that reorganizes a filesystem on your behalf. It is
@@ -79,7 +88,7 @@ locations first, and ask the user for anything this list misses:
 
 - `~/.claude/skills`
 - `~/.cursor/skills-cursor`
-- `~/.agents/skills`
+- `~/.agents/skills` (the global hub)
 - Any project-local `.claude/skills` or `.agents/skills` under the user's
   usual working directories (ask where their projects generally live if not
   obvious — e.g. a `~/Sites`, `~/Code`, `~/dev`, or `~/Projects` equivalent)
@@ -89,6 +98,22 @@ locations first, and ask the user for anything this list misses:
 For each `SKILL.md` found, note its containing folder path. If a discovery
 location does not exist on this machine, skip it silently — do not treat a
 missing conventional path as an error, just fewer candidates.
+
+**`~/.agents/skills` is not the only place skills legitimately live.** Most
+tools that read the global hub (Codex, Cursor, OpenCode) also walk from a
+project's working directory up to its repo root looking for a
+project-local `.agents/skills`. This auditor's Phase 1 discovery above
+already includes that project-local scan, but don't let anything downstream
+in this skill implicitly treat the global hub as the single source of truth
+when reasoning about a workspace. A `./.agents/skills/<name>/` folder found
+inside a project falls under a separate two-rule convention (personal
+projects symlink from `~/AI Assets` into the project root, the same as the
+global hub; team-shared repos commit a real `SKILL.md` directly into the
+project so it travels with the clone) — see "Workspace scope" in the
+companion `index.html` writeup. Auditing or reconciling every project's own
+`.agents/skills` folder against that convention is out of scope for this
+skill; just don't audit a machine as if the global hub were the whole
+picture.
 
 ### 1.2 Find candidate MCP server entries
 
@@ -247,6 +272,27 @@ If a nested `SKILL.md` is found:
   the finding clearly as part of the Phase 2 plan and let the user decide how
   to handle it — this is a flag-and-ask case, not a stop-the-audit case.
 
+### 1.7 Real (non-symlink) entries directly inside `~/.agents/skills` are not automatically a problem
+
+Not every entry inside `~/.agents/skills` needs to be a symlink. Every tool that reads this
+hub (Codex CLI, Cursor, OpenCode, Gemini CLI, GitHub Copilot) resolves whatever sits at each
+entry — a real directory or a symlink — with no restriction on mixing the two. Before flagging
+a real (non-symlink) folder or file found directly in `~/.agents/skills`, check which of two
+cases actually applies — do not assume it's a violation just because it isn't a symlink:
+
+- **Tracked elsewhere with identical content.** Search `~/AI Assets` (e.g. `find ~/AI\ Assets
+  -iname SKILL.md`, or compare directory contents/hashes against the candidate) to see if this
+  same skill already exists as a git-tracked repo or personal skill folder under the physical
+  root. If it does, and the content matches, this one IS still worth flagging in the Phase 2
+  plan — recommend converting it to a symlink, same as any other tracked asset, for consistency
+  and version control.
+- **Not tracked anywhere, plausibly tool-written.** If no matching content exists anywhere
+  under `~/AI Assets`, this is very likely something a tool's own sync/install mechanism wrote
+  directly into the hub (a built-in skill, an installer's copy-based output). **Leave it
+  alone.** This is not a violation, not drift, and not something to propose deleting, moving,
+  or converting to a symlink. Record it in the Phase 1 findings as "tool-managed, no action
+  needed" rather than omitting it or silently treating it as a defect.
+
 ---
 
 ## Phase 2 — Present the plan, ask, wait for confirmation
@@ -277,6 +323,9 @@ Lay out, in plain language:
   already-decided plan items.
 - Any nested `SKILL.md` found under 1.6, listed by path with both remediation
   options spelled out, for any folder proposed as a symlink target.
+- Any real (non-symlink) entry found directly in `~/.agents/skills` under 1.7 — labeled either
+  "tracked elsewhere, recommend symlinking" (with the matching physical-root path shown) or
+  "tool-managed, no action needed."
 
 ### 2.2 Ask explicit clarifying questions
 
@@ -401,6 +450,9 @@ someone else's skill content to make a migration tidier.
 - Every folder proposed as a `~/.agents/skills` symlink target gets checked
   for nested `SKILL.md` files (exactly 1 expected, at the top level) — flag
   and ask, never symlink a folder with nested skills silently.
+- A real (non-symlink) entry sitting directly in `~/.agents/skills` is only flagged for
+  conversion if it's also tracked with identical content somewhere under `~/AI Assets`.
+  Otherwise it's presumed tool-managed and left alone — not a violation.
 - Phase 3 never runs on a plan that wasn't presented and explicitly
   confirmed first, and re-checks git state immediately before each move
   rather than trusting a stale audit.

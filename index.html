@@ -430,6 +430,16 @@
     text-align: center;
   }
 
+  /* ---------- Footnotes ---------- */
+  .footnotes {
+    font-size: 13px;
+    color: var(--muted);
+    padding-left: 20px;
+  }
+  .footnotes li { margin-top: 8px; }
+  .footnotes a { color: var(--muted); }
+  sup a { text-decoration: none; font-size: 0.75em; }
+
   /* ---------- Responsive ---------- */
   @media (max-width: 768px) {
     .hero h1 { font-size: 32px; }
@@ -491,9 +501,11 @@
         <tr>
           <td><span class="move-num">2)</span><span class="move-label">Symlink</span></td>
           <td>One canonical hub directory (e.g. <code class="inline">~/.agents/skills</code>)
-            holds the real per-repo symlinks; every other tool points a single symlink at that
-            hub instead of rebuilding its own — moving or renaming touches symlinks only, never
-            file contents.</td>
+            holds your own tracked skills as symlinks back into the physical root; every other
+            tool points a single symlink at that hub instead of rebuilding its own. The hub
+            itself isn't required to be pure symlinks — tool-managed real files can legitimately
+            sit there too<sup><a href="#fn1">[1]</a><a href="#fn2">[2]</a></sup> — but moving or
+            renaming one of your own entries touches symlinks only, never file contents.</td>
         </tr>
         <tr>
           <td><span class="move-num">3)</span><span class="move-label">Split MCP</span></td>
@@ -597,7 +609,7 @@
         <span class="caption">symlinked into every tool's directory</span>
       </div>
 
-      <h4><code class="inline">~/.agents/skills/</code> — the canonical hub: every skill's symlink is listed here by name, once</h4>
+      <h4><code class="inline">~/.agents/skills/</code> — the canonical hub: your own skills are listed here as symlinks, once each</h4>
       <pre class="flat-listing">
 concaten-gator            <span class="symlink-arrow">&rarr;</span> <span class="symlink-a">~/AI Assets/data-org/repo-one/skills/concaten-gator/</span>
 meeting-maxi              <span class="symlink-arrow">&rarr;</span> <span class="symlink-b">~/AI Assets/platform-org/sub-group/repo-two/skills/meeting-maxi/</span>
@@ -616,15 +628,23 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
         <tbody>
           <tr>
             <td><code class="inline">~/.agents/skills</code></td>
-            <td>The hub itself. Holds the real, per-repo symlinks into the flat physical root. Followed by Codex CLI and other shared tools.</td>
+            <td>The hub itself. Holds your own tracked skills as symlinks into the flat physical
+              root — and may also legitimately hold real (non-symlink) entries a tool wrote
+              there directly, such as a built-in skill or an installer's output. Read natively by
+              Codex CLI<sup><a href="#fn4">[4]</a></sup>, Cursor<sup><a href="#fn9">[9]</a></sup>,
+              OpenCode<sup><a href="#fn6">[6]</a></sup>, Gemini CLI<sup><a href="#fn7">[7]</a></sup>,
+              and GitHub Copilot<sup><a href="#fn8">[8]</a></sup>.</td>
           </tr>
           <tr>
             <td><code class="inline">~/.claude/skills</code></td>
-            <td>Claude Code CLI's skill directory. Collapses to a single symlink pointing at the hub above.</td>
+            <td>Claude Code CLI's skill directory. Claude Code doesn't read the
+              <code class="inline">~/.agents/skills</code> hub directly, but its docs explicitly
+              support a symlinked skill folder here,<sup><a href="#fn3">[3]</a></sup> so this can
+              collapse to a single symlink pointing at the hub above.</td>
           </tr>
           <tr>
             <td>Cursor's skills directory</td>
-            <td>Cursor's tool-specific location on disk. Collapses to a single symlink pointing at the hub.</td>
+            <td>Cursor's tool-specific location on disk.<sup><a href="#fn9">[9]</a></sup> Collapses to a single symlink pointing at the hub.</td>
           </tr>
           <tr>
             <td><code class="inline">.claude/skills</code> <em>(project-local)</em></td>
@@ -645,6 +665,62 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
         Fix it at the source by renaming the skill folder in whichever repo you control, or pick which one keeps the plain name in the hub. If you need both live at once, symlink the second under an org-prefixed name (e.g. <code class="inline">org-b--example-skill-name</code>). Any tooling that builds the hub should warn and skip on collisions rather than silently overwriting.
       </p>
     </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow-label">Workspace scope</p>
+    <h2>The hub is global. Most of these tools also read a project-level <code class="inline">.agents/skills</code></h2>
+    <p class="lead-text">
+      Everything above describes <code class="inline">~/.agents/skills</code> as a single global hub, but that's
+      only half of what these tools actually look at. Codex CLI, Cursor, and OpenCode each walk upward from the
+      current working directory to the repo root looking for a second, workspace-scoped
+      <code class="inline">.agents/skills</code> folder, and load whatever they find there in addition to the
+      global hub<sup><a href="#fn4">[4]</a><a href="#fn9">[9]</a><a href="#fn6">[6]</a></sup>. The methodology so
+      far never addressed that project-level layer. Closing the gap doesn't need a merge engine — just two rules
+      for which of the two ways an asset can exist inside <code class="inline">./.agents/skills/</code> applies to
+      a given repo.
+    </p>
+    <p>
+      <strong>Rule 1 — personal, local-only workspaces.</strong> If the repo or project is just yours, not meant
+      to be shared, apply the exact same principle used for the global hub, one level deeper: symlink from
+      <code class="inline">~/AI Assets</code> straight into <code class="inline">./.agents/skills/</code> at the
+      project root, the same way <code class="inline">~/.agents/skills</code> itself is built. Nothing physically
+      lives inside the project's own <code class="inline">.agents/</code> folder — it's still every real file
+      living under the one physical root, with the project-level folder acting as just another symlink view onto
+      it, not a second copy.
+    </p>
+    <p>
+      <strong>Rule 2 — team-shared repositories.</strong> If the point is for a skill to travel <em>with</em> the
+      repo — a project-specific skill that only makes sense inside that codebase, and that a teammate should get
+      automatically on <code class="inline">git clone</code> — let a real, physical <code class="inline">SKILL.md</code>
+      live directly inside <code class="inline">./.agents/skills/&lt;skill-name&gt;/</code>, committed to the repo
+      like any other source file. This is the one deliberate exception to the single-physical-root rule described
+      throughout this page: a teammate who clones the repo doesn't have your personal <code class="inline">~/AI
+      Assets</code> checkout, so a symlink pointing back at it would just be dangling on their machine. A real,
+      committed file is the only way the skill actually arrives with the clone.
+    </p>
+    <p>
+      This works without any merge logic because a workspace-level entry generally takes precedence over a
+      same-named global one — of the tools cited on this page, Codex, Cursor, and OpenCode's docs each describe the
+      project-level <code class="inline">.agents/skills</code> as its own discovery scope layered on top of the
+      global one, which is consistent with a project-level skill shadowing a global entry sharing its name.
+      That said, this page's prior research only confirmed that each tool <em>has</em> a project-level scope, not
+      that "project wins on a name collision" is exhaustively documented or identical across all of them — treat it
+      as the reasonable, likely default rather than a guaranteed behavior, and verify it directly against whichever
+      tool your workflow actually depends on if a collision matters to you.
+    </p>
+    <p>
+      Concretely: <code class="inline">your-username/repo-three</code> from the diagram above, if it's a personal
+      project, would get a plain symlink at <code class="inline">./.agents/skills/build-automation</code> pointing
+      back at <code class="inline">~/AI Assets/your-username/repo-three/skills/build-automation/</code> — no
+      different from the global hub entry for the same skill. <code class="inline">platform-org/sub-group/repo-two</code>,
+      if it's a team-shared repo and <code class="inline">meeting-maxi</code> only makes sense inside it, instead
+      gets a real <code class="inline">SKILL.md</code> committed straight into
+      <code class="inline">./.agents/skills/meeting-maxi/</code> in that repo — no symlink, no dependency on
+      anyone's personal asset root, just a file that ships with the clone.
+    </p>
   </div>
 </section>
 
@@ -708,7 +784,7 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
         <p>
           If there is no remote to derive a name from — no <code class="inline">.git</code> at
           all, or a git repo with no remote configured — nest it under your own OS username as
-          the namespace folder (e.g. <code class="inline">ktotten/</code>), the same as any other
+          the namespace folder (e.g. <code class="inline">john-doe/</code>), the same as any other
           personal repo, rather than inventing a generic <code class="inline">personal/</code>
           folder name that doesn't correspond to anything real on the remote side.
         </p>
@@ -764,12 +840,12 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
       <h4><code class="inline">~/AI Assets/</code> — vendor original untouched, personal-fork override added alongside it</h4>
       <pre class="flat-listing"><span class="symlink-a">org-a/</span>
 <span class="symlink-arrow">└── </span><span class="symlink-a">fiddlewidget/</span>
-<span class="symlink-c">ktotten/</span>
+<span class="symlink-c">john-doe/</span>
 <span class="symlink-arrow">└── </span><span class="symlink-c">fiddlewidget/</span>
 <span class="symlink-arrow">    └── </span><span class="filerow">SKILL.md</span></pre>
 
       <h4><code class="inline">~/.agents/skills/</code> — the tool-facing symlink re-pointed off the vendor copy</h4>
-      <pre class="flat-listing">fiddlewidget               <span class="symlink-arrow">&rarr;</span> <span class="symlink-c">~/AI Assets/ktotten/fiddlewidget/</span></pre>
+      <pre class="flat-listing">fiddlewidget               <span class="symlink-arrow">&rarr;</span> <span class="symlink-c">~/AI Assets/john-doe/fiddlewidget/</span></pre>
     </div>
 
     <div class="callout red" style="margin-top: 24px;">
@@ -831,6 +907,22 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
     A general methodology for organizing AI agent skills and MCP servers across multiple tools.
   </div>
 </footer>
+
+<section class="tight">
+  <div class="wrap">
+    <p class="eyebrow-label">Sources</p>
+    <ol class="footnotes">
+      <li id="fn1">agentskills.io — Agent Skills format spec: canonical <code class="inline">SKILL.md</code> filename, and <code class="inline">.agents/skills</code> described as a widely-adopted convention rather than a mandated location. <a href="https://agentskills.io/client-implementation/adding-skills-support" target="_blank" rel="noopener">agentskills.io/client-implementation/adding-skills-support</a></li>
+      <li id="fn2">agent-plugins.org — Agent Plugins v1.0.0 specification. Its only symlink-related rule concerns distributed plugin packages not letting an internal symlink escape the package's own root boundary — unrelated to a personal/global skills hub. <a href="https://agent-plugins.org/specification" target="_blank" rel="noopener">agent-plugins.org/specification</a></li>
+      <li id="fn3">Anthropic Claude Code — Skills docs. Claude Code reads only <code class="inline">~/.claude/skills</code> (personal) and <code class="inline">.claude/skills</code> (project), not <code class="inline">~/.agents/skills</code> directly, and explicitly supports a symlinked skill folder in that location. <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills</a></li>
+      <li id="fn4">OpenAI Codex CLI — Agent Skills docs. Documents <code class="inline">$HOME/.agents/skills</code> as a supported global scope and follows symlinked skill folders. <a href="https://developers.openai.com/codex/skills" target="_blank" rel="noopener">developers.openai.com/codex/skills</a></li>
+      <li id="fn6">OpenCode (sst/opencode) — Skills docs. Reads <code class="inline">~/.agents/skills/*/SKILL.md</code> and <code class="inline">.agents/skills/*/SKILL.md</code> via a glob scanner that follows symlinks. <a href="https://opencode.ai/docs/skills/" target="_blank" rel="noopener">opencode.ai/docs/skills</a></li>
+      <li id="fn7">Google Gemini CLI — Skills docs. Treats <code class="inline">~/.agents/skills/</code> as an explicit alias for <code class="inline">~/.gemini/skills/</code>, with a shipped fix (PR #28968) that resolves realpath to dedupe symlinked/aliased directories. <a href="https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/skills.md" target="_blank" rel="noopener">github.com/google-gemini/gemini-cli — docs/cli/skills.md</a></li>
+      <li id="fn8">GitHub Copilot (Microsoft) — Agent Skills docs. Lists <code class="inline">.agents/skills</code> and <code class="inline">~/.agents/skills</code> alongside <code class="inline">.github/skills</code>/<code class="inline">.claude/skills</code> and <code class="inline">~/.copilot/skills</code>/<code class="inline">~/.claude/skills</code>, per the agentskills.io specification. <a href="https://learn.microsoft.com/en-us/visualstudio/ide/copilot-agent-skills?view=visualstudio" target="_blank" rel="noopener">learn.microsoft.com — copilot-agent-skills</a></li>
+      <li id="fn9">Cursor — Skills docs. Reads <code class="inline">~/.agents/skills/</code> and <code class="inline">.agents/skills/</code> natively via a recursive walk, with skill identity taken from the immediate parent folder of <code class="inline">SKILL.md</code>. <a href="https://cursor.com/docs/skills" target="_blank" rel="noopener">cursor.com/docs/skills</a></li>
+    </ol>
+  </div>
+</section>
 
 </body>
 </html>
