@@ -1,13 +1,8 @@
 ---
 name: skill-override-safeguard
 description: >
-  Standing safeguard for editing skills that live outside ~/AI Assets/overrides/.
-  Use this BEFORE editing, modifying, or "fixing" any SKILL.md (or any file inside
-  that skill's folder) that lives under ~/AI Assets/@*--*/ and is not already under
-  ~/AI Assets/overrides/. Applies to any Cursor, Claude Code, or Codex agent working
-  on this machine. Triggers on requests like "update this skill", "fix a bug in
-  <skill>", "improve <skill>'s prompt", or any direct edit targeting a file inside a
-  team/vendor-owned skill folder.
+   CRITICAL GUARDRAIL: Must be consulted before modifying, editing, patching, or updating
+   ANY existing agent skill, vendor package, or team-shared asset on disk.
 ---
 
 # Skill Override Safeguard
