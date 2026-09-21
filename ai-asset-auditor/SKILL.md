@@ -27,10 +27,12 @@ agent actually follows, and git repos whose local folder name has quietly
 drifted from what their remote says they should be called.
 
 The fix is architectural: pick exactly one folder on disk (the "physical
-root") that holds the real files for every AI-related asset, named
-`@org--repo-name` from each repo's actual git remote, one flat entry per
-repo — no org sub-folders, no per-skill splitting. Every tool-facing directory
-then becomes a pure symlink view into that root. Moving or renaming an asset
+root") that holds the real files for every AI-related asset, organized as
+nested `<org>/<repo-name>/` folders derived from each repo's actual git
+remote — one entry per repo, nested under its owning org, no per-skill
+splitting. See "Physical Root & Identity" in the companion `index.html`
+writeup for the reasoning. Every tool-facing directory then becomes a pure
+symlink view into that root. Moving or renaming an asset
 afterward only ever means updating where a symlink points, never touching file
 contents.
 
@@ -82,7 +84,7 @@ locations first, and ask the user for anything this list misses:
   usual working directories (ask where their projects generally live if not
   obvious — e.g. a `~/Sites`, `~/Code`, `~/dev`, or `~/Projects` equivalent)
 - Any existing "AI assets" style root the user has already started (a folder
-  whose entries are named `@org--repo-name`)
+  whose entries are nested `<org>/<repo-name>/` folders)
 
 For each `SKILL.md` found, note its containing folder path. If a discovery
 location does not exist on this machine, skip it silently — do not treat a
@@ -138,11 +140,23 @@ repo:
 1. Run `git -C <path> remote -v` and parse the remote URL (the `origin`
    remote if present, otherwise ask the user which remote to treat as
    canonical if there are several).
-2. Extract the **org/owner** from the remote URL's path component immediately
-   before the final segment, and the **repo name** from the final path
-   segment (strip `.git` if present).
-3. Propose the flat entry name as `@<org>--<repo-name>`.
-4. **Explicitly compare this derived name against the local folder name.** If
+2. Extract the **full org/owner path** from the remote URL — everything
+   between the host and the final segment — and the **repo name** from the
+   final path segment (strip `.git` if present). GitLab and GitHub subgroups
+   mean this path can be more than one level deep; preserve every level as
+   its own nested folder, never collapse down to just the top-level group.
+   For example, `git@gitlab.example.com:dataverse/agentic-engineering/skills-hub.git`
+   resolves to the three-level entry `dataverse/agentic-engineering/skills-hub/`,
+   not the collapsed `dataverse/skills-hub/`.
+3. Lowercase every segment of that org/owner path, and the repo name, before
+   proposing the folder — regardless of how the remote actually capitalizes
+   it. Use hyphens to separate words if needed, never underscores or
+   camelCase. For example, remote owner `RHEcosystemAppEng` becomes the local
+   folder `rhecosystemappeng/`, not `RHEcosystemAppEng/`.
+4. Propose the nested entry path as `<org>/<repo-name>/` (an org folder
+   containing a repo folder — or, for multi-level remotes, `<org>/<subgroup>/<repo-name>/`).
+   This is the convention for every entry, new or existing.
+5. **Explicitly compare this derived name against the local folder name.** If
    they differ in any way — different org, different repo name, different
    casing, a container folder implying a different owner than the remote
    actually resolves to — flag it as a named discrepancy in the Phase 2 plan
@@ -161,10 +175,13 @@ the repo happens to currently live at.
 Do not resolve any of the following silently. Collect them for Phase 2 and
 present each one as an explicit question:
 
-- **No `.git` at all.** Ask the user how they want it named and grouped —
-  offer a personal-namespace fallback (e.g. `@<username>--<folder-name>`) as
-  a suggestion, but let the user confirm or override it. Never invent an org
-  prefix for an asset that has no remote to derive one from.
+- **No `.git` at all (or a git repo with no remote configured).** Nest it under
+  the user's own OS username as the namespace folder (e.g.
+  `<username>/<folder-name>/`), the same as any other personal repo — never a
+  generic `personal/<folder-name>/` folder, since that name doesn't correspond
+  to anything on the remote side. Confirm the exact username and folder name
+  with the user rather than assuming, but the username-as-namespace convention
+  itself is settled; don't offer `personal/` as an alternative.
 - **Repo with a remote but uncommitted changes.** Run `git -C <path> status
   --porcelain` for every real git repo before proposing it move. If it's
   non-empty, flag the repo and its specific dirty files, and ask the user how
@@ -174,7 +191,7 @@ present each one as an explicit question:
   the user's behalf** — surface the exact list of modified files and wait for
   a decision.
 - **Name collision.** If two different discovered entries would resolve to
-  the same proposed flat entry name (same org + repo name, or two different
+  the same proposed nested entry path (same org + repo name, or two different
   skills that would land on the same tool-facing symlink name), flag the
   collision with both source paths and ask the user how to disambiguate.
   Never auto-resolve a collision by silently overwriting one with the other
@@ -183,6 +200,52 @@ present each one as an explicit question:
   has a real local checkout or is purely remote/PATH-resolved, ask rather
   than guessing which of the two treatments (folder entry vs. lone doc file)
   applies.
+
+### 1.6 Check for nested `SKILL.md` files before proposing any symlink target
+
+For every folder being considered as a symlink target into
+`~/.agents/skills` — whether it's a brand-new skill source being onboarded or
+an existing entry being re-audited — count how many files named `SKILL.md`
+exist anywhere inside it, at any depth. Something conceptually equivalent to:
+
+```
+find <target> -name SKILL.md | wc -l
+```
+
+The expected count is **exactly 1**, and that one `SKILL.md` must sit at the
+top level of the folder itself. Any count other than 1, or a match found at
+a deeper nesting level than the top, is a problem to flag — not something to
+silently accept or silently fix by picking one.
+
+**Why this check exists:** OpenAI's Codex CLI recursively walks skill
+directories and registers *any* file named `SKILL.md` it finds at any depth —
+it does not enforce a boundary of "one skill = one top-level folder" (this is
+a confirmed open bug:
+[openai/codex#22275](https://github.com/openai/codex/issues/22275)). If a
+folder being symlinked into `~/.agents/skills` contains other, nested skill
+folders inside it, and those nested skills are *also* separately symlinked as
+their own top-level entries in `~/.agents/skills`, Codex will double-register
+those nested skills — once via the parent's symlink, once via their own.
+This was discovered concretely in a real vendor repo (`dataverse/skills-hub`),
+where several top-level skill folders turned out to contain nested sub-skill
+folders of their own.
+
+If a nested `SKILL.md` is found:
+
+- Flag it clearly to the user as part of Phase 2's plan, **before** proposing
+  or creating the symlink for that folder — do not let it pass through as if
+  the folder were a clean single-skill entry.
+- Recommend one of two fixes, and let the user pick:
+  1. Don't symlink the parent folder at all. Instead, symlink each nested
+     skill folder individually into `~/.agents/skills`, treating each nested
+     `SKILL.md`'s containing folder as its own top-level skill entry.
+  2. Ask the upstream repo maintainer to flatten their structure — file an
+     issue against the source repo, the same way this was already handled
+     for `dataverse/skills-hub`.
+- Consistent with this skill's human-in-the-loop pattern, **do not block or
+  refuse to proceed automatically** on finding a nested `SKILL.md`. Surface
+  the finding clearly as part of the Phase 2 plan and let the user decide how
+  to handle it — this is a flag-and-ask case, not a stop-the-audit case.
 
 ---
 
@@ -198,10 +261,10 @@ Lay out, in plain language:
 - The proposed physical root location (ask the user if they already have one
   in mind, e.g. `~/AI Assets`; do not assume a specific path without
   confirming it, especially on a machine you haven't audited before).
-- For each real git repo found: current path → proposed flat entry name,
-  with the remote-derived org/name shown explicitly next to the current
+- For each real git repo found: current path → proposed nested `<org>/<repo-name>/`
+  entry path, with the remote-derived org/name shown explicitly next to the current
   folder name so any discrepancy from 1.4 is visible at a glance, not buried.
-- For each plain non-git folder: the fallback name being proposed, clearly
+- For each plain non-git folder: the fallback path being proposed, clearly
   marked as "no remote — needs your input" rather than presented as settled.
 - For each MCP server: whether it's proposed as a folder entry (real local
   checkout) or a lone symlinked doc file (remote/PATH-resolved), and what
@@ -212,20 +275,22 @@ Lay out, in plain language:
   individually — not just "N stray files will be cleaned up."
 - Anything flagged in 1.5 (edge cases), listed as open questions, not as
   already-decided plan items.
+- Any nested `SKILL.md` found under 1.6, listed by path with both remediation
+  options spelled out, for any folder proposed as a symlink target.
 
 ### 2.2 Ask explicit clarifying questions
 
 For every ambiguous or edge case surfaced in Phase 1, ask a direct question
 rather than proceeding on an assumption — for example:
 
-- "`<folder>` has no git remote — should I name it `@<fallback>` or would you
+- "`<folder>` has no git remote — should I place it under `<fallback>/` or would you
   prefer something else?"
 - "`<repo>` has uncommitted changes to `<files>` — do you want to commit
   those first, or should I skip moving this one for now?"
-- "`<repo-a>` and `<repo-b>` would both resolve to `@<org>--<name>` — how
+- "`<repo-a>` and `<repo-b>` would both resolve to `<org>/<name>` — how
   should I distinguish them?"
-- "`<folder>`'s remote resolves to `@<derived-org>`, but its current
-  container folder implies `<assumed-org>` — please confirm `@<derived-org>`
+- "`<folder>`'s remote resolves to `<derived-org>/<repo-name>`, but its current
+  container folder implies `<assumed-org>` — please confirm `<derived-org>/<repo-name>`
   is correct before I use it."
 
 Batch these into one clear round of questions where possible rather than
@@ -315,13 +380,12 @@ whole assets — it is **not** a substitute for the sibling
 vendor- or team-owned skill in place as part of its own operation.
 
 If, during any phase, you discover that a skill actually needs a content
-edit (not just a location change) and that skill lives outside
-`~/AI Assets/overrides/` and is not one of the user's own personal
-(`@<username>--*`) entries, stop and point the user (or the agent handling
-that edit) at the `skill-override-safeguard` skill's copy → edit → re-point
-procedure instead of improvising an edit here. This auditor moves and links
-files; it does not decide, on its own initiative, to rewrite someone else's
-skill content to make a migration tidier.
+edit (not just a location change) and that skill is not one of the user's own
+personal (`<username>/*`) entries, stop and point the user (or the agent
+handling that edit) at the `skill-override-safeguard` skill's copy → edit →
+re-point procedure instead of improvising an edit here. This auditor moves
+and links files; it does not decide, on its own initiative, to rewrite
+someone else's skill content to make a migration tidier.
 
 ---
 
@@ -331,9 +395,12 @@ skill content to make a migration tidier.
 - Every proposed name for a git repo comes from `git remote -v`, not the
   folder name — and every mismatch between the two gets flagged, not silently
   resolved either way.
-- No `.git` at all → ask, don't invent an org prefix.
+- No `.git` at all → ask, don't invent an org folder.
 - Uncommitted changes → flag and ask, never silently discard or move around.
 - Name collisions → flag and ask, never auto-resolve.
+- Every folder proposed as a `~/.agents/skills` symlink target gets checked
+  for nested `SKILL.md` files (exactly 1 expected, at the top level) — flag
+  and ask, never symlink a folder with nested skills silently.
 - Phase 3 never runs on a plan that wasn't presented and explicitly
   confirmed first, and re-checks git state immediately before each move
   rather than trusting a stale audit.

@@ -319,7 +319,7 @@
     color: var(--muted);
   }
   .symlink-a { color: var(--navy-accent-text); }
-  .symlink-b { color: #f0c98a; }
+  .symlink-b { color: #f08ad5; }
   .symlink-c { color: #9ad98a; }
   .symlink-arrow { color: #9a97b0; }
 
@@ -573,12 +573,24 @@
       <p class="diagram-title">Physical root vs. tool-facing symlink views</p>
 
       <h4><code class="inline">~/AI Assets/</code> — real files live here, once</h4>
-      <pre class="flat-listing"><span class="symlink-a">@org-a--repo-one/</span>
-<span class="symlink-b">@org-b--repo-two/</span>
-<span class="symlink-arrow">└── </span><span class="symlink-b">skills/</span>
-<span class="symlink-arrow">    └── </span><span class="symlink-b">example-skill-name/</span>
-<span class="symlink-arrow">        └── </span><span class="filerow">SKILL.md</span>
-<span class="symlink-c">@platform-org--build-automation/</span></pre>
+      <pre class="flat-listing">
+<span class="symlink-a">data-org/</span>
+<span class="symlink-arrow">└── </span><span class="symlink-a">repo-one/</span> 
+<span class="symlink-arrow">    └── </span><span class="symlink-a">skills/</span>
+<span class="symlink-arrow">        └── </span><span class="symlink-a">concaten-gator/</span>
+<span class="symlink-arrow">            └── </span><span class="filerow">SKILL.md</span> 
+<span class="symlink-b">platform-org/</span>
+<span class="symlink-arrow">└── </span><span class="symlink-b">sub-group/</span>
+<span class="symlink-arrow">    └── </span><span class="symlink-b">repo-two/</span>
+<span class="symlink-arrow">        └── </span><span class="symlink-b">skills/</span>
+<span class="symlink-arrow">            └── </span><span class="symlink-b">meeting-maxi/</span>
+<span class="symlink-arrow">                └── </span><span class="filerow">SKILL.md</span>
+<span class="symlink-c">your-username/</span>
+<span class="symlink-arrow">└── </span><span class="symlink-c">repo-three/</span>
+<span class="symlink-arrow">    └── </span><span class="symlink-c">skills/</span>
+<span class="symlink-arrow">        └── </span><span class="symlink-c">build-automation/</span>
+<span class="symlink-arrow">            └── </span><span class="filerow">SKILL.md</span> 
+</pre>
 
       <div class="root-compare-arrow-vert" aria-hidden="true">
         <span class="glyph">&darr;</span>
@@ -586,18 +598,10 @@
       </div>
 
       <h4><code class="inline">~/.agents/skills/</code> — the canonical hub: every skill's symlink is listed here by name, once</h4>
-      <pre class="flat-listing">repo-one                   <span class="symlink-arrow">&rarr;</span> <span class="symlink-a">~/AI Assets/@org-a--repo-one/</span>
-example-skill-name         <span class="symlink-arrow">&rarr;</span> <span class="symlink-b">~/AI Assets/@org-b--repo-two/skills/example-skill-name/</span>
-build-automation           <span class="symlink-arrow">&rarr;</span> <span class="symlink-c">~/AI Assets/@platform-org--build-automation/</span></pre>
-
-      <h4><code class="inline">~/.codeassist-ide/skills</code> — a second tool, collapsed to one symlink pointing at the hub</h4>
-      <pre class="flat-listing">skills                     <span class="symlink-arrow">&rarr;</span> <span class="symlink-a">~/.agents/skills</span></pre>
-
-      <p class="arrow-note">
-        Every line in the top panel is a symlink; the physical root above is the only place real files exist.
-        <code class="inline">~/.agents/skills</code> is the one canonical hub folder holding all of those per-repo symlinks — every other
-        tool directory is a single symlink pointing <em>at the hub</em>.
-      </p>
+      <pre class="flat-listing">
+concaten-gator            <span class="symlink-arrow">&rarr;</span> <span class="symlink-a">~/AI Assets/data-org/repo-one/skills/concaten-gator/</span>
+meeting-maxi              <span class="symlink-arrow">&rarr;</span> <span class="symlink-b">~/AI Assets/platform-org/sub-group/repo-two/skills/meeting-maxi/</span>
+build-automation          <span class="symlink-arrow">&rarr;</span> <span class="symlink-c">~/AI Assets/your-username/repo-three/skills/build-automation/</span></pre>
     </div>
 
     <div class="card" style="margin-top: 24px;">
@@ -633,7 +637,7 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
     <div class="callout amber" style="margin-top: 24px;">
       <h4>What if two different repos ship the same skill name?</h4>
       <p>
-        Say <code class="inline">@org-a--repo-one</code> and <code class="inline">@org-b--repo-two</code>
+        Say <code class="inline">org-a/repo-one</code> and <code class="inline">org-b/repo-two</code>
         each contain a skill folder literally named <code class="inline">example-skill-name</code>.
         A flat hub can only ever point one name at one target.
       </p>
@@ -647,9 +651,19 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
 <section class="band">
   <div class="wrap">
     <p class="eyebrow-label">Physical Root & Identity</p>
-    <h2>Organize however you like — just derive names from the git remote</h2>
+    <h2>Derive names from the git remote, and nest them by org</h2>
     <p class="lead-text">
-      Use nested org directories <span class="white"><code class="inline">/org-name/repo-name/</code></span> or an <span class="white"><code class="inline">@org--</code></span> prefix, pick whatever is easiest to scan for you!
+      The recommended shape is nested org directories —
+      <span class="white"><code class="inline">&lt;org-name&gt;/&lt;repo-name&gt;/</code></span> —
+      rather than a flat <span class="white"><code class="inline">@org--repo-name</code></span> prefix.
+      Nesting is the convention Go's <code class="inline">GOPATH</code> layout and Cargo registries
+      already settled on for exactly this problem, and it pays off in three concrete ways: git's
+      <code class="inline">includeIf "gitdir:…"</code> conditional config (for scoping a different
+      identity or signing key to, say, everything under one org) only matches cleanly against real
+      folder hierarchies, not filename prefixes; CLI navigation tools like <code class="inline">fzf</code>
+      and <code class="inline">zoxide</code> tab-complete and fuzzy-jump far better across nested
+      directories than across a single flat namespace once you're past 50+ entries; and a nested
+      root simply reads cleaner, with less clutter at the top level.
     </p>
 
     <div class="case-stack" style="margin-top: 24px;">
@@ -659,13 +673,44 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
         <ul class="styled-list" style="margin-top: 10px;">
           <li><strong>Local path on disk:</strong> <code>team-a-tools/internal-tools-cli</code></li>
           <li><strong>Actual Git remote:</strong> <code>git@example.com:platform-org/internal-tools-cli.git</code></li>
-          <li><strong>Correct flat entry:</strong> <code>@platform-org--internal-tools-cli</code></li>
+          <li><strong>Correct nested entry:</strong> <code>platform-org/internal-tools-cli/</code></li>
+        </ul>
+      </div>
+      <div class="callout blue">
+        <h4>Multi-level groups: preserve the full remote path, don't collapse it</h4>
+        <p>
+          GitLab and GitHub both support subgroups, and a repo's remote path can be more than
+          one level deep. Preserve every level as its own nested folder instead of collapsing
+          down to just the top-level group:
+        </p>
+        <ul class="styled-list" style="margin-top: 10px;">
+          <li><strong>Git remote:</strong> <code>git@gitlab.example.com:dataverse/agentic-engineering/skills-hub.git</code></li>
+          <li><strong>Correct nested entry (three levels):</strong> <code>dataverse/agentic-engineering/skills-hub/</code></li>
+          <li><strong>Not this (collapsed to two levels):</strong> <code>dataverse/skills-hub/</code></li>
+        </ul>
+      </div>
+      <div class="callout blue">
+        <h4>Always lowercase every folder segment, regardless of the remote's casing</h4>
+        <p>
+          Git remotes are case-sensitive and org/owner names show up in every capitalization
+          style imaginable — <code class="inline">CamelCase</code>, mixed case, whatever the
+          owner typed when they created the account. The local nested folder name should always
+          be lowercased, hyphen-separated (never underscores or camelCase), regardless of how the
+          remote actually capitalizes it:
+        </p>
+        <ul class="styled-list" style="margin-top: 10px;">
+          <li><strong>Git remote owner:</strong> <code>RHEcosystemAppEng</code></li>
+          <li><strong>Correct nested folder:</strong> <code>rhecosystemappeng/</code> (not <code>RHEcosystemAppEng/</code>)</li>
         </ul>
       </div>
       <div class="callout green">
         <h4>What about custom homemade skills?</h4>
         <p>
-          If there is no remote to derive a name from, simply prefix it with a default namespace (<code class="inline">@personal--</code>).
+          If there is no remote to derive a name from — no <code class="inline">.git</code> at
+          all, or a git repo with no remote configured — nest it under your own OS username as
+          the namespace folder (e.g. <code class="inline">ktotten/</code>), the same as any other
+          personal repo, rather than inventing a generic <code class="inline">personal/</code>
+          folder name that doesn't correspond to anything real on the remote side.
         </p>
       </div>
     </div>
@@ -684,13 +729,13 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
       <div class="card">
         <h4 style="color:var(--accent);">Real local code checkout</h4>
         <p>
-          Local code, virtual environments, or launch scripts get a normal flat physical entry in the root (<code class="inline">@vendor-org--example-mcp-server/</code>).
+          Local code, virtual environments, or launch scripts get a normal nested physical entry in the root (<code class="inline">vendor-org/example-mcp-server/</code>).
         </p>
       </div>
       <div class="card">
         <h4 style="color:var(--amber-accent);">Documentation-only / vendor-hosted</h4>
         <p>
-          Remote URLs or globally installed binaries get a lone symlinked markdown file at the root's top level (<code class="inline">@acme-team--docs-mcp.md</code>), avoiding unnecessary folder overhead.
+          Remote URLs or globally installed binaries get a lone symlinked markdown file nested under the org's folder (<code class="inline">acme-team/docs-mcp.md</code>), avoiding unnecessary folder overhead.
         </p>
       </div>
     </div>
@@ -708,29 +753,29 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
     <div class="card" style="margin-top: 24px;">
       <h3>Copy → edit → re-point</h3>
       <ol class="steps">
-        <li>Copy the <strong>whole skill folder</strong> into a dedicated overrides area of the physical root.</li>
+        <li>Copy the <strong>whole skill folder</strong> to a personal fork location under your own username namespace — treated exactly like you forked the upstream repo yourself, even if no actual git fork/remote exists yet. There is no dedicated <code class="inline">overrides/</code> folder anywhere in the physical root.</li>
         <li>Make your edits in the copy. The original upstream folder is left untouched.</li>
-        <li>Re-point the single tool-facing hub symlink for that skill's name at the new override location.</li>
+        <li>Re-point the single tool-facing hub symlink for that skill's name at the new personal-fork location — the symlink name itself doesn't change, only its target.</li>
       </ol>
     </div>
 
     <div class="diagram" style="margin-top: 24px;">
       <p class="diagram-title">Concrete example: a skill after being overridden</p>
-      <h4><code class="inline">~/AI Assets/</code> — vendor original untouched, override copy added alongside it</h4>
-      <pre class="flat-listing"><span class="symlink-a">@org-a--fiddlewidget/</span>
-<span class="symlink-c">@personal--fiddlewidget/</span>
-<span class="symlink-arrow">└── </span><span class="symlink-c">skills/</span>
-<span class="symlink-arrow">    └── </span><span class="symlink-c">fiddlewidget/</span>
-<span class="symlink-arrow">        └── </span><span class="filerow">SKILL.md</span></pre>
+      <h4><code class="inline">~/AI Assets/</code> — vendor original untouched, personal-fork override added alongside it</h4>
+      <pre class="flat-listing"><span class="symlink-a">org-a/</span>
+<span class="symlink-arrow">└── </span><span class="symlink-a">fiddlewidget/</span>
+<span class="symlink-c">ktotten/</span>
+<span class="symlink-arrow">└── </span><span class="symlink-c">fiddlewidget/</span>
+<span class="symlink-arrow">    └── </span><span class="filerow">SKILL.md</span></pre>
 
       <h4><code class="inline">~/.agents/skills/</code> — the tool-facing symlink re-pointed off the vendor copy</h4>
-      <pre class="flat-listing">fiddlewidget               <span class="symlink-arrow">&rarr;</span> <span class="symlink-c">~/AI Assets/@personal--fiddlewidget/skills/fiddlewidget/</span></pre>
+      <pre class="flat-listing">fiddlewidget               <span class="symlink-arrow">&rarr;</span> <span class="symlink-c">~/AI Assets/ktotten/fiddlewidget/</span></pre>
     </div>
 
     <div class="callout red" style="margin-top: 24px;">
       <h4>Skill-override-safeguard: an agent-facing guardrail</h4>
       <p>
-        To keep agents from editing vendor code directly, you can install the <strong>skill-override-safeguard</strong> skill. It instructs agents to stop and execute the Copy → Edit → Re-point workflow automatically whenever an edit is requested outside the designated overrides folder.
+        To keep agents from editing vendor code directly, you can install the <strong>skill-override-safeguard</strong> skill. It instructs agents to stop and execute the Copy → Edit → Re-point workflow automatically whenever an edit is requested outside the user's own personal username namespace.
       </p>
       <div class="download-cta">
         <a class="btn-download" href="./skill-override-safeguard/SKILL.md">&#8681; View the skill (SKILL.md)</a>
@@ -760,10 +805,10 @@ build-automation           <span class="symlink-arrow">&rarr;</span> <span class
         <code class="inline">scripts/lola-post-install-hub-bridge.sh</code>.
       </p>
       <p>
-        Triggered after installation, it moves newly-copied skill folders into <code class="inline">~/AI Assets/@lola--&lt;module-name&gt;/&lt;skill-name&gt;/</code> and replaces the original path with a symlink back to the hub.
+        Triggered after installation, it moves newly-copied skill folders into <code class="inline">~/AI Assets/lola/&lt;module-name&gt;/&lt;skill-name&gt;/</code> and replaces the original path with a symlink back to the hub.
       </p>
       <pre class="code-block" style="margin: var(--paragraph-spacing) 0 0;">lola install my-module ./my-project -a claude-code -s user \
-  --post-install "$HOME/AI Assets/@ktotten--local-ai-asset-organization/scripts/lola-post-install-hub-bridge.sh"</pre>
+  --post-install "$HOME/AI Assets/ktotten/local-ai-asset-organization/scripts/lola-post-install-hub-bridge.sh"</pre>
     </div>
 
     <div class="callout blue" style="margin-top: 24px;">
