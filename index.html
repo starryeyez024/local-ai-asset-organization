@@ -920,6 +920,14 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
       <li id="fn7">Google Gemini CLI — Skills docs. Treats <code class="inline">~/.agents/skills/</code> as an explicit alias for <code class="inline">~/.gemini/skills/</code>, with a shipped fix (PR #28968) that resolves realpath to dedupe symlinked/aliased directories. <a href="https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/skills.md" target="_blank" rel="noopener">github.com/google-gemini/gemini-cli — docs/cli/skills.md</a></li>
       <li id="fn8">GitHub Copilot (Microsoft) — Agent Skills docs. Lists <code class="inline">.agents/skills</code> and <code class="inline">~/.agents/skills</code> alongside <code class="inline">.github/skills</code>/<code class="inline">.claude/skills</code> and <code class="inline">~/.copilot/skills</code>/<code class="inline">~/.claude/skills</code>, per the agentskills.io specification. <a href="https://learn.microsoft.com/en-us/visualstudio/ide/copilot-agent-skills?view=visualstudio" target="_blank" rel="noopener">learn.microsoft.com — copilot-agent-skills</a></li>
       <li id="fn9">Cursor — Skills docs. Reads <code class="inline">~/.agents/skills/</code> and <code class="inline">.agents/skills/</code> natively via a recursive walk, with skill identity taken from the immediate parent folder of <code class="inline">SKILL.md</code>. <a href="https://cursor.com/docs/skills" target="_blank" rel="noopener">cursor.com/docs/skills</a></li>
+      <li>Open related issues:
+        <ul  style="margin-top:0;padding-top:0;">
+        <li id="fn10">Lola: <a href="https://github.com/LobsterTrap/lola/issues/250" target="_blank" rel="noopener">"Feature request: configurable behavior for symlinked install destinations"</a></li>
+        <li id="fn10">Dataverse: <a href="https://gitlab.cee.redhat.com/dataverse/agentic-engineering/skills-hub/-/work_items/3" target="_blank" rel="noopener">"Skills naming and structuring"
+        </a></li>
+        <li id="fn10">Codex: <a href="https://github.com/openai/codex/issues/22275" target="_blank" rel="noopener">"Skill discovery recursively registers nested SKILL.md files inside symlinked skill directories"</a></li>
+      </ul>
+      </li>
     </ol>
   </div>
 </section>

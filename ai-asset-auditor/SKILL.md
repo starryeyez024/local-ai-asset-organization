@@ -355,6 +355,8 @@ plan. If the user changes their mind about part of the plan, re-confirm the
 updated plan before executing any part of it — don't execute the
 unchanged parts on the strength of an earlier, now-superseded confirmation.
 
+Before executing, ask the user: "Want a quick backup first? I can tar/zip the current state of `~/.agents/skills` and the affected `~/AI Assets` folders before making changes." Proceed only after their answer.
+
 ---
 
 ## Phase 3 — Execute only what was confirmed
