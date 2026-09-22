@@ -159,6 +159,14 @@
     margin: 0;
   }
   .band .eyebrow-label { color: #084b87; }
+  .eyebrow-label a.eyebrow-anchor {
+    color: inherit;
+    text-decoration: none;
+  }
+  .eyebrow-label a.eyebrow-anchor:hover,
+  .eyebrow-label a.eyebrow-anchor:focus {
+    text-decoration: underline;
+  }
 
   .lead-text {
     font-size: 17px;
@@ -462,27 +470,25 @@
   <div class="wrap">
     <div class="hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow">A methodology for AI tooling hygiene</p>
-        <h1>One Root, No Duplicates</h1>
+        <p class="eyebrow">A methodology for managing local AI tools</p>
+        <h1>A Single Source of Truth</h1>
         <p class="lede">
-          A general approach for organizing AI agent skills and MCP servers so they have a single
-          source of truth on disk, stay in sync across every tool that reads them, and never get
-          silently duplicated, broken, or overwritten when something moves.
+          A prescribed approach for organizing your local AI Skills and MCP Servers, so they stay in sync across every tool that reads them (i.e. Cursor / Codex) and are never silently duplicated, broken, or overwritten.
+          <i>This is not something which is automatically handled by Lola, NPX, or other package managers.</i>
         </p>
       </div>
       <div class="hero-image">
         <div class="hero-image-frame">
           <img src="./ai-assets-sot.jpeg" alt="Diagram of a single flat physical root folder on disk, with every AI tool symlinked back into it as the one source of truth.">
         </div>
-        <p class="hero-image-caption">One physical root, symlinked everywhere</p>
-      </div>
+       </div>
     </div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
-    <p class="eyebrow-label">Summary</p>
+    <p class="eyebrow-label"><a href="#summary" id="summary" class="eyebrow-anchor">Summary</a></p>
     <h2>The whole approach in five moves</h2>
     <table>
       <thead>
@@ -494,9 +500,8 @@
       <tbody>
         <tr>
           <td><span class="move-num">1)</span><span class="move-label">Flatten</span></td>
-          <td>One physical root, one entry per repo, named from the git remote. This eliminates the problem of
-            "which copy is real" and folder-name-vs-owner mismatches. This could be a folder named 
-            <code class="inline">/Sites</code>  or <code class="inline">/AI Assets</code>, whatever you like. <a href="#architecture">See an example of the architecture.</a></td> </td>
+          <td>One place to check out git projects, organized according to the git remote. This eliminates the problem of "which copy is real" and folder-name-vs-owner mismatches. This folder could benamed  
+            <code class="inline">/Sites</code>, <code class="inline">/wwwroot</code>, or <code class="inline">/AI Assets</code>... whatever you like. <a href="#architecture">See an example of the architecture.</a></td> </td>
         </tr>
         <tr>
           <td><span class="move-num">2)</span><span class="move-label">Symlink</span></td>
@@ -507,10 +512,10 @@
             sit there too<sup><a href="#fn1">[1]</a><a href="#fn2">[2]</a></sup> — but moving or
             renaming one of your own entries touches symlinks only, never file contents.</td>
         </tr>
+
         <tr>
-          <td><span class="move-num">3)</span><span class="move-label">Split MCP</span></td>
-          <td>Real code checkouts get a folder entry; doc-only servers get a lone file — and a
-            stable indirection symlink absorbs future path changes for hardcoded configs.</td>
+          <td><span class="move-num">3)</span><span class="move-label">MCPs: 2 ways</span></td>
+          <td>Cloned MCP servers get a folder entry in the physical root; Vendor-hosted servers (remote) get a symlinked markdown file (which absorbs future path changes for hardcoded configs).</td>
         </tr>
         <tr>
           <td><span class="move-num">4)</span><span class="move-label">Override safely</span></td>
@@ -529,7 +534,7 @@
 
 <section class="band">
   <div class="wrap">
-    <p class="eyebrow-label">The problem</p>
+    <p class="eyebrow-label"><a href="#the-problem" id="the-problem" class="eyebrow-anchor">The problem</a></p>
     <h2>AI assets sprawl across every tool you install</h2>
     <div class="sprawl-grid">
       <div>
@@ -573,7 +578,7 @@
 
 <section>
   <div class="wrap">
-    <p class="eyebrow-label" id="architecture">The architecture</p>
+    <p class="eyebrow-label"><a href="#architecture" id="architecture" class="eyebrow-anchor">The architecture</a></p>
     <h2>One physical root, one canonical hub, and symlink views</h2>
     <p class="lead-text">
       The fix is architectural, not procedural: pick exactly one folder on disk that is the
@@ -670,8 +675,8 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
 
 <section>
   <div class="wrap">
-    <p class="eyebrow-label">Workspace scope</p>
-    <h2>The hub is global. Most of these tools also read a project-level <code class="inline">.agents/skills</code></h2>
+    <p class="eyebrow-label"><a href="#workspace-scope" id="workspace-scope" class="eyebrow-anchor">Workspace scope</a></p>
+    <h2>This approach is global, but it can handle project-specific skills too!</h2>
     <p class="lead-text">
       Everything above describes <code class="inline">~/.agents/skills</code> as a single global hub, but that's
       only half of what these tools actually look at. Codex CLI, Cursor, and OpenCode each walk upward from the
@@ -726,7 +731,7 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
 
 <section class="band">
   <div class="wrap">
-    <p class="eyebrow-label">Physical Root & Identity</p>
+    <p class="eyebrow-label"><a href="#physical-root-identity" id="physical-root-identity" class="eyebrow-anchor">Physical Root &amp; Identity</a></p>
     <h2>Derive names from the git remote, and nest them by org</h2>
     <p class="lead-text">
       The recommended shape is nested org directories —
@@ -795,7 +800,7 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
 
 <section>
   <div class="wrap">
-    <p class="eyebrow-label">MCP servers</p>
+    <p class="eyebrow-label"><a href="#mcp-servers" id="mcp-servers" class="eyebrow-anchor">MCP servers</a></p>
     <h2>Two kinds of MCP server need two different treatments</h2>
     <p class="lead-text">
       MCP servers are configured via explicit file paths rather than scanned directories. Because config files hardcode exact paths, a stable indirection symlink layer is critical to prevent path breakage when a repository reorganizes.
@@ -820,7 +825,7 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
 
 <section class="band">
   <div class="wrap">
-    <p class="eyebrow-label">The override problem</p>
+    <p class="eyebrow-label"><a href="#the-override-problem" id="the-override-problem" class="eyebrow-anchor">The override problem</a></p>
     <h2>Never edit a vendor or team skill in place</h2>
     <p class="lead-text">
       Editing a shared or vendor skill directly inside its source repo creates uncommitted drift that gets overwritten on the next <code class="inline">git pull</code>.
@@ -865,7 +870,7 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
 
 <section>
   <div class="wrap">
-    <p class="eyebrow-label">Tooling & Case Studies</p>
+    <p class="eyebrow-label"><a href="#tooling-case-studies" id="tooling-case-studies" class="eyebrow-anchor">Tooling &amp; Case Studies</a></p>
     <h2>Bridging copy-based tools like Lola with the hub</h2>
     <p class="lead-text">
       Many skill package managers are <strong>copy-based</strong>: installing writes a fresh copy straight into the destination directory without recognizing symlinks.
@@ -910,7 +915,7 @@ build-automation          <span class="symlink-arrow">&rarr;</span> <span class=
 
 <section class="tight">
   <div class="wrap">
-    <p class="eyebrow-label">Sources</p>
+    <p class="eyebrow-label"><a href="#sources" id="sources" class="eyebrow-anchor">Sources</a></p>
     <ol class="footnotes">
       <li id="fn1">agentskills.io — Agent Skills format spec: canonical <code class="inline">SKILL.md</code> filename, and <code class="inline">.agents/skills</code> described as a widely-adopted convention rather than a mandated location. <a href="https://agentskills.io/client-implementation/adding-skills-support" target="_blank" rel="noopener">agentskills.io/client-implementation/adding-skills-support</a></li>
       <li id="fn2">agent-plugins.org — Agent Plugins v1.0.0 specification. Its only symlink-related rule concerns distributed plugin packages not letting an internal symlink escape the package's own root boundary — unrelated to a personal/global skills hub. <a href="https://agent-plugins.org/specification" target="_blank" rel="noopener">agent-plugins.org/specification</a></li>
