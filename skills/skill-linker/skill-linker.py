@@ -62,20 +62,29 @@ symlinks_dir = "~/.agents/skills"
         """
         Scan project for skills (directories containing SKILL.md).
         Returns dict: {skill_name: skill_folder_path}
+        
+        Supports two structures:
+        1. skills/*/SKILL.md (organized in skills/ subdirectory)
+        2. */SKILL.md (skills at root level)
         """
         skills = {}
         
-        # Look for skills/*/SKILL.md pattern
+        # First, try organized structure: skills/*/SKILL.md
         skills_dir = project_path / "skills"
-        if not skills_dir.exists():
-            self._error(f"No 'skills' directory found in {project_path}")
-            return skills
-
-        for skill_folder in skills_dir.iterdir():
-            if skill_folder.is_dir():
-                skill_md = skill_folder / "SKILL.md"
-                if skill_md.exists():
-                    skills[skill_folder.name] = skill_folder
+        if skills_dir.exists():
+            for skill_folder in skills_dir.iterdir():
+                if skill_folder.is_dir():
+                    skill_md = skill_folder / "SKILL.md"
+                    if skill_md.exists():
+                        skills[skill_folder.name] = skill_folder
+        
+        # If no organized skills found, try root-level structure: */SKILL.md
+        if not skills:
+            for item in project_path.iterdir():
+                if item.is_dir() and not item.name.startswith("."):
+                    skill_md = item / "SKILL.md"
+                    if skill_md.exists():
+                        skills[item.name] = item
 
         return skills
 

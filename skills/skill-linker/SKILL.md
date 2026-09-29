@@ -17,7 +17,7 @@ want to use a handful of them. Symlinking the entire project folder into `~/.age
 makes all skills available at once, which clutters your namespace and wastes tool-discovery
 overhead. This skill solves that by:
 
-1. Scanning a project for individual skills (looking for `skills/*/SKILL.md`)
+1. Scanning a project for individual skills (supports both `skills/*/SKILL.md` and `*/SKILL.md` structures)
 2. Letting you select which ones to link
 3. Creating symlinks only for the skills you choose, directly into `~/.agents/skills`
 4. Storing your preferred directories in a config file so you don't have to type paths repeatedly
@@ -113,6 +113,38 @@ The `--force` flag overwrites any existing symlinks without asking.
 - **Uncommitted changes in projects.** The skill doesn't care whether a project has uncommitted
   git changes — it will symlink regardless. But if a skill's code changes later, the symlink
   will automatically reflect the new content (since it points to the live folder).
+
+## Supported Project Structures
+
+This skill works with two common project layouts:
+
+**Structure 1: Organized (skills in subdirectory)**
+```
+project-name/
+├── skills/
+│   ├── skill-a/
+│   │   └── SKILL.md
+│   ├── skill-b/
+│   │   └── SKILL.md
+│   └── skill-c/
+│       └── SKILL.md
+```
+Example: `ktotten/local-ai-asset-organization`
+
+**Structure 2: Root-level (skills at project root)**
+```
+project-name/
+├── skill-a/
+│   └── SKILL.md
+├── skill-b/
+│   └── SKILL.md
+├── skill-c/
+│   └── SKILL.md
+└── README.md
+```
+Example: `ktotten/ktotten-skills`
+
+The skill auto-detects which structure your project uses and scans accordingly.
 
 ## Configuration file format
 
