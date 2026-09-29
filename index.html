@@ -532,6 +532,27 @@
   </div>
 </section>
 
+<section>
+  <div class="wrap">
+    <p class="eyebrow-label"><a href="#getting-started" id="getting-started" class="eyebrow-anchor">Getting started</a></p>
+    <h2>Don't do this by hand — hand it to the auditor skill</h2>
+    <p class="lead-text">
+      Everything above is the methodology. The <code class="inline">ai-asset-auditor</code> skill is how you
+      actually apply it to a real machine, without hand-running every check yourself. It's a read-first,
+      ask-often audit, not a script that reorganizes your filesystem on its own initiative.
+    </p>
+    <ol class="steps">
+      <li>Install the <code class="inline">ai-asset-auditor</code> skill into wherever your AI coding tool
+        reads skills from, then ask it to audit or clean up your AI assets.</li>
+      <li>It discovers your current setup read-only first — scanning skill directories, MCP config, and
+        git remotes — then asks clarifying questions, including which AI agent tools you use beyond
+        whatever it already found directories for.</li>
+      <li>It presents the full plan and waits for your explicit confirmation before it moves, renames,
+        deletes, or symlinks anything.</li>
+    </ol>
+  </div>
+</section>
+
 <section class="band">
   <div class="wrap">
     <p class="eyebrow-label"><a href="#the-problem" id="the-problem" class="eyebrow-anchor">The problem</a></p>

@@ -50,6 +50,12 @@ audit**, not a script that reorganizes a filesystem on your behalf. It is
 deliberately conservative: it would rather stop and ask a question than guess
 wrong about a real user's files.
 
+**MCP scope is intentionally narrow.** Phase 1.2 below only discovers
+configured MCP servers and flags redundant entries across config files — it
+does not manage secrets, does not migrate tokens into Keychain or any other
+secret store, and does not decide global-vs-project scope for MCP servers.
+That work is out of scope for this skill entirely, not a future phase of it.
+
 ## Warning — read this before doing anything else
 
 **This skill, once its plan is confirmed, changes real files on a real
@@ -327,11 +333,45 @@ Lay out, in plain language:
   "tracked elsewhere, recommend symlinking" (with the matching physical-root path shown) or
   "tool-managed, no action needed."
 
-### 2.2 Ask explicit clarifying questions
+### 2.2 Surface non-blocking best-practice advisories
+
+Alongside the plan in 2.1, include a short "FYI, also worth knowing" list for
+anything Phase 1 discovery noticed that's worth mentioning but doesn't need a
+yes/no answer the way 2.3's questions do. These are informational, not
+blocking — the user can read them, ignore them, and still confirm the plan
+as-is. Keep this section itself general and skill-focused, since MCP-specific
+advisories are out of scope for this skill (see "Why this exists" above).
+
+Examples of what belongs here:
+
+- A duplicate skill found across two different tool directories with
+  identical content, where the plan already proposes collapsing it to one
+  symlink — worth a one-line note on why the duplicate existed, even though
+  it doesn't change what gets asked in 2.3.
+- A broader pattern noticed across several individually-flagged dangling
+  symlinks or Finder aliases (e.g. "these five all point at a folder that
+  looks like it was renamed once already") — useful context even though
+  each individual instance is still handled through the normal flag-and-ask
+  items in the plan.
+- General hygiene observations that don't map to any specific action item at
+  all — e.g. noticing the user has no existing physical root and everything
+  discovered is scattered with no prior attempt at consolidation.
+
+Do not use this section to sneak in a decision that actually needs the
+user's input — anything that changes what Phase 3 would do still belongs in
+2.1's plan or 2.3's questions. This section is strictly supplementary color,
+not a backdoor around the confirm-before-acting rule.
+
+### 2.3 Ask explicit clarifying questions
 
 For every ambiguous or edge case surfaced in Phase 1, ask a direct question
 rather than proceeding on an assumption — for example:
 
+- "I found these AI agent tool directories present: `<list>`. Do you use any
+  other AI coding tools (Cursor, Claude Code, Codex CLI, OpenCode, Gemini
+  CLI, GitHub Copilot, etc.) that I should also account for?" — this is
+  about which AI IDE/agent *tools* you use, not individual skills or MCP
+  servers; those are already covered by the discovery in 1.1–1.2.
 - "`<folder>` has no git remote — should I place it under `<fallback>/` or would you
   prefer something else?"
 - "`<repo>` has uncommitted changes to `<files>` — do you want to commit
@@ -342,14 +382,19 @@ rather than proceeding on an assumption — for example:
   container folder implies `<assumed-org>` — please confirm `<derived-org>/<repo-name>`
   is correct before I use it."
 
+Any tool confirmed via the first question above that doesn't already have a
+directory on disk still gets its symlink target created fresh in Phase 3 —
+same as any other planned symlink, just with no existing folder to replace
+or reconcile first.
+
 Batch these into one clear round of questions where possible rather than
 trickling them out one at a time, but don't force a single mega-question if
 the answers are genuinely independent.
 
-### 2.3 Get explicit go-ahead on the specific plan presented
+### 2.4 Get explicit go-ahead on the specific plan presented
 
 Do not proceed to Phase 3 until the user has confirmed the plan as written
-(after any revisions from their answers to 2.2). A general "yes, clean things
+(after any revisions from their answers to 2.3). A general "yes, clean things
 up" given before the plan existed does not count as confirmation of this
 plan. If the user changes their mind about part of the plan, re-confirm the
 updated plan before executing any part of it — don't execute the
