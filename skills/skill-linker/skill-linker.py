@@ -201,14 +201,19 @@ symlinks_dir = "~/.agents/skills"
             else:
                 requested_skills = user_input.split()
 
-        resolved_skills, unmatched = self._resolve_skill_names(requested_skills, available_skills)
+        # Handle "all" keyword
+        if requested_skills == ["all"]:
+            resolved_skills = available_skills
+            unmatched = []
+        else:
+            resolved_skills, unmatched = self._resolve_skill_names(requested_skills, available_skills)
 
-        if unmatched:
-            self._error(f"Skills not found (or fuzzy-matched): {', '.join(unmatched)}")
+            if unmatched:
+                self._error(f"Skills not found (or fuzzy-matched): {', '.join(unmatched)}")
 
-        if not resolved_skills:
-            self._error("No skills to link.")
-            return 1
+            if not resolved_skills:
+                self._error("No skills to link.")
+                return 1
 
         self._log(f"\n🔗 Linking {len(resolved_skills)} skill(s):")
 
