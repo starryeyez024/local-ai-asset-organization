@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — IXD AI-First Skills Explorer</title>
+<style>
+  :root {
+    --rh-dark: #151515;
+    --rh-gray-900: #1a1a1a;
+    --rh-gray-700: #3c3f42;
+    --rh-gray-500: #6a6e73;
+    --rh-gray-300: #d2d2d2;
+    --rh-gray-100: #f0f0f0;
+    --rh-white: #ffffff;
+    --tag-tool: #0066cc;
+    --tag-tool-bg: #e7f1fa;
+    --tag-role: #3e8635;
+    --tag-role-bg: #e9f5e6;
+    --tag-task: #c9190b;
+    --tag-task-bg: #fce4e1;
+    --tag-type: #6753ac;
+    --tag-type-bg: #f4e6ff;
+    --tag-phase: #005f60;
+    --tag-phase-bg: #e0f3f2;
+    --tag-stage: #a35a00;
+    --tag-stage-bg: #fbead2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Red Hat Text", "Helvetica Neue", Arial, sans-serif;
+    background: var(--rh-gray-100);
+    color: var(--rh-dark);
+    line-height: 1.6;
+    margin: 0;
+  }
+  header {
+    background: var(--rh-dark);
+    color: var(--rh-white);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  header h1 { font-size: 20px; font-weight: 500; margin: 0; }
+  header a.back {
+    color: var(--rh-gray-300);
+    text-decoration: none;
+    font-size: 13px;
+    margin-left: auto;
+  }
+  header a.back:hover { color: var(--rh-white); }
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  h2 { font-size: 19px; margin-top: 40px; border-bottom: 1px solid var(--rh-gray-300); padding-bottom: 8px; }
+  h2:first-of-type { margin-top: 0; }
+  h3 { font-size: 15px; margin-top: 20px; margin-bottom: 6px; }
+  p { color: var(--rh-gray-700); }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    background: var(--rh-gray-100);
+    border: 1px solid var(--rh-gray-300);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 13px;
+  }
+  pre {
+    background: var(--rh-gray-900);
+    color: #e7f1fa;
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  pre code { background: none; border: none; padding: 0; color: inherit; }
+  .card {
+    background: var(--rh-white);
+    border: 1px solid var(--rh-gray-300);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--tag-tool-bg);
+    color: var(--tag-tool);
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .note {
+    border-left: 3px solid var(--tag-tool);
+    background: var(--tag-tool-bg);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: var(--rh-gray-700);
+    margin-top: 16px;
+  }
+  .warn {
+    border-left: 3px solid var(--tag-task);
+    background: var(--tag-task-bg);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: var(--rh-gray-700);
+    margin-top: 16px;
+  }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rh-gray-100); vertical-align: top; }
+  th { color: var(--rh-gray-500); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .pill {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .pill.tool { background: var(--tag-tool-bg); color: var(--tag-tool); }
+  .pill.role { background: var(--tag-role-bg); color: var(--tag-role); }
+  .pill.task { background: var(--tag-task-bg); color: var(--tag-task); }
+  .pill.type { background: var(--tag-type-bg); color: var(--tag-type); }
+  .pill.phase { background: var(--tag-phase-bg); color: var(--tag-phase); }
+  .pill.stage { background: var(--tag-stage-bg); color: var(--tag-stage); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>About — IXD AI-First Skills Explorer</h1>
+  <a class="back" href="index.html">&larr; Back to explorer</a>
+</header>
+
+<main>
+
+  <h2>What this is</h2>
+  <p>
+    A local, filterable browser for the AI skills installed on this machine. It has two
+    views: <strong>Browse Skills</strong> — a curated, filterable catalog of the ixd-firefly
+    "AI-first" skills across 6 persona modules (Product Management, Program Management,
+    Data Science, UX Design, UX Research, Content Creation) — and
+    <strong>Maintain Skills</strong> — a raw audit of everything in your local skills
+    folder, including skills outside that curated set, broken symlinks, duplicates, and
+    stale definitions.
+  </p>
+
+  <h2>How the data is built</h2>
+  <p>
+    Nothing in this tool is dynamic or AI-generated at browse time. A Python script,
+    <code>generate-skills-json.py</code>, runs once (whenever you tell it to — see
+    "Refreshing the data" below) and writes a single static file, <code>skills.json</code>.
+    <code>index.html</code> just does one <code>fetch("skills.json")</code> on page load and
+    renders everything from that. There's no server-side logic, no database, no live
+    re-scanning while you browse.
+  </p>
+  <p>The script's actual steps:</p>
+  <ol>
+    <li>Walk <code>~/.agents/skills</code> (a flat, symlink-only folder — the same list Cursor
+      and Codex CLI read natively; override with the <code>SKILLS_ROOT</code> env var).</li>
+    <li>Resolve each entry to its real target folder and look for a <code>SKILL.md</code> file.</li>
+    <li>Parse that file's YAML frontmatter (<code>name</code>, <code>description</code>,
+      <code>metadata.skill-type</code>, etc.) plus a few specific markdown sections in the
+      body — <code>## Inputs</code>, <code>## Trigger</code> / <code>## When to Use</code>,
+      and <code>## Required skills</code> — using regex-based parsing (no AI, no LLM calls).</li>
+    <li>Run every skill's name + description + first ~1000 characters of body text through
+      several keyword-matching functions (below) to assign tags.</li>
+    <li>If the resolved folder belongs to one of the 6 known ixd-firefly modules, add it to
+      the curated <code>skills</code> array (this is what Browse Skills shows). Every farm
+      entry — curated or not, broken or not — also goes into a separate
+      <code>inventory</code> array (this is what Maintain Skills shows).</li>
+  </ol>
+
+  <h2>How tags get assigned (and why you might disagree with one)</h2>
+  <p>
+    <strong>Every tag on every skill is a keyword-regex guess, not a judgment call by a
+    person or an AI.</strong> The script scans each skill's name, description, and the start
+    of its body text for pattern matches against fixed keyword lists, and assigns whichever
+    tags match. There's no semantic understanding involved — if a skill's description happens
+    to contain the word "plan," it can pick up a Planning-flavored tag even if the skill
+    isn't really about planning. This is exactly why you'll sometimes look at a skill's tags
+    and think "that's not right."
+  </p>
+
+  <table>
+    <tr><th>Tag group</th><th>Example</th><th>How it's decided</th></tr>
+    <tr>
+      <td><span class="pill tool">Tool</span></td>
+      <td>jira, confluence, figma, slack, git...</td>
+      <td>Keyword match per tool (e.g. "jira" tag fires on <code>jira</code>, <code>epic</code>,
+        <code>sprint</code>, <code>backlog</code>, etc.). A skill can get multiple tool tags.</td>
+    </tr>
+    <tr>
+      <td><span class="pill role">Role</span></td>
+      <td>product-manager, ux-designer...</td>
+      <td>Fixed 1:1 mapping from which of the 6 ixd-firefly modules the skill's real folder
+        lives under — not keyword-based, this one's reliable.</td>
+    </tr>
+    <tr>
+      <td><span class="pill task">Task Type</span></td>
+      <td>planning, analysis, generation, validation, reporting...</td>
+      <td>12 keyword buckets (e.g. "generation" fires on <code>generat</code>, <code>draft</code>,
+        <code>create</code>, <code>author</code>, <code>write</code>). A skill can match
+        several buckets at once.</td>
+    </tr>
+    <tr>
+      <td><span class="pill type">Skill Type</span></td>
+      <td>Workflow / Atomic</td>
+      <td>Reads <code>metadata.skill-type</code> from frontmatter if present; otherwise
+        guesses "workflow" if the skill's id starts with <code>workflow-</code>.</td>
+    </tr>
+    <tr>
+      <td><span class="pill phase">Agile Phase</span></td>
+      <td>Planning / In Progress / Retrospective</td>
+      <td>Checked in priority order — retrospective keywords (<code>retro</code>,
+        <code>baseline</code>, <code>trend</code>...) win first, then planning keywords
+        (<code>roadmap</code>, <code>capacity</code>, <code>backlog</code>...), and
+        <strong>everything else defaults to "In Progress"</strong> even if nothing matched.
+        This is the tag most likely to feel wrong, since it's a single guess picked from a
+        short priority list, not a real classification.</td>
+    </tr>
+    <tr>
+      <td><span class="pill stage">Work Stage</span></td>
+      <td>Gather / Produce / Reflect</td>
+      <td>Same idea as Agile Phase — keyword buckets for "gather" (ingest, discover,
+        research...), "produce" (generate, analyze, validate...), "reflect" (retro, baseline,
+        historical...). Workflows additionally inherit every stage tag of the atomic skills
+        they call.</td>
+    </tr>
+  </table>
+
+  <div class="warn">
+    <strong>So if you see 4 skills tagged "In Progress" that you'd actually call
+    "Planning":</strong> that's the keyword lists not covering the words those particular
+    skills happen to use — it's not a bug you can fix by clicking anything in the UI today.
+    The only way to change it right now is to edit the keyword lists
+    (<code>PHASE_KEYWORDS</code>, <code>STAGE_KEYWORDS</code>, <code>TASK_KEYWORDS</code>,
+    etc., near the top of <code>generate-skills-json.py</code>) and re-run
+    <code>make regen</code>. There's no per-skill override and no in-UI tag editor yet.
+  </div>
+
+  <h2>Refreshing the data</h2>
+  <p>
+    Regenerate <code>skills.json</code> any time skills change, or any time a tag looks
+    wrong after you've adjusted the keyword lists:
+  </p>
+  <div class="card">
+    <pre><code>cd ~/Sites/skills-explorer
+make regen   # rebuild skills.json from ~/.agents/skills
+make serve   # or: serve the site locally
+# open http://localhost:8790</code></pre>
+    <p style="margin-bottom:0">Or do both in one shot: <code>make run</code>.</p>
+  </div>
+
+  <h3>Point at a different skills folder</h3>
+  <div class="card" style="margin-bottom:0">
+    <pre><code>SKILLS_ROOT=/some/other/path make regen</code></pre>
+  </div>
+
+  <div class="note">
+    <strong>Note:</strong> This is a local-only tool with no scheduled or automatic
+    rebuild. <code>skills.json</code> only reflects whatever was on disk the last time
+    someone ran <code>make regen</code> — the page also force-bypasses browser cache on
+    every load, so once you regenerate, a normal reload will always show the latest data.
+    Requires Python 3.10+; no extra installs needed (standard library only).
+  </div>
+
+</main>
+
+</body>
+</html>
