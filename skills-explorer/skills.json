@@ -13306,7 +13306,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -13322,7 +13322,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -13338,7 +13338,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-05-07",
-      "daysSinceModified": 145,
+      "daysSinceModified": 147,
       "inCuratedView": true,
       "module": "other",
       "duplicates": {
@@ -13353,8 +13353,8 @@
       "truePath": "/Users/ktotten/AI Assets/ktotten/local-ai-asset-organization/skills/ai-asset-auditor",
       "broken": false,
       "hasSkillMd": true,
-      "skillMdModified": "2026-09-22",
-      "daysSinceModified": 7,
+      "skillMdModified": "2026-09-30",
+      "daysSinceModified": 0,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -13370,7 +13370,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -13386,7 +13386,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -13402,7 +13402,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-23",
-      "daysSinceModified": 98,
+      "daysSinceModified": 99,
       "inCuratedView": true,
       "module": "global-engineering",
       "duplicates": {
@@ -13418,7 +13418,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -13434,7 +13434,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -13450,7 +13450,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -13466,7 +13466,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -13482,7 +13482,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-23",
-      "daysSinceModified": 98,
+      "daysSinceModified": 99,
       "inCuratedView": true,
       "module": "global-engineering",
       "duplicates": {
@@ -13498,7 +13498,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -13514,7 +13514,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -13530,7 +13530,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -13546,7 +13546,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -13562,7 +13562,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -13578,7 +13578,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -13594,7 +13594,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -13610,7 +13610,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -13626,7 +13626,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -13642,7 +13642,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -13658,7 +13658,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -13674,7 +13674,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-05-12",
-      "daysSinceModified": 140,
+      "daysSinceModified": 142,
       "inCuratedView": true,
       "module": "compass",
       "duplicates": {
@@ -13690,7 +13690,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-05-12",
-      "daysSinceModified": 140,
+      "daysSinceModified": 142,
       "inCuratedView": true,
       "module": "compass",
       "duplicates": {
@@ -13706,7 +13706,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-05-12",
-      "daysSinceModified": 140,
+      "daysSinceModified": 142,
       "inCuratedView": true,
       "module": "compass",
       "duplicates": {
@@ -13722,7 +13722,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -13738,7 +13738,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -13754,7 +13754,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -13770,7 +13770,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -13786,7 +13786,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -13802,7 +13802,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -13818,7 +13818,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -13834,7 +13834,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-11",
-      "daysSinceModified": 110,
+      "daysSinceModified": 111,
       "inCuratedView": true,
       "module": "other",
       "duplicates": {
@@ -13850,7 +13850,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -13866,7 +13866,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -13882,7 +13882,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -13898,7 +13898,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-18",
-      "daysSinceModified": 42,
+      "daysSinceModified": 44,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -13914,7 +13914,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -13930,7 +13930,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -13946,7 +13946,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -13962,7 +13962,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -13978,7 +13978,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -13994,7 +13994,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -14010,7 +14010,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -14026,7 +14026,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -14042,7 +14042,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -14058,7 +14058,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -14074,7 +14074,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14090,7 +14090,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14106,7 +14106,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14122,7 +14122,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14138,7 +14138,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14154,7 +14154,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14170,7 +14170,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14186,7 +14186,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14202,7 +14202,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-05-07",
-      "daysSinceModified": 145,
+      "daysSinceModified": 147,
       "inCuratedView": true,
       "module": "other",
       "duplicates": {
@@ -14218,7 +14218,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-05-07",
-      "daysSinceModified": 145,
+      "daysSinceModified": 147,
       "inCuratedView": true,
       "module": "other",
       "duplicates": {
@@ -14234,7 +14234,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-05-07",
-      "daysSinceModified": 145,
+      "daysSinceModified": 147,
       "inCuratedView": true,
       "module": "other",
       "duplicates": {
@@ -14250,7 +14250,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -14266,7 +14266,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -14282,7 +14282,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14298,7 +14298,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14314,7 +14314,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -14330,7 +14330,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14346,7 +14346,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14362,7 +14362,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14378,7 +14378,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14394,7 +14394,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14410,7 +14410,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-16",
-      "daysSinceModified": 13,
+      "daysSinceModified": 14,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14426,7 +14426,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14442,7 +14442,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14458,7 +14458,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14474,7 +14474,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14490,7 +14490,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14506,7 +14506,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14522,7 +14522,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14538,7 +14538,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14554,7 +14554,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14570,7 +14570,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14586,7 +14586,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14602,7 +14602,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14618,7 +14618,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14634,7 +14634,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14650,7 +14650,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14666,7 +14666,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14682,7 +14682,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14698,7 +14698,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14714,7 +14714,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14730,7 +14730,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -14746,7 +14746,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -14762,7 +14762,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 45,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -14778,7 +14778,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14794,7 +14794,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14810,7 +14810,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14826,7 +14826,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14842,7 +14842,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14858,7 +14858,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14874,7 +14874,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14890,7 +14890,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14906,7 +14906,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14922,7 +14922,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14938,7 +14938,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14954,7 +14954,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14970,7 +14970,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -14986,7 +14986,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15002,7 +15002,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15018,7 +15018,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15034,7 +15034,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-10",
-      "daysSinceModified": 172,
+      "daysSinceModified": 173,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15050,7 +15050,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15066,7 +15066,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15082,7 +15082,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15098,7 +15098,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15114,7 +15114,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-04-17",
-      "daysSinceModified": 165,
+      "daysSinceModified": 167,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15130,7 +15130,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-21",
-      "daysSinceModified": 8,
+      "daysSinceModified": 9,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -15146,7 +15146,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 48,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -15162,7 +15162,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-05-15",
-      "daysSinceModified": 137,
+      "daysSinceModified": 138,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15178,7 +15178,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-03",
-      "daysSinceModified": 57,
+      "daysSinceModified": 58,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -15194,7 +15194,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -15210,7 +15210,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -15226,7 +15226,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -15242,7 +15242,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -15258,7 +15258,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -15274,7 +15274,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-16",
-      "daysSinceModified": 13,
+      "daysSinceModified": 14,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -15290,7 +15290,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-16",
-      "daysSinceModified": 13,
+      "daysSinceModified": 14,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -15306,7 +15306,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -15322,7 +15322,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -15338,7 +15338,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -15354,7 +15354,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15370,7 +15370,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-23",
-      "daysSinceModified": 98,
+      "daysSinceModified": 99,
       "inCuratedView": true,
       "module": "other",
       "duplicates": {
@@ -15386,7 +15386,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15402,7 +15402,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-23",
-      "daysSinceModified": 98,
+      "daysSinceModified": 99,
       "inCuratedView": true,
       "module": "other",
       "duplicates": {
@@ -15418,7 +15418,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15434,7 +15434,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15450,7 +15450,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15466,7 +15466,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15482,7 +15482,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15498,7 +15498,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-23",
-      "daysSinceModified": 98,
+      "daysSinceModified": 99,
       "inCuratedView": true,
       "module": "other",
       "duplicates": {
@@ -15514,7 +15514,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15530,7 +15530,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -15546,7 +15546,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -15562,7 +15562,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15578,7 +15578,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -15594,7 +15594,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -15610,7 +15610,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -15626,7 +15626,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -15642,7 +15642,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -15658,7 +15658,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -15674,7 +15674,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -15690,7 +15690,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-19",
-      "daysSinceModified": 102,
+      "daysSinceModified": 103,
       "inCuratedView": true,
       "module": "dxp",
       "duplicates": {
@@ -15706,7 +15706,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-11",
-      "daysSinceModified": 110,
+      "daysSinceModified": 111,
       "inCuratedView": true,
       "module": "compass",
       "duplicates": {
@@ -15722,7 +15722,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-24",
-      "daysSinceModified": 36,
+      "daysSinceModified": 37,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -15738,7 +15738,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 28,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -15754,7 +15754,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15770,7 +15770,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15786,7 +15786,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15802,7 +15802,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-11",
-      "daysSinceModified": 110,
+      "daysSinceModified": 111,
       "inCuratedView": true,
       "module": "other",
       "duplicates": {
@@ -15818,7 +15818,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15834,7 +15834,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15850,7 +15850,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15866,7 +15866,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15882,7 +15882,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15898,7 +15898,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -15914,7 +15914,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15930,7 +15930,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -15946,7 +15946,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -15962,7 +15962,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -15978,7 +15978,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -15994,7 +15994,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16010,7 +16010,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16026,7 +16026,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16042,7 +16042,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16058,7 +16058,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16074,7 +16074,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16090,7 +16090,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16106,7 +16106,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16122,7 +16122,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16138,7 +16138,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16154,7 +16154,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16170,7 +16170,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16186,7 +16186,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16202,7 +16202,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16218,7 +16218,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16234,7 +16234,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16250,7 +16250,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16266,7 +16266,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16282,7 +16282,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16298,7 +16298,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16314,7 +16314,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-13",
-      "daysSinceModified": 47,
+      "daysSinceModified": 48,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -16330,7 +16330,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-23",
-      "daysSinceModified": 98,
+      "daysSinceModified": 99,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -16346,7 +16346,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -16362,7 +16362,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-23",
-      "daysSinceModified": 98,
+      "daysSinceModified": 99,
       "inCuratedView": true,
       "module": "global-engineering",
       "duplicates": {
@@ -16378,7 +16378,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16394,7 +16394,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -16410,7 +16410,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -16474,7 +16474,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-16",
-      "daysSinceModified": 13,
+      "daysSinceModified": 14,
       "inCuratedView": true,
       "module": "toddward",
       "duplicates": {
@@ -16522,7 +16522,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16538,7 +16538,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16554,7 +16554,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16570,7 +16570,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-02",
-      "daysSinceModified": 119,
+      "daysSinceModified": 121,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -16586,7 +16586,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16602,7 +16602,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -16618,7 +16618,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -16634,7 +16634,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -16650,7 +16650,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -16666,7 +16666,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -16682,7 +16682,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16698,7 +16698,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16714,7 +16714,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16730,7 +16730,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16746,7 +16746,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16762,7 +16762,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16778,7 +16778,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16794,7 +16794,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16810,7 +16810,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16826,7 +16826,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16842,7 +16842,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16858,7 +16858,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16874,7 +16874,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16890,7 +16890,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16906,7 +16906,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16922,7 +16922,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16938,7 +16938,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16954,7 +16954,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -16970,7 +16970,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -16986,7 +16986,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -17002,7 +17002,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -17018,7 +17018,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-23",
-      "daysSinceModified": 98,
+      "daysSinceModified": 99,
       "inCuratedView": true,
       "module": "global-engineering",
       "duplicates": {
@@ -17034,7 +17034,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -17050,7 +17050,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-08",
-      "daysSinceModified": 113,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "redhat-community-ai-tools",
       "duplicates": {
@@ -17066,7 +17066,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -17082,7 +17082,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -17098,7 +17098,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17114,7 +17114,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -17130,7 +17130,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -17146,7 +17146,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-29",
-      "daysSinceModified": 0,
+      "daysSinceModified": 1,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17162,7 +17162,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-21",
-      "daysSinceModified": 8,
+      "daysSinceModified": 9,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17178,7 +17178,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17194,7 +17194,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -17210,7 +17210,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17226,7 +17226,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17242,7 +17242,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17258,7 +17258,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -17274,7 +17274,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-27",
-      "daysSinceModified": 64,
+      "daysSinceModified": 65,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17290,7 +17290,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-16",
-      "daysSinceModified": 13,
+      "daysSinceModified": 14,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17306,7 +17306,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -17322,7 +17322,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17338,7 +17338,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17354,7 +17354,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -17370,7 +17370,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -17386,7 +17386,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -17402,7 +17402,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -17418,7 +17418,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -17434,7 +17434,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -17450,7 +17450,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-25",
-      "daysSinceModified": 4,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "tailwind",
       "duplicates": {
@@ -17466,7 +17466,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17482,7 +17482,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-26",
-      "daysSinceModified": 34,
+      "daysSinceModified": 36,
       "inCuratedView": true,
       "module": "uie",
       "duplicates": {
@@ -17498,7 +17498,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -17514,7 +17514,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-03",
-      "daysSinceModified": 26,
+      "daysSinceModified": 27,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -17530,7 +17530,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -17546,7 +17546,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17562,7 +17562,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -17578,7 +17578,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-24",
-      "daysSinceModified": 5,
+      "daysSinceModified": 6,
       "inCuratedView": true,
       "module": "ai-first-product-management",
       "duplicates": {
@@ -17594,7 +17594,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-09-29",
-      "daysSinceModified": 0,
+      "daysSinceModified": 2,
       "inCuratedView": true,
       "module": ".agents",
       "duplicates": {
@@ -17610,7 +17610,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-03",
-      "daysSinceModified": 57,
+      "daysSinceModified": 58,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17626,7 +17626,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -17642,7 +17642,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {
@@ -17658,7 +17658,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-23",
-      "daysSinceModified": 98,
+      "daysSinceModified": 99,
       "inCuratedView": true,
       "module": "global-engineering",
       "duplicates": {
@@ -17674,7 +17674,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-14",
-      "daysSinceModified": 46,
+      "daysSinceModified": 47,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17690,7 +17690,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17706,7 +17706,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17722,7 +17722,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17738,7 +17738,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17754,7 +17754,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17770,7 +17770,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17786,7 +17786,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17802,7 +17802,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17818,7 +17818,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17834,7 +17834,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17850,7 +17850,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17866,7 +17866,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17882,7 +17882,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17898,7 +17898,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-08-17",
-      "daysSinceModified": 43,
+      "daysSinceModified": 44,
       "inCuratedView": true,
       "module": "ktotten",
       "duplicates": {
@@ -17914,7 +17914,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17930,7 +17930,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-07-14",
-      "daysSinceModified": 77,
+      "daysSinceModified": 78,
       "inCuratedView": true,
       "module": "ai-first-program-management",
       "duplicates": {
@@ -17946,7 +17946,7 @@
       "broken": false,
       "hasSkillMd": true,
       "skillMdModified": "2026-06-09",
-      "daysSinceModified": 112,
+      "daysSinceModified": 114,
       "inCuratedView": true,
       "module": "anthropics",
       "duplicates": {

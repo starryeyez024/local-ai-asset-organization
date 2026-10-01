@@ -156,6 +156,19 @@ classify it into exactly one of these categories before proposing anything:
 | **Dangling symlink** | `readlink` succeeds but the target path does not exist (check with `test -e` on the resolved target, or `find -L <parent> -xtype l`) | Flag explicitly. Ask the user whether the target moved (and should be repointed) or the asset is genuinely gone (and the dangling link should be removed) |
 | **Real symlink, valid target** | `readlink` succeeds and the target exists | Note what it currently points at — this may already reflect a prior migration; don't propose redundant moves for something already correctly symlinked into a physical root |
 
+**Shortcut: use `skills-explorer`'s Maintain inventory instead of scanning `~/.agents/skills` by hand.**
+The `local-ai-asset-organization/skills-explorer` project (`make run`, served locally) already
+walks the whole `~/.agents/skills` farm and classifies every entry — broken symlink, has/missing
+`SKILL.md`, stale (`>60d` since last edit), redundant symlink, and frontmatter `name:` collisions
+— and exposes it as `skills.json`'s `inventory` array (also browsable in-app under "Maintain
+Skills" → "Broken only"). If that project's `skills.json` is present and reasonably fresh (check
+its own mtime, or just run `make regen` first to be sure), read it directly instead of manually
+running `find -L ~/.agents/skills -xtype l` and `readlink` per entry — each `inventory` row
+already has `name`, `truePath`, `broken`, `hasSkillMd`, and `duplicates` populated. Still confirm
+findings before proposing fixes (this is discovery, not consent), and fall back to the manual
+`find`/`readlink` scan if the project isn't set up on this machine or its `skills.json` looks
+stale.
+
 Do not guess a category from the name or extension alone — actually run the
 check for every entry. A folder that looks like a git repo because it has a
 `.gitignore` may still fail `git remote -v` if it has no `.git` directory or
