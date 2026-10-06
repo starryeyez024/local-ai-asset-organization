@@ -145,7 +145,6 @@ STAGE_KEYWORDS = {
 }
 STAGE_ORDER = ["gather", "produce", "reflect"]
 
-
 def extract_section(text: str, headings: list[str]) -> str:
     """Return the body text of the first matching '## Heading' section (up to the next '## ' or '---')."""
     for heading in headings:
@@ -410,6 +409,38 @@ def find_skill_files() -> list[tuple[str, Path]]:
     return results
 
 
+def find_git_root(path: Path) -> Path | None:
+    """Return the nearest Git root for a resolved skill path.
+
+    A worktree can contain a .git file instead of a .git directory, so use
+    exists() rather than is_dir().
+    """
+    current = path if path.is_dir() else path.parent
+    for parent in (current, *current.parents):
+        if (parent / ".git").exists():
+            return parent
+    return None
+
+
+def source_repository(skill_path: Path) -> dict[str, str]:
+    """Derive a sanitized org/repo label without exposing local filesystem paths."""
+    repo_root = find_git_root(skill_path)
+    if repo_root is None:
+        return {"sourceOrg": "", "sourceRepo": "", "sourceLabel": "Unclassified"}
+
+    assets_root = HOME / "AI Assets"
+    try:
+        relative = repo_root.relative_to(assets_root)
+    except ValueError:
+        return {"sourceOrg": "", "sourceRepo": "", "sourceLabel": "Unclassified"}
+
+    if len(relative.parts) < 2:
+        return {"sourceOrg": "", "sourceRepo": "", "sourceLabel": "Unclassified"}
+
+    org, repo = relative.parts[:2]
+    return {"sourceOrg": org, "sourceRepo": repo, "sourceLabel": f"{org}/{repo}"}
+
+
 def _frontmatter_name(skill_md: Path) -> str:
     """Read just the frontmatter `name:` field of a SKILL.md, falling back to
     its parent folder name -- same convention process_skill() uses."""
@@ -483,10 +514,12 @@ def build_inventory() -> tuple[list[dict], dict]:
 
         module = resolve_module(skill_file) if skill_file is not None else None
 
+        repository = source_repository(real_dir or skill_file or entry)
         entries.append({
             "name": entry.name,
             "isSymlink": is_symlink,
             "truePath": true_path,
+            **repository,
             "broken": broken,
             "hasSkillMd": has_skill_md,
             "skillMdModified": mtime_iso,
@@ -611,6 +644,7 @@ def process_skill(module: str, skill_path: Path) -> dict | None:
         inputs = extract_inputs(text)
         required_skills = extract_required_skills(text)
 
+    repository = source_repository(skill_path)
     return {
         "id": name,
         "displayName": display_name,
@@ -625,6 +659,7 @@ def process_skill(module: str, skill_path: Path) -> dict | None:
         "inputs": inputs,
         "requiredSkills": required_skills,
         "sourcePath": f"{module}/skills/{skill_path.parent.name}/SKILL.md",
+        **repository,
         "tags": {
             "tool": tool_tags,
             "role": [role],
@@ -632,6 +667,7 @@ def process_skill(module: str, skill_path: Path) -> dict | None:
             "type": [skill_type or ("workflow" if name.startswith("workflow-") else "atomic")],
             "phase": [phase_tag],
             "stage": stage_tags,
+            "repository": [repository["sourceLabel"]],
         },
     }
 
@@ -677,6 +713,7 @@ def main():
     all_types = sorted({t for s in deduped for t in s["tags"]["type"]})
     all_phases = sorted({p for s in deduped for p in s["tags"]["phase"]}, key=PHASE_ORDER.index)
     all_stages = sorted({t for s in deduped for t in s["tags"]["stage"]}, key=STAGE_ORDER.index)
+    all_repositories = sorted({s["sourceLabel"] for s in deduped})
 
     inventory, inventory_stats = build_inventory()
     print(
@@ -699,6 +736,7 @@ def main():
             "tool": all_tools,
             "role": all_roles,
             "task": all_tasks,
+            "repository": all_repositories,
         },
         "skills": sorted(deduped, key=lambda s: s["displayName"]),
         "inventory": inventory,

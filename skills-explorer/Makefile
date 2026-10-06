@@ -17,6 +17,6 @@ regen:
 
 serve:
 	@echo "Serving at http://localhost:$(PORT) -- press Ctrl+C to stop"
-	python3 -m http.server $(PORT)
+	python3 serve.py $(PORT)
 
 run: regen serve

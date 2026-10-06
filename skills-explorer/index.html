@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IXD AI-First Skills Explorer</title>
+  <title>AI Assets Explorer</title>
   <style>
     :root {
       --rh-red: #ee0000;
@@ -62,72 +62,19 @@
     .header-stats strong { color: var(--rh-white); }
 
     #search-box {
-      margin-left: auto;
+      margin: 0;
       padding: 8px 12px;
       border: 1px solid var(--rh-gray-500);
       border-radius: 4px;
-      background: var(--rh-gray-900);
-      color: var(--rh-white);
+      background: var(--rh-white);
+      color: var(--rh-dark);
       font-size: 14px;
-      width: 260px;
+      font-family: "Red Hat Text", "Helvetica Neue", Arial, sans-serif;
+      width: 100%;
     }
 
     #search-box::placeholder { color: var(--rh-gray-500); }
     #search-box:focus { outline: 2px solid var(--tag-tool); border-color: var(--tag-tool); }
-
-    .active-filters-bar {
-      background: var(--rh-white);
-      border-bottom: 1px solid var(--rh-gray-300);
-      padding: 8px 24px;
-      display: none;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .active-filters-bar.visible { display: flex; }
-
-    .active-filters-bar .label {
-      font-size: 12px;
-      color: var(--rh-gray-500);
-      margin-right: 4px;
-    }
-
-    .filter-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 10px;
-      border-radius: 12px;
-      font-size: 12px;
-      cursor: pointer;
-      border: none;
-    }
-
-    .filter-chip .remove {
-      font-weight: bold;
-      margin-left: 2px;
-    }
-
-    .filter-chip[data-group="tool"] { background: var(--tag-tool-bg); color: var(--tag-tool); }
-    .filter-chip[data-group="role"] { background: var(--tag-role-bg); color: var(--tag-role); }
-    .filter-chip[data-group="task"] { background: var(--tag-task-bg); color: var(--tag-task); }
-    .filter-chip[data-group="type"] { background: var(--tag-type-bg); color: var(--tag-type); }
-    .filter-chip[data-group="phase"] { background: var(--tag-phase-bg); color: var(--tag-phase); }
-    .filter-chip[data-group="stage"] { background: var(--tag-stage-bg); color: var(--tag-stage); }
-
-    .clear-all-btn {
-      background: none;
-      border: 1px solid var(--rh-gray-300);
-      color: var(--rh-gray-500);
-      padding: 2px 10px;
-      border-radius: 12px;
-      font-size: 12px;
-      cursor: pointer;
-      margin-left: 8px;
-    }
-
-    .clear-all-btn:hover { background: var(--rh-gray-100); color: var(--rh-dark); }
 
     .layout {
       display: flex;
@@ -146,44 +93,100 @@
       height: calc(100vh - 64px);
     }
 
+    .sidebar-search {
+      padding: 0 16px 12px;
+    }
+
+    .mobile-filter-shell { display: contents; }
+    .mobile-filter-toggle { display: none; }
+
     .filter-group {
       border-bottom: 1px solid var(--rh-gray-100);
       padding: 0 16px;
+    }
+
+    .filter-all {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 16px 10px;
+      font-size: 12px;
+      color: var(--rh-gray-700);
+      cursor: pointer;
+    }
+
+    .filter-all input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--rh-dark);
     }
 
     .filter-group-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 0;
-      cursor: pointer;
+      padding: 0;
       user-select: none;
+    }
+
+    .filter-group-toggle,
+    .filter-group-select {
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+
+    .filter-group-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 0 7px;
+      color: var(--rh-gray-700);
       font-size: 13px;
       font-weight: 600;
-      text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: var(--rh-gray-700);
+      text-transform: uppercase;
     }
 
-    .filter-group-header .arrow {
+    .filter-group-toggle:hover,
+    .filter-group-select:hover {
+      color: var(--tag-tool);
+      text-decoration: none;
+    }
+
+    .filter-group-toggle .arrow {
+      display: inline-block;
+      font-size: 12px;
       transition: transform 0.15s;
-      font-size: 10px;
     }
 
-    .filter-group.collapsed .arrow { transform: rotate(-90deg); }
+    .filter-group.collapsed .filter-group-toggle .arrow { transform: rotate(-90deg); }
     .filter-group.collapsed .filter-options { display: none; }
 
+    .filter-group-select {
+      padding: 10px 0 7px 8px;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--rh-gray-500);
+    }
+
+    .filter-group[data-selected="all"] .filter-group-select::after { content: "Clear all"; }
+    .filter-group[data-selected="none"] .filter-group-select::after,
+    .filter-group[data-selected="some"] .filter-group-select::after { content: "Select all"; }
+
     .filter-options {
-      padding-bottom: 12px;
+      padding-bottom: 9px;
     }
 
     .filter-option {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 4px 0;
+      gap: 6px;
+      padding: 2px 0;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--rh-gray-700);
     }
 
@@ -191,8 +194,8 @@
 
     .filter-option input[type="checkbox"] {
       accent-color: var(--tag-tool);
-      width: 14px;
-      height: 14px;
+      width: 13px;
+      height: 13px;
     }
 
     .filter-option .count {
@@ -213,6 +216,7 @@
 
     .main {
       flex: 1;
+      min-width: 0;
       padding: 20px 24px;
       max-width: 900px;
     }
@@ -226,7 +230,7 @@
       color: var(--rh-gray-500);
     }
 
-    .toggle-stubs {
+    .toggle-expand {
       display: flex;
       align-items: center;
       gap: 6px;
@@ -235,9 +239,11 @@
       cursor: pointer;
     }
 
-    .toggle-stubs input { accent-color: var(--rh-gray-500); }
+    .toggle-expand input { accent-color: var(--rh-gray-500); }
 
     .skill-card {
+      width: 100%;
+      min-width: 0;
       background: var(--rh-white);
       border: 1px solid var(--rh-gray-300);
       border-radius: 6px;
@@ -278,15 +284,30 @@
 
     .skill-card summary::-webkit-details-marker { display: none; }
 
-    .skill-card summary::before {
-      content: "\25B6";
-      font-size: 10px;
-      color: var(--rh-gray-500);
-      transition: transform 0.15s;
-      flex-shrink: 0;
+    .skill-disclosure {
+      position: relative;
+      display: inline-block;
+      flex: 0 0 18px;
+      width: 18px;
+      height: 21px;
+      margin-top: 0;
     }
 
-    .skill-card[open] summary::before { transform: rotate(90deg); }
+    .skill-disclosure::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 2px;
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 7px solid var(--rh-gray-500);
+      transform-origin: 3.5px 5px;
+      transition: transform 0.15s;
+    }
+
+    .skill-card[open] .skill-disclosure::before { transform: rotate(90deg); }
 
     .skill-name {
       font-weight: 600;
@@ -318,6 +339,7 @@
     .tag.task { background: var(--tag-task-bg); color: var(--tag-task); }
     .tag.phase { background: var(--tag-phase-bg); color: var(--tag-phase); }
     .tag.stage { background: var(--tag-stage-bg); color: var(--tag-stage); }
+    .tag.repository { background: var(--rh-gray-100); color: var(--rh-gray-700); }
 
     .skill-details {
       padding: 0 16px 16px 32px;
@@ -328,13 +350,14 @@
 
     .skill-details .meta-row {
       display: flex;
+      flex-wrap: wrap;
       gap: 24px;
       margin-top: 8px;
       font-size: 12px;
       color: var(--rh-gray-500);
     }
 
-    .skill-details .meta-row span { white-space: nowrap; }
+    .skill-details .meta-row span { min-width: 0; overflow-wrap: anywhere; }
     .skill-details .meta-row strong { color: var(--rh-gray-700); }
 
     .skill-type-badge {
@@ -353,7 +376,6 @@
     .how-to-use {
       margin-top: 12px;
       padding-top: 12px;
-      border-top: 1px solid var(--rh-gray-100);
     }
 
     .how-to-use h4 {
@@ -421,6 +443,41 @@
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
     }
 
+    .source-path-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .source-path-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      border: 0;
+      background: none;
+      color: var(--rh-gray-500);
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    .source-path-action:hover,
+    .source-path-action:focus-visible {
+      color: var(--tag-tool);
+      background: var(--tag-tool-bg);
+      outline: none;
+    }
+
+    .source-path-action svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     .no-results {
       text-align: center;
       padding: 60px 20px;
@@ -431,10 +488,8 @@
     /* -- View tabs (Browse / Maintain) -- */
     .view-tabs {
       display: flex;
-      gap: 4px;
-      background: var(--rh-gray-900);
-      border-radius: 6px;
-      padding: 3px;
+      gap: 24px;
+      margin-left: auto;
     }
 
     .view-tab {
@@ -443,13 +498,18 @@
       color: var(--rh-gray-300);
       font-size: 13px;
       font-weight: 500;
-      padding: 6px 14px;
-      border-radius: 4px;
+      font-family: "Red Hat Text", "Helvetica Neue", Arial, sans-serif;
+      padding: 8px 0;
       cursor: pointer;
     }
 
-    .view-tab:hover { color: var(--rh-white); }
-    .view-tab.active { background: var(--rh-white); color: var(--rh-dark); }
+    .view-tab:hover,
+    .view-tab.active {
+      color: var(--rh-white);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 5px;
+    }
 
     .view-tab-link {
       display: inline-flex;
@@ -634,8 +694,14 @@
     .badge-orphaned { background: var(--rh-gray-100); color: var(--rh-gray-500); }
     .badge-realdir { background: var(--rh-gray-100); color: var(--rh-gray-500); }
 
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .layout { flex-direction: column; }
+      .mobile-filter-shell { display: block; background: var(--rh-white); border-bottom: 1px solid var(--rh-gray-300); }
+      .mobile-filter-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 14px 16px; border: 0; background: var(--rh-white); color: var(--rh-gray-700); font-family: inherit; font-size: 14px; font-weight: 600; line-height: 1.2; text-align: left; cursor: pointer; }
+      .mobile-filter-toggle:hover, .mobile-filter-toggle:focus-visible { color: var(--tag-tool); }
+      .mobile-filter-toggle .mobile-filter-arrow { transition: transform .15s; }
+      .mobile-filter-shell.collapsed .mobile-filter-arrow { transform: rotate(-90deg); }
+      .mobile-filter-shell.collapsed .sidebar { display: none; }
       .sidebar {
         width: 100%;
         min-width: 100%;
@@ -644,7 +710,7 @@
         border-right: none;
         border-bottom: 1px solid var(--rh-gray-300);
       }
-      #search-box { width: 100%; margin-left: 0; margin-top: 8px; }
+      .view-tabs { width: 100%; margin-left: 0; justify-content: space-between; gap: 12px; }
       .main { max-width: 100%; }
     }
   </style>
@@ -652,30 +718,26 @@
 <body>
 
 <header>
-  <h1>IXD AI-First Skills Explorer</h1>
+  <h1>AI Assets Explorer</h1>
   <span class="header-stats" id="header-stats"></span>
   <div class="view-tabs" id="view-tabs">
-    <button class="view-tab active" data-view="browse">Browse Skills</button>
-    <button class="view-tab" data-view="maintain">Maintain Skills</button>
-    <a class="view-tab view-tab-link" href="how-to-update.html">About</a>
+  <button class="view-tab active" data-view="browse">Browse Assets</button>
+  <button class="view-tab" data-view="maintain">Manage Assets</button>
+  <a class="view-tab view-tab-link" href="how-to-update.html">About</a>
   </div>
-  <input type="text" id="search-box" placeholder="Search skills by name or description...">
 </header>
 
 <div id="browse-view">
-  <div class="active-filters-bar" id="active-filters-bar">
-    <span class="label">Active filters:</span>
-    <div id="filter-chips"></div>
-    <button class="clear-all-btn" id="clear-all-btn">Clear all</button>
-  </div>
-
   <div class="layout">
-    <aside class="sidebar" id="sidebar"></aside>
+    <div class="mobile-filter-shell">
+      <button class="mobile-filter-toggle" id="mobile-filter-toggle" type="button" aria-expanded="true" aria-controls="sidebar">Filters <span class="mobile-filter-arrow" aria-hidden="true">▾</span></button>
+      <aside class="sidebar" id="sidebar"></aside>
+    </div>
     <main class="main">
       <div class="results-header">
         <span id="results-count"></span>
-        <label class="toggle-stubs">
-          <input type="checkbox" id="show-stubs"> Show stubs
+        <label class="toggle-expand">
+          <input type="checkbox" id="expand-skills"> Expand/Collapse Skills
         </label>
       </div>
       <div id="skills-list"></div>
@@ -711,11 +773,21 @@
 <script>
 (function () {
   let DATA = null;
-  const activeFilters = { type: new Set(), phase: new Set(), stage: new Set(), tool: new Set(), role: new Set(), task: new Set() };
+  const activeFilters = { type: new Set(), status: new Set(), phase: new Set(), stage: new Set(), tool: new Set(), role: new Set(), task: new Set(), repository: new Set() };
+  const collapsedGroups = new Set();
   let searchQuery = "";
-  let showStubs = false;
+  let expandAllSkills = false;
 
-  const GROUP_LABELS = { type: "Skill Type", phase: "Agile Phase", stage: "Work Stage", tool: "Tool", role: "Role", task: "Task Type" };
+  const GROUP_LABELS = { type: "Skill Type", status: "Status", phase: "Agile Phase", stage: "Work Stage", tool: "Tool", role: "Role", task: "Task Type", repository: "Source repository" };
+  const STATUS_OPTIONS = ["full", "stub"];
+  const UNCLASSIFIED_VALUE = "unclassified";
+
+  function getFilterOptions(group) {
+    if (group === "status") return STATUS_OPTIONS;
+    const options = DATA.filterOptions[group] || [];
+    const hasUnclassifiedSkills = DATA.skills.some(skill => !(skill.tags[group] || []).length);
+    return hasUnclassifiedSkills ? [...options, UNCLASSIFIED_VALUE] : options;
+  }
 
   const PHASE_LABELS = {
     "planning": "Planning (future-looking)",
@@ -727,6 +799,11 @@
     "gather": "Gather (context-gathering)",
     "produce": "Produce (the actual work)",
     "reflect": "Reflect (retrospective insight)",
+  };
+
+  const STATUS_LABELS = {
+    "full": "Full skill",
+    "stub": "Stub",
   };
 
   let currentView = "browse";
@@ -775,6 +852,7 @@
     // computeHomePrefix() for why this is intentionally static.
     homePathPrefix = computeHomePrefix(DATA.inventory || []);
     loadFiltersFromHash();
+    if (!window.location.hash) setAllFilters(true);
     renderSidebar();
     renderSkills();
     renderMaintainStats();
@@ -785,23 +863,39 @@
   function renderSidebar() {
     const sidebar = document.getElementById("sidebar");
     sidebar.innerHTML = "";
+    const allSelected = areAllFiltersSelected();
+    const someSelected = Object.values(activeFilters).some(values => values.size > 0);
+    sidebar.innerHTML = `
+      <div class="sidebar-search">
+        <input type="text" id="search-box" placeholder="search name or description">
+      </div>
+      <label class="filter-all">
+        <input type="checkbox" id="filter-all" ${allSelected ? "checked" : ""}>
+        <span>Check all / uncheck all</span>
+      </label>
+    `;
+    sidebar.querySelector("#search-box").value = searchQuery;
+    const masterCheckbox = sidebar.querySelector("#filter-all");
+    masterCheckbox.indeterminate = someSelected && !allSelected;
     for (const [group, label] of Object.entries(GROUP_LABELS)) {
-      const options = DATA.filterOptions[group];
+      const options = getFilterOptions(group);
       const div = document.createElement("div");
-      div.className = "filter-group";
+      div.className = `filter-group${collapsedGroups.has(group) ? " collapsed" : ""}`;
       div.dataset.group = group;
+      const groupAllSelected = options.length > 0 && options.every(opt => activeFilters[group].has(opt));
+      div.dataset.selected = groupAllSelected ? "all" : (activeFilters[group].size ? "some" : "none");
 
       const counts = {};
       for (const opt of options) {
-        counts[opt] = DATA.skills.filter(s =>
-          s.tags[group].includes(opt) && (showStubs || s.status !== "stub")
-        ).length;
+        counts[opt] = DATA.skills.filter(s => matchesFilterOption(s, group, opt)).length;
       }
 
       div.innerHTML = `
         <div class="filter-group-header">
-          <span>${label}</span>
-          <span class="arrow">▼</span>
+          <button class="filter-group-toggle" type="button" aria-expanded="${!collapsedGroups.has(group)}">
+            <span class="arrow" aria-hidden="true">▾</span><span>${label}</span>
+          </button>
+          <button class="filter-group-select" type="button" aria-label="${groupAllSelected ? "Clear" : "Select all"} ${label}"></button>
         </div>
         <div class="filter-options">
           ${options.map(opt => `
@@ -816,10 +910,55 @@
       `;
       sidebar.appendChild(div);
 
-      div.querySelector(".filter-group-header").addEventListener("click", () => {
-        div.classList.toggle("collapsed");
+      div.querySelector(".filter-group-toggle").addEventListener("click", () => {
+        if (collapsedGroups.has(group)) collapsedGroups.delete(group);
+        else collapsedGroups.add(group);
+        renderSidebar();
+      });
+      div.querySelector(".filter-group-select").addEventListener("click", () => {
+        const selectAll = !options.every(opt => activeFilters[group].has(opt));
+        setGroupFilters(group, selectAll);
+        updateHashFromFilters();
+        renderSidebar();
+        renderSkills();
       });
     }
+  }
+
+  function setAllFilters(checked) {
+    for (const [group, values] of Object.entries(activeFilters)) {
+      values.clear();
+      if (checked) getFilterOptions(group).forEach(value => values.add(value));
+    }
+  }
+
+  function setGroupFilters(group, checked) {
+    activeFilters[group].clear();
+    if (checked) getFilterOptions(group).forEach(value => activeFilters[group].add(value));
+  }
+
+  function areAllFiltersSelected() {
+    return Object.entries(activeFilters).every(([group, values]) =>
+      getFilterOptions(group).every(value => values.has(value))
+    );
+  }
+
+  function matchesFilterOption(skill, group, value) {
+    if (group === "status") return value === "stub"
+      ? skill.status === "stub"
+      : value === "full" && skill.status !== "stub";
+    if (value === UNCLASSIFIED_VALUE) return !(skill.tags[group] || []).length;
+    return (skill.tags[group] || []).includes(value);
+  }
+
+  function getSkillFilePath(skill) {
+    const entry = (DATA.inventory || []).find(item =>
+      item.name === skill.id && item.hasSkillMd && item.truePath
+    );
+    if (!entry) return "";
+    return entry.truePath.endsWith("SKILL.md")
+      ? entry.truePath
+      : `${entry.truePath}/SKILL.md`;
   }
 
   function renderSkills() {
@@ -831,7 +970,7 @@
       const matchesFilters = matchesActiveFilters(skill);
       const matchesSearch = matchesSearchQuery(skill);
       const isStub = skill.status === "stub";
-      const visible = matchesFilters && matchesSearch && (showStubs || !isStub);
+      const visible = matchesFilters && matchesSearch;
 
       if (visible) visibleCount++;
 
@@ -848,12 +987,12 @@
       ];
 
       const isWorkflow = skill.skillType === "workflow";
-      const inputs = skill.inputs || [];
       const requiredSkills = skill.requiredSkills || [];
-      const trigger = skill.trigger || "";
+      const skillFilePath = getSkillFilePath(skill);
 
       card.innerHTML = `
         <summary>
+          <span class="skill-disclosure" aria-hidden="true"></span>
           <div class="summary-text">
             <span class="skill-name">${escapeHtml(skill.displayName)}</span>
             <span class="skill-description-preview">${escapeHtml(skill.description)}</span>
@@ -867,25 +1006,19 @@
             ).join("")}
           </div>
           <div class="meta-row">
-            <span><strong>Module:</strong> ${escapeHtml(skill.moduleDisplay)}</span>
-            ${skill.owningAgent ? `<span><strong>Agent:</strong> ${escapeHtml(skill.owningAgent)}</span>` : ""}
-            <span><strong>ID:</strong> <code>${escapeHtml(skill.id)}</code></span>
+            <span><strong>Repository:</strong> <code>${escapeHtml(skill.sourceLabel || "Unclassified")}</code>${skillFilePath ? `
+              <button class="source-path-action" type="button" data-file-path="${escapeHtml(skillFilePath)}"
+                title="Show source in Finder" aria-label="Show source in Finder">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M9 2h5v5"></path>
+                  <path d="M8 8l6-6"></path>
+                  <path d="M13 9v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4"></path>
+                </svg>
+              </button>
+            ` : ""}</span>
+            <span><strong>Name:</strong> <code>${escapeHtml(skill.id)}</code></span>
           </div>
           <div class="how-to-use">
-            ${trigger ? `
-              <div class="block">
-                <h4>When to use</h4>
-                <p>${escapeHtml(trigger)}</p>
-              </div>
-            ` : ""}
-            ${inputs.length ? `
-              <div class="block">
-                <h4>Inputs</h4>
-                <ul class="inputs-list">
-                  ${inputs.map(i => `<li class="${i.required ? "required" : ""}" title="${i.required ? "Required" : "Optional"}">${escapeHtml(i.name)}</li>`).join("")}
-                </ul>
-              </div>
-            ` : ""}
             ${requiredSkills.length ? `
               <div class="block">
                 <h4>Runs these skills in order</h4>
@@ -896,12 +1029,11 @@
                 </div>
               </div>
             ` : ""}
-            <div class="block">
-              <span class="source-path">${escapeHtml(skill.sourcePath || "")}</span>
-            </div>
           </div>
         </div>
       `;
+
+      card.open = expandAllSkills && visible;
 
       list.appendChild(card);
     }
@@ -916,32 +1048,6 @@
       list.appendChild(msg);
     }
 
-    renderActiveFiltersBar();
-  }
-
-  function renderActiveFiltersBar() {
-    const bar = document.getElementById("active-filters-bar");
-    const chips = document.getElementById("filter-chips");
-    const hasFilters = Object.values(activeFilters).some(s => s.size > 0);
-    bar.classList.toggle("visible", hasFilters);
-    chips.innerHTML = "";
-    for (const [group, values] of Object.entries(activeFilters)) {
-      for (const val of values) {
-        const chip = document.createElement("button");
-        chip.className = "filter-chip";
-        chip.dataset.group = group;
-        chip.dataset.value = val;
-        chip.innerHTML = `${formatLabel(val, group)} <span class="remove">×</span>`;
-        chip.addEventListener("click", () => {
-          activeFilters[group].delete(val);
-          const cb = document.querySelector(`input[data-group="${group}"][data-value="${val}"]`);
-          if (cb) cb.checked = false;
-          updateHashFromFilters();
-          renderSkills();
-        });
-        chips.appendChild(chip);
-      }
-    }
   }
 
   function switchView(view) {
@@ -1097,9 +1203,8 @@
 
   function matchesActiveFilters(skill) {
     for (const [group, selected] of Object.entries(activeFilters)) {
-      if (selected.size === 0) continue;
-      const skillTags = skill.tags[group] || [];
-      if (!skillTags.some(t => selected.has(t))) return false;
+      if (selected.size === 0) return false;
+      if (![...selected].some(value => matchesFilterOption(skill, group, value))) return false;
     }
     return true;
   }
@@ -1121,9 +1226,9 @@
     // Clear filters/search that would hide the target skill, then scroll to and open it.
     searchQuery = "";
     document.getElementById("search-box").value = "";
-    for (const set of Object.values(activeFilters)) set.clear();
-    document.querySelectorAll(".sidebar input[type=checkbox]").forEach(cb => cb.checked = false);
+    setAllFilters(true);
     updateHashFromFilters();
+    renderSidebar();
     renderSkills();
     const target = document.querySelector(`.skill-card[data-id="${CSS.escape(id)}"]`);
     if (target) {
@@ -1135,7 +1240,21 @@
   }
 
   function bindEvents() {
+    const mobileFilterShell = document.querySelector(".mobile-filter-shell");
+    const mobileFilterToggle = document.getElementById("mobile-filter-toggle");
+    mobileFilterToggle.addEventListener("click", () => {
+      const collapsed = mobileFilterShell.classList.toggle("collapsed");
+      mobileFilterToggle.setAttribute("aria-expanded", String(!collapsed));
+    });
+
     document.getElementById("sidebar").addEventListener("change", (e) => {
+      if (e.target.id === "filter-all") {
+        setAllFilters(e.target.checked);
+        updateHashFromFilters();
+        renderSidebar();
+        renderSkills();
+        return;
+      }
       if (e.target.type !== "checkbox") return;
       const { group, value } = e.target.dataset;
       if (e.target.checked) {
@@ -1144,10 +1263,18 @@
         activeFilters[group].delete(value);
       }
       updateHashFromFilters();
+      renderSidebar();
       renderSkills();
     });
 
     document.getElementById("skills-list").addEventListener("click", (e) => {
+      const fileAction = e.target.closest(".source-path-action");
+      if (fileAction) {
+        e.preventDefault();
+        e.stopPropagation();
+        showInFileManager(fileAction.dataset.filePath);
+        return;
+      }
       const jumpBtn = e.target.closest(".step-link");
       if (jumpBtn) {
         e.preventDefault();
@@ -1165,28 +1292,22 @@
       } else {
         activeFilters[group].add(value);
       }
-      const cb = document.querySelector(`input[data-group="${group}"][data-value="${value}"]`);
-      if (cb) cb.checked = activeFilters[group].has(value);
       updateHashFromFilters();
+      renderSidebar();
       renderSkills();
     });
 
-    document.getElementById("clear-all-btn").addEventListener("click", () => {
-      for (const set of Object.values(activeFilters)) set.clear();
-      document.querySelectorAll(".sidebar input[type=checkbox]").forEach(cb => cb.checked = false);
-      updateHashFromFilters();
-      renderSkills();
-    });
-
-    document.getElementById("search-box").addEventListener("input", (e) => {
+    document.getElementById("sidebar").addEventListener("input", (e) => {
+      if (e.target.id !== "search-box") return;
       searchQuery = e.target.value.trim();
       renderSkills();
     });
 
-    document.getElementById("show-stubs").addEventListener("change", (e) => {
-      showStubs = e.target.checked;
-      renderSidebar();
-      renderSkills();
+    document.getElementById("expand-skills").addEventListener("change", (e) => {
+      expandAllSkills = e.target.checked;
+      document.querySelectorAll(".skill-card:not(.hidden)").forEach(card => {
+        card.open = expandAllSkills;
+      });
     });
 
     document.getElementById("view-tabs").addEventListener("click", (e) => {
@@ -1229,6 +1350,16 @@
     });
   }
 
+  async function showInFileManager(filePath) {
+    try {
+      const response = await fetch(`/__show-in-file-manager?path=${encodeURIComponent(filePath)}`);
+      if (!response.ok) throw new Error("File manager endpoint unavailable");
+    } catch (error) {
+      // Keep the icon useful when the page is opened without the local server.
+      window.open(`file://${filePath}`, "_blank", "noopener");
+    }
+  }
+
   function updateHashFromFilters() {
     const parts = [];
     for (const [group, values] of Object.entries(activeFilters)) {
@@ -1246,7 +1377,7 @@
       const [group, vals] = part.split("=");
       if (activeFilters[group] && vals) {
         for (const v of vals.split(",")) {
-          if (DATA.filterOptions[group]?.includes(v)) {
+          if (getFilterOptions(group).includes(v)) {
             activeFilters[group].add(v);
           }
         }
@@ -1255,6 +1386,9 @@
   }
 
   function formatLabel(slug, group) {
+    if (group === "status" && STATUS_LABELS[slug]) return STATUS_LABELS[slug];
+    if (group === "repository") return slug;
+    if (slug === UNCLASSIFIED_VALUE) return "Other";
     if (group === "phase" && PHASE_LABELS[slug]) return PHASE_LABELS[slug];
     if (group === "stage" && STAGE_LABELS[slug]) return STAGE_LABELS[slug];
     return slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
