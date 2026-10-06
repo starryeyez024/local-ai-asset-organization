@@ -4,8 +4,11 @@ pages:
     - itup-alm-x86
   script:
     - mkdir -p public
-    - cp pages/index.html public/index.html
-    - cp -r pages/images public/ || true
+    - cp -r pages/. public/
+    - mkdir -p public/skills-explorer
+    - cp -r skills-explorer/. public/skills-explorer/
+    - mkdir -p public/skills
+    - cp -r skills/. public/skills/
   artifacts:
     paths:
       - public

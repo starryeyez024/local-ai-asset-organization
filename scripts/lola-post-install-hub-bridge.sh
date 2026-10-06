@@ -157,8 +157,25 @@ set -uo pipefail
 # -----------------------------------------------------------------------
 # Defaults / physical root location
 # -----------------------------------------------------------------------
-# The canonical flat physical root this whole methodology is built around.
-PHYSICAL_ROOT="${PHYSICAL_ROOT:-$HOME/AI Assets}"
+# The canonical flat physical root comes from the shared machine config when
+# that file is available. PHYSICAL_ROOT remains an explicit escape hatch for
+# another machine or a one-off test; the final fallback is only for backward
+# compatibility with older installations.
+AI_TOOLS_CONFIG="${AI_TOOLS_CONFIG:-$HOME/.config/ai-tools/ai-tools.toml}"
+configured_install_dir=""
+if [[ -f "$AI_TOOLS_CONFIG" ]]; then
+  configured_install_dir="$(awk '
+    /^\[directories\][[:space:]]*$/ { in_directories=1; next }
+    /^\[/ { in_directories=0 }
+    in_directories && /^[[:space:]]*install_dir[[:space:]]*=/ {
+      sub(/^[^=]*=[[:space:]]*"/, "")
+      sub(/"[[:space:]]*$/, "")
+      print
+      exit
+    }
+  ' "$AI_TOOLS_CONFIG")"
+fi
+PHYSICAL_ROOT="${PHYSICAL_ROOT:-${configured_install_dir:-$HOME/AI Assets}}"
 
 # These get filled in either from the LOLA_* env vars (Mode 1) or from
 # explicit CLI flags (Mode 2). Left blank until resolved below.

@@ -2,6 +2,30 @@
 
 A collection of three complementary skills for managing, organizing, and safely maintaining AI agent skills and assets on your local machine.
 
+## Documentation site
+
+The public guidance is organized as a small documentation site:
+
+- [`pages/index.html`](pages/index.html) — overview and physical-root/tool-facing-view diagram.
+- [`pages/agentic-setup.html`](pages/agentic-setup.html) — instructions, configuration, context, and scope.
+- [`pages/asset-organization.html`](pages/asset-organization.html) — physical roots, links, naming, collisions, and overrides.
+- [`pages/tool-compatibility.html`](pages/tool-compatibility.html) — Codex-first asset compatibility matrix and precedence rules.
+- [`PAGES-RESTRUCTURING-PLAN.md`](PAGES-RESTRUCTURING-PLAN.md) — the maintenance plan for the documentation structure.
+
+The site deliberately distinguishes canonical content from tool-facing delivery
+mechanisms. A symlink is one option; committed files, generated copies, native
+configuration, and platform-managed packages are also valid when a tool or
+runtime requires them.
+
+## Shared setup model
+
+This project follows a portable version of the local agentic setup pattern:
+keep agent behavior, machine configuration, and personal context separate.
+Use one canonical global instruction file, one canonical machine-configuration
+file, and short tool-native bootstrap files that point to those sources. Put
+project-specific additions in a project-level instruction file only when the
+project genuinely needs them.
+
 ## The Three Skills
 
 ### 1. 🔗 **Skill Linker** — Selective Symlink Creation
@@ -15,7 +39,7 @@ When you download an AI project with 50+ skills but only want to use a handful, 
 ✅ **Selective linking** — Choose 1, some, or all skills from a project  
 ✅ **Fuzzy matching** — Typos are forgiven ("override-safe" matches "skill-override-safeguard")  
 ✅ **Name-based invocation** — Just type skill names, no numbered lists  
-✅ **Config-driven** — `~/.config/ai-tools/ai-tools.toml` remembers your directories  
+✅ **Config-driven** — a canonical `ai-tools.toml` supplies the directories
 ✅ **Safe by default** — Won't overwrite existing symlinks without `--force`  
 ✅ **Cross-platform** — Works on macOS, Linux, and Windows  
 
@@ -125,14 +149,16 @@ When you have skills scattered across `~/.claude/skills`, `~/.cursor/skills-curs
 
 ---
 
-## Configuration: `~/.config/ai-tools/ai-tools.toml`
+## Configuration: `ai-tools.toml`
 
-The **skill-linker** reads from a simple TOML config file that remembers where you store projects and where symlinks should go. You only set this up once.
+The **skill-linker** reads the canonical TOML config file to find the physical
+asset root and the tool-facing skill hub. It does not create a second config
+file or maintain a separate copy of those paths.
 
 ### File Location
 
 ```
-~/.config/ai-tools/ai-tools.toml
+`/path/to/.config/ai-tools/ai-tools.toml`
 ```
 
 If the file doesn't exist, **skill-linker** will tell you where to create it and what to put inside.
@@ -141,18 +167,19 @@ If the file doesn't exist, **skill-linker** will tell you where to create it and
 
 ```toml
 [directories]
-install_dir = "~/AI Assets"
-symlinks_dir = "~/.agents/skills"
+install_dir = "/absolute/path/to/AI Assets"
+symlinks_dir = "/absolute/path/to/.agents/skills"
 ```
 
-Both paths support `~/` expansion (will be expanded to your home directory).
+Use absolute paths for cross-tool configuration. TOML does not expand `~` by
+itself; a consuming application would have to implement that behavior.
 
 ### What Each Setting Does
 
 | Setting | Purpose | Default | Example |
 |---------|---------|---------|---------|
-| `install_dir` | Where you download/store AI projects and their skills | `~/AI Tools` | `~/AI Assets`, `~/Projects/AI`, `/opt/ai-projects` |
-| `symlinks_dir` | Where symlinks are created (must already exist or be creatable) | `~/.agents/skills` | `~/.agents/skills`, `~/.cursor/skills`, `~/.claude/skills` |
+| `install_dir` | Where you download/store AI projects and their skills | user-defined | An absolute path for the configured machine |
+| `symlinks_dir` | Where symlinks are created (must already exist or be creatable) | user-defined | An absolute path for the configured machine |
 
 ### Understanding the Two Directories
 

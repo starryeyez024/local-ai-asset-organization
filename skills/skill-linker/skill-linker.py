@@ -2,8 +2,8 @@
 """
 skill-linker: Selective symlink creation for AI project skills.
 
-Creates symlinks from individual skills in an AI project directory into
-~/.agents/skills, with fuzzy matching on skill names.
+Creates symlinks from individual skills in an AI project directory into the
+configured skill hub, with fuzzy matching on skill names.
 
 Usage:
   skill-linker <project-name> [skill1] [skill2] ...
@@ -33,27 +33,38 @@ class SkillLinker:
         """Read and parse ai-tools.toml config file."""
         if not self.config_path.exists():
             self._error(f"Config file not found: {self.config_path}")
-            self._error("Create ~/.config/ai-tools/ai-tools.toml with:")
+            self._error("Create ~/.config/ai-tools/ai-tools.toml with the canonical directories:")
             self._error("""
 [directories]
-install_dir = "~/AI Tools"
-symlinks_dir = "~/.agents/skills"
+install_dir = "/absolute/path/to/asset-root"
+symlinks_dir = "/absolute/path/to/.agents/skills"
 """)
             sys.exit(1)
 
-        config = {"install_dir": "~/AI Tools", "symlinks_dir": "~/.agents/skills"}
+        config = {}
+        in_directories = False
         try:
             with open(self.config_path, "r") as f:
                 for line in f:
                     line = line.strip()
+                    if line.startswith("[") and line.endswith("]"):
+                        in_directories = line == "[directories]"
+                        continue
                     if "=" in line and not line.startswith("["):
                         key, value = line.split("=", 1)
                         key = key.strip()
                         value = value.strip().strip('"')
-                        if key in ["install_dir", "symlinks_dir"]:
+                        if in_directories and key in ["install_dir", "symlinks_dir"]:
                             config[key] = value
         except Exception as e:
             self._error(f"Error reading config: {e}")
+            sys.exit(1)
+
+        missing = [key for key in ("install_dir", "symlinks_dir") if key not in config]
+        if missing:
+            self._error(
+                f"Missing [directories] setting(s) in {self.config_path}: {', '.join(missing)}"
+            )
             sys.exit(1)
 
         return config

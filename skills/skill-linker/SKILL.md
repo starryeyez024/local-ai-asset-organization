@@ -2,9 +2,9 @@
 name: skill-linker
 description: >
   Help create selective symlinks from a newly-downloaded AI asset project (with multiple skills) into
-  ~/.agents/skills directory. Instead of symlinking an entire project folder, this skill lets
+  the configured skill-hub directory. Instead of symlinking an entire project folder, this skill lets
   you choose 1, some, or all skills from that project and symlink just the ones you want.
-  Manages the ~/.config/ai-tools.ai-tools.toml config file to remember your install and
+  Reads the canonical ~/.config/ai-tools/ai-tools.toml config file to find your install and
   symlink directories across uses.
 ---
 
@@ -26,12 +26,11 @@ overhead. This skill solves that by:
 
 The first time you run this skill, it will ask you for two directories:
 
-- **Install directory** (default: `~/AI Tools`) — where you download new projects
-- **Symlinks directory** (default: `~/.agents/skills`) — where symlinks should be created
+- **Install directory** — `directories.install_dir` in the canonical `ai-tools.toml`
+- **Symlinks directory** — `directories.symlinks_dir` in the canonical `ai-tools.toml`
 
-These get saved to `~/.config/ai-tools.ai-tools.toml`. You only enter these once; later
-runs reuse them. You can edit the config file by hand if your preferences change, or ask this
-skill to re-configure them.
+The skill reads these values from `~/.config/ai-tools/ai-tools.toml`. It does not create a
+second configuration file or maintain another copy of the paths.
 
 ## How to use this skill
 
@@ -61,7 +60,7 @@ If you run the skill without specifying skill names, it lists what's available a
 ```bash
 $ skill-linker ktotten/local-ai-asset-organization
 
-📁 Project: ~/AI Tools/ktotten/local-ai-asset-organization
+📁 Project: /absolute/path/to/asset-root/ktotten/local-ai-asset-organization
 📚 Found 3 skill(s): ai-asset-auditor, skill-linker, skill-override-safeguard
 
 Which skills do you want to link? (space-separated names, or 'all')
@@ -148,15 +147,15 @@ The skill auto-detects which structure your project uses and scans accordingly.
 
 ## Configuration file format
 
-`~/.config/ai-tools.ai-tools.toml`:
+`~/.config/ai-tools/ai-tools.toml`:
 
 ```toml
 [directories]
-install_dir = "~/AI Tools"
-symlinks_dir = "~/.agents/skills"
+install_dir = "/absolute/path/to/asset-root"
+symlinks_dir = "/absolute/path/to/.agents/skills"
 ```
 
-Both paths support `~/` expansion. You can edit this file by hand at any time.
+Use absolute paths for cross-tool configuration. You can edit this canonical file by hand at any time.
 
 ## Common use cases
 
