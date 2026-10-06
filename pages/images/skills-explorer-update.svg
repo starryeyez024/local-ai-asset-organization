@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Illustrated skills explorer update workflow</title>
+  <desc id="desc">A three-step workflow showing a skill source folder, catalog generation, and the published explorer.</desc>
+  <rect width="1200" height="620" rx="18" fill="#fff8e5"/>
+  <text x="600" y="70" text-anchor="middle" fill="#151528" font-family="Arial, sans-serif" font-size="28" font-weight="700">Source skill → generated catalog → explorer</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="70" y="135" width="290" height="320" rx="14" fill="#151528"/><text x="104" y="183" fill="#9ad98a" font-size="18" font-weight="700">1 · EDIT THE SOURCE</text><text x="104" y="235" fill="#91bdf0" font-family="monospace" font-size="21">skills/</text><text x="124" y="273" fill="#e7e7f0" font-family="monospace" font-size="20">my-skill/</text><text x="144" y="311" fill="#ffd27a" font-family="monospace" font-size="20">SKILL.md</text><text x="104" y="390" fill="#e7e7f0" font-size="17">Keep the real skill folder</text><text x="104" y="418" fill="#e7e7f0" font-size="17">under version control.</text>
+    <rect x="455" y="135" width="290" height="320" rx="14" fill="#151528"/><text x="489" y="183" fill="#9ad98a" font-size="18" font-weight="700">2 · REGENERATE</text><rect x="489" y="235" width="220" height="54" rx="8" fill="#24243a"/><text x="509" y="269" fill="#ffd27a" font-family="monospace" font-size="18">make generate</text><text x="489" y="350" fill="#e7e7f0" font-size="17">The script reads skill</text><text x="489" y="378" fill="#e7e7f0" font-size="17">metadata into skills.json.</text><text x="489" y="422" fill="#f08ad5" font-size="16">Review generated output</text>
+    <rect x="840" y="135" width="290" height="320" rx="14" fill="#151528"/><text x="874" y="183" fill="#9ad98a" font-size="18" font-weight="700">3 · BROWSE / PUBLISH</text><rect x="874" y="235" width="220" height="54" rx="8" fill="#24243a"/><text x="894" y="269" fill="#91bdf0" font-family="monospace" font-size="18">skills-explorer/</text><text x="874" y="350" fill="#e7e7f0" font-size="17">Open the static catalog</text><text x="874" y="378" fill="#e7e7f0" font-size="17">locally or via Pages.</text><text x="874" y="422" fill="#9ad98a" font-size="16">No skill code is executed</text>
+  </g>
+  <g fill="#0066cc"><path d="M385 290h48l-12-12 10-10 32 32-32 32-10-10 12-12h-48z"/><path d="M770 290h48l-12-12 10-10 32 32-32 32-10-10 12-12h-48z"/></g>
+</svg>
