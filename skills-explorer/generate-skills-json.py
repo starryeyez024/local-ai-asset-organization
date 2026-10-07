@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Scan the ~/.agents/skills symlink farm for ixd-firefly AI-first skill files
-and generate a tagged skills.json.
+Scan the configured skills directory and generate a shareable catalog plus a
+local inventory for the Explorer's audit view.
 
 Usage:
     python3 generate-skills-json.py
@@ -11,21 +11,9 @@ Usage:
 
         SKILLS_ROOT=/some/other/path python3 generate-skills-json.py
 
-Reads SKILL.md files by walking ~/.agents/skills -- a flat, symlink-only farm
-where each entry is named after a skill id and points at wherever that skill's
-real folder currently lives (a mix of ~/AI Assets/... and legacy ~/Sites/...
-paths, since the personal AI Asset Management System migration is still in
-progress). This farm is the canonical, migration-proof list of "all installed
-skills" that Cursor and Codex CLI read natively, so scanning it here means
-this generator keeps working regardless of where any individual skill's real
-folder physically lives today or moves to next.
-
-For each farm entry we resolve the symlink to its real target, then infer
-which of the 6 known ai-first-* modules the skill belongs to by looking for
-the module name as a path component of that resolved target. Farm entries
-that don't resolve to a known ai-first module (e.g. skills from other repos
-that also get symlinked into the same farm) are skipped with a warning.
-Extracts frontmatter, auto-tags by keyword analysis, writes skills.json.
+Includes every valid SKILL.md entry. The committed skills.json contains catalog
+metadata only; the ignored skills-local.json also contains absolute paths and
+inventory details for use on the machine that generated it.
 """
 
 import json
@@ -41,12 +29,9 @@ HOME = Path.home()
 # as stale (rendered in red in the UI) if it hasn't been touched in this long.
 STALE_THRESHOLD_DAYS = 60
 
-# The canonical, flat symlink farm of all installed skills. Cursor and Codex
-# CLI read this natively; each entry is a symlink (occasionally a real dir)
-# named after the skill id, pointing at the skill's real folder wherever it
-# currently lives. Override with the SKILLS_ROOT env var to point the
-# generator at a different directory (e.g. for testing); defaults to the
-# real farm at ~/.agents/skills when unset.
+# Inventory the configured local skill hub. Entries can be symlinks or real
+# directories, and tool discovery still depends on each tool and runtime.
+# SKILLS_ROOT can point the generator at another directory for testing.
 AGENTS_SKILLS_FARM = Path(os.environ.get("SKILLS_ROOT", str(HOME / ".agents" / "skills")))
 
 AI_FIRST_MODULES = [
@@ -258,7 +243,7 @@ def parse_frontmatter(text: str) -> dict:
                     result["metadata"] = {}
                     in_metadata = True
                     continue
-                if current_val == ">":
+                if current_val in (">", ">-", ">+", "|", "|-", "|+"):
                     current_val = ""
                 elif current_val.startswith("[") and current_val.endswith("]"):
                     items = current_val[1:-1].split(",")
@@ -347,8 +332,8 @@ def resolve_module(skill_file: Path) -> str:
 
 
 def find_skill_files() -> list[tuple[str, Path]]:
-    """Discover skills by walking the ~/.agents/skills symlink farm and resolving
-    each entry to its real SKILL.md file. Determines the module for each skill:
+    """Discover valid skills in the configured hub and resolve each entry to
+    its real SKILL.md file. Determines the module for each skill:
     ixd-firefly skills are identified by their path, while non-ixd-firefly skills
     are assigned a module based on their parent directory name (e.g., 'anthropics',
     'rhecosystemappeng') or defaulting to 'other' if unrecognizable."""
@@ -437,8 +422,9 @@ def source_repository(skill_path: Path) -> dict[str, str]:
     if len(relative.parts) < 2:
         return {"sourceOrg": "", "sourceRepo": "", "sourceLabel": "Unclassified"}
 
-    org, repo = relative.parts[:2]
-    return {"sourceOrg": org, "sourceRepo": repo, "sourceLabel": f"{org}/{repo}"}
+    org = relative.parts[0]
+    repo = relative.parts[-1]
+    return {"sourceOrg": org, "sourceRepo": repo, "sourceLabel": "/".join(relative.parts)}
 
 
 def _frontmatter_name(skill_md: Path) -> str:
@@ -453,11 +439,10 @@ def _frontmatter_name(skill_md: Path) -> str:
 
 
 def build_inventory() -> tuple[list[dict], dict]:
-    """Walk EVERY entry in the skills farm -- not just the ones that resolve to
-    a known ixd-firefly module -- for the 'Maintain' audit view. Reports each
+    """Walk every entry in the configured hub for the local audit view. Reports each
     entry's true (resolved) path, whether its symlink is broken, whether it has
     a SKILL.md, how stale that SKILL.md is, whether it's also surfaced in the
-    curated `skills` array, and flags two kinds of duplicate issues: the same
+    catalog `skills` array, and flags two kinds of duplicate issues: the same
     real skill symlinked into the farm under more than one name, and two
     different real skills whose SKILL.md frontmatter claims the same `name`."""
     if not AGENTS_SKILLS_FARM.exists():
@@ -517,6 +502,7 @@ def build_inventory() -> tuple[list[dict], dict]:
         repository = source_repository(real_dir or skill_file or entry)
         entries.append({
             "name": entry.name,
+            "skillId": fm_name,
             "isSymlink": is_symlink,
             "truePath": true_path,
             **repository,
@@ -658,7 +644,6 @@ def process_skill(module: str, skill_path: Path) -> dict | None:
         "trigger": trigger,
         "inputs": inputs,
         "requiredSkills": required_skills,
-        "sourcePath": f"{module}/skills/{skill_path.parent.name}/SKILL.md",
         **repository,
         "tags": {
             "tool": tool_tags,
@@ -739,15 +724,18 @@ def main():
             "repository": all_repositories,
         },
         "skills": sorted(deduped, key=lambda s: s["displayName"]),
-        "inventory": inventory,
-        "inventoryStats": inventory_stats,
     }
 
-    out_path = Path(__file__).resolve().parent / "skills.json"
+    out_dir = Path(__file__).resolve().parent
+    local_path = out_dir / "skills-local.json"
+    with open(local_path, "w") as f:
+        json.dump({**output, "inventory": inventory, "inventoryStats": inventory_stats}, f, indent=2)
+
+    out_path = out_dir / "skills.json"
     with open(out_path, "w") as f:
         json.dump(output, f, indent=2)
 
-    print(f"Wrote {len(deduped)} skills ({output['activeCount']} active, {output['stubCount']} stubs) to {out_path}", file=sys.stderr)
+    print(f"Wrote {len(deduped)} skills ({output['activeCount']} active, {output['stubCount']} stubs) to {out_path} and local inventory to {local_path}", file=sys.stderr)
 
 
 if __name__ == "__main__":

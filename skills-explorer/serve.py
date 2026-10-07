@@ -1,13 +1,15 @@
 """Local preview server with a cross-platform file-manager action."""
 
 import json
-import os
 import platform
 import subprocess
 import sys
+from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
+
+EXPLORER_DIR = Path(__file__).resolve().parent
 
 
 class SkillsExplorerHandler(SimpleHTTPRequestHandler):
@@ -20,7 +22,24 @@ class SkillsExplorerHandler(SimpleHTTPRequestHandler):
 
     def show_in_file_manager(self, raw_path):
         path = Path(raw_path).expanduser()
-        if not path.is_absolute() or not path.exists():
+        if self.headers.get("X-Explorer-Action") != "reveal":
+            self.send_json({"ok": False, "error": "Action not allowed"}, 403)
+            return
+        inventory_file = EXPLORER_DIR / "skills-local.json"
+        try:
+            inventory = json.loads(inventory_file.read_text()).get("inventory", [])
+        except (OSError, ValueError):
+            inventory = []
+        allowed = {
+            str(Path(item["truePath"]) / "SKILL.md")
+            for item in inventory
+            if item.get("hasSkillMd") and item.get("truePath") and not item["truePath"].endswith("SKILL.md")
+        }
+        allowed.update(
+            item["truePath"] for item in inventory
+            if item.get("hasSkillMd") and item.get("truePath", "").endswith("SKILL.md")
+        )
+        if not path.is_absolute() or str(path) not in allowed or not path.exists():
             self.send_json({"ok": False, "error": "File not found"}, 404)
             return
 
@@ -49,7 +68,8 @@ class SkillsExplorerHandler(SimpleHTTPRequestHandler):
 
 def main():
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8790
-    server = ThreadingHTTPServer(("", port), SkillsExplorerHandler)
+    handler = partial(SkillsExplorerHandler, directory=str(EXPLORER_DIR))
+    server = ThreadingHTTPServer(("127.0.0.1", port), handler)
     print(f"Serving at http://localhost:{port} -- press Ctrl+C to stop")
     try:
         server.serve_forever()

@@ -38,8 +38,16 @@
     <section>
       <div class="wrap">
         <p class="section-label">The problem</p>
-        <h2>AI assets multiply faster than 🐰🐰🐰</h2>
-        <p class="lead-text">Each tool has its own discovery locations, configuration format, installer behavior, and runtime boundaries. Copies drift, symlinks break, and a setup that works locally may disappear in a cloud session.</p>
+        <h2>Why this exists: the same asset ends up in several places</h2>
+        <p class="lead-text">As you use more than one AI coding tool, skills and MCP servers spread across different folders while instructions and settings live in each product's own format. Each installer and runtime sees a different slice of that setup. A change that works in one place may never reach another.</p>
+        <ul class="steps">
+          <li><strong>Unclear ownership:</strong> a skill may be a tracked folder in one repository, a copied install in another tool, and a symlink elsewhere. It becomes hard to know which version to edit or update.</li>
+          <li><strong>Overwritten customization:</strong> local tweaks to an installed skill can disappear when its vendor or package manager refreshes it.</li>
+          <li><strong>Hard to recover or reuse:</strong> untracked edits and undocumented links make it harder to review changes, roll back mistakes, or set up another machine.</li>
+          <li><strong>Runtime mismatch:</strong> a local path or symlink does not automatically travel with a project or become available to a hosted agent.</li>
+        </ul>
+        <p>These problems grow from several tools having different discovery and delivery rules. The goal is to make the source of each asset clear, then deliver it through the path each tool actually supports.</p>
+        <h3>What the model changes</h3>
         <div class="card-grid">
           <article class="card"><h3>One canonical source</h3><p>Keep portable procedures, context, and code in a version-controlled physical root.</p></article>
           <article class="card"><h3>Verified delivery</h3><p>Use a symlink, committed file, generated copy, native configuration, or platform-managed package according to the consuming tool.</p></article>
@@ -72,8 +80,8 @@
 <span class="tree-mark">    └── </span><span class="tree green">skills/</span>
 <span class="tree-mark">        └── </span><span class="tree green">build-automation/</span>
 <span class="tree-mark">            └── </span><span class="tree-file">SKILL.md</span></pre>
-          <div class="root-compare-arrow-vert" aria-hidden="true"><span class="glyph">↓</span><span class="caption">symlinked into every tool's directory</span></div>
-          <h3><code class="inline">~/.agents/skills/</code> — the canonical hub: your own skills are listed here as symlinks, once each</h3>
+          <div class="root-compare-arrow-vert" aria-hidden="true"><span class="glyph">↓</span><span class="caption">linked to a tested local skills hub</span></div>
+          <h3><code class="inline">~/.agents/skills/</code> — an example local hub: selected skills can be linked here</h3>
           <pre>concaten-gator            <span class="tree-mark">→</span> <span class="tree">~/AI Assets/data-org/repo-one/skills/concaten-gator/</span>
 meeting-maxi              <span class="tree-mark">→</span> <span class="tree pink">~/AI Assets/platform-org/sub-group/repo-two/skills/meeting-maxi/</span>
 build-automation          <span class="tree-mark">→</span> <span class="tree green">~/AI Assets/your-username/repo-three/skills/build-automation/</span></pre>

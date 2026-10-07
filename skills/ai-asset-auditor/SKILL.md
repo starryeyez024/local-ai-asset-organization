@@ -1,9 +1,9 @@
 ---
 name: ai-asset-auditor
 description: >
-  Interactive auditing tool for organizing scattered AI assets (skills, MCP
-  servers) onto a single flat physical root with symlink fan-out into every
-  tool's own directory — the "one root, no duplicates" methodology. Use this
+  Read-first audit and migration-planning procedure for scattered AI assets
+  (skills and MCP servers). Proposes a clear physical root and verifies each
+  tool-facing delivery path against its runtime. Use this
   BEFORE moving, renaming, deduplicating, or restructuring any skill folder or
   MCP server checkout, on ANY machine. Triggers on requests like "clean up my
   skills folders," "consolidate my AI assets," "find duplicate skills," "set up
@@ -30,20 +30,15 @@ The fix is architectural: pick exactly one folder on disk (the "physical
 root") that holds the real files for every asset you personally curate and
 version-control, organized as nested `<org>/<repo-name>/` folders derived from
 each repo's actual git remote — one entry per repo, nested under its owning
-org, no per-skill splitting. See "Physical Root & Identity" in the companion
-`index.html` writeup for the reasoning. Your own tracked skills and
-vendor-fork overrides get symlinked from that physical root into
-`~/.agents/skills` — a canonical, cross-tool-recognized location that OpenAI
-Codex CLI, Cursor, OpenCode, Google Gemini CLI, and GitHub Copilot all read
-natively. That hub is not required to be pure symlinks, though: every one of
-those tools discovers skills by resolving whatever sits at each entry, real
-directory or symlink, with no restriction on mixing the two. Content a tool
-writes directly into the hub (Cursor's own built-ins, Codex's own built-ins, a
-third-party skills-CLI installer's output) legitimately coexists there as
-real files — that's expected, not drift, and forcing it into a symlink risks
-it being silently overwritten on the next tool sync anyway. Moving or
-renaming one of your own tracked assets afterward only ever means updating
-where its symlink points, never touching file contents.
+org, no per-skill splitting. See the repository's
+[asset organization guide](../../pages/asset-organization.html) for the reasoning.
+For local runtimes that have been tested to follow them, symlinks from that
+physical root into `~/.agents/skills` can provide a convenient view of
+personally curated skills. The hub can also contain real, tool-managed
+directories. Check the [compatibility matrix](../../pages/tool-compatibility.html)
+for each target tool and runtime; a global hub is not a universal delivery
+path, especially for hosted agents. Moving a tracked source requires checking
+and updating every link or adapter that points to its old location.
 
 This skill operationalizes that methodology as a **read-first, ask-often
 audit**, not a script that reorganizes a filesystem on your behalf. It is
@@ -113,10 +108,9 @@ already includes that project-local scan, but don't let anything downstream
 in this skill implicitly treat the global hub as the single source of truth
 when reasoning about a workspace. A `./.agents/skills/<name>/` folder found
 inside a project falls under a separate two-rule convention (personal
-projects symlink from `~/AI Assets` into the project root, the same as the
-global hub; team-shared repos commit a real `SKILL.md` directly into the
-project so it travels with the clone) — see "Workspace scope" in the
-companion `index.html` writeup. Auditing or reconciling every project's own
+projects may symlink from `~/AI Assets` into the project root when the tool
+supports it; team-shared repos should commit real skill files so they travel
+with the clone) — see the repository's compatibility guide. Auditing or reconciling every project's own
 `.agents/skills` folder against that convention is out of scope for this
 skill; just don't audit a machine as if the global hub were the whole
 picture.
@@ -293,9 +287,8 @@ If a nested `SKILL.md` is found:
 
 ### 1.7 Real (non-symlink) entries directly inside `~/.agents/skills` are not automatically a problem
 
-Not every entry inside `~/.agents/skills` needs to be a symlink. Every tool that reads this
-hub (Codex CLI, Cursor, OpenCode, Gemini CLI, GitHub Copilot) resolves whatever sits at each
-entry — a real directory or a symlink — with no restriction on mixing the two. Before flagging
+Not every entry inside `~/.agents/skills` needs to be a symlink. Tool discovery
+of real directories and symlinks varies by version and runtime. Before flagging
 a real (non-symlink) folder or file found directly in `~/.agents/skills`, check which of two
 cases actually applies — do not assume it's a violation just because it isn't a symlink:
 
@@ -305,12 +298,10 @@ cases actually applies — do not assume it's a violation just because it isn't 
   root. If it does, and the content matches, this one IS still worth flagging in the Phase 2
   plan — recommend converting it to a symlink, same as any other tracked asset, for consistency
   and version control.
-- **Not tracked anywhere, plausibly tool-written.** If no matching content exists anywhere
-  under `~/AI Assets`, this is very likely something a tool's own sync/install mechanism wrote
-  directly into the hub (a built-in skill, an installer's copy-based output). **Leave it
-  alone.** This is not a violation, not drift, and not something to propose deleting, moving,
-  or converting to a symlink. Record it in the Phase 1 findings as "tool-managed, no action
-  needed" rather than omitting it or silently treating it as a defect.
+- **Not tracked anywhere, possibly tool-written.** If no matching content exists under
+  `~/AI Assets`, identify its owner or installer before proposing a change. Leave it
+  alone while ownership is uncertain; record it as "origin unverified, no action"
+  rather than assuming it is disposable or tool-managed.
 
 ---
 
@@ -456,7 +447,7 @@ the stray files" does not extend to a different, larger deletion encountered
 mid-execution; go back and ask again for anything outside what was
 specifically itemized in the confirmed plan.
 
-### 3.4 Rebuild symlinks so tool-facing directories become pure views
+### 3.4 Rebuild confirmed local symlinks
 
 After a repo or asset lands in its new physical-root location:
 

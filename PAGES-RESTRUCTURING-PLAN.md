@@ -1,6 +1,11 @@
 # Public Guidance Site Restructuring Plan
 
-Status: Planning only. No page restructuring has been implemented.
+Status: Historical planning note. The site now has an overview, setup guide,
+asset organization guide, compatibility matrix, and Explorer guide. The
+proposed `tooling.html` was not created; compatibility guidance lives in
+`pages/tool-compatibility.html`, and the Lola bridge remains documented in its
+script. Use the current pages and README for instructions, not the proposed
+implementation sequence below.
 Research reviewed: 2026-10-05.
 Updated: 2026-10-05 after Cursor symlink research and multi-tool structure review.
 

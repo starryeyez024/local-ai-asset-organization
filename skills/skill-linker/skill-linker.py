@@ -6,16 +6,13 @@ Creates symlinks from individual skills in an AI project directory into the
 configured skill hub, with fuzzy matching on skill names.
 
 Usage:
-  skill-linker <project-name> [skill1] [skill2] ...
-  skill-linker <project-name>  # interactive mode
-  skill-linker --force <project-name> [skill1] [skill2] ...  # replace existing symlinks
+  python3 skills/skill-linker/skill-linker.py <project-name> [skill1] [skill2] ...
+  python3 skills/skill-linker/skill-linker.py <project-name>  # interactive mode
+  python3 skills/skill-linker/skill-linker.py --force <project-name> [skill1] [skill2] ...
 """
 
-import os
 import sys
-import json
-import re
-import subprocess
+import tomllib
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 import difflib
@@ -41,26 +38,15 @@ symlinks_dir = "/absolute/path/to/.agents/skills"
 """)
             sys.exit(1)
 
-        config = {}
-        in_directories = False
         try:
-            with open(self.config_path, "r") as f:
-                for line in f:
-                    line = line.strip()
-                    if line.startswith("[") and line.endswith("]"):
-                        in_directories = line == "[directories]"
-                        continue
-                    if "=" in line and not line.startswith("["):
-                        key, value = line.split("=", 1)
-                        key = key.strip()
-                        value = value.strip().strip('"')
-                        if in_directories and key in ["install_dir", "symlinks_dir"]:
-                            config[key] = value
-        except Exception as e:
+            with open(self.config_path, "rb") as f:
+                directories = tomllib.load(f).get("directories", {})
+        except (OSError, tomllib.TOMLDecodeError) as e:
             self._error(f"Error reading config: {e}")
             sys.exit(1)
 
-        missing = [key for key in ("install_dir", "symlinks_dir") if key not in config]
+        config = {key: directories.get(key) for key in ("install_dir", "symlinks_dir")}
+        missing = [key for key, value in config.items() if not isinstance(value, str) or not value]
         if missing:
             self._error(
                 f"Missing [directories] setting(s) in {self.config_path}: {', '.join(missing)}"
@@ -148,12 +134,12 @@ symlinks_dir = "/absolute/path/to/.agents/skills"
         """
         try:
             if symlink_path.exists() or symlink_path.is_symlink():
+                if not symlink_path.is_symlink():
+                    self._log(f"  ⚠ {symlink_path.name} is real content, not a symlink — skipping")
+                    return False
                 if not force:
                     existing_target = self._check_existing_symlink(symlink_path)
-                    if existing_target == "REAL_DIR":
-                        self._log(f"  ⚠ {symlink_path.name} is a real directory, not a symlink — skipping")
-                        return False
-                    elif existing_target == str(target_path):
+                    if existing_target == str(target_path):
                         self._log(f"  ✓ {symlink_path.name} already points to correct target")
                         return True
                     else:
@@ -186,8 +172,11 @@ symlinks_dir = "/absolute/path/to/.agents/skills"
         Returns 0 on success, 1 on failure.
         """
         # Phase 1: Locate project
-        project_path = self.install_dir / project_name
-        if not project_path.exists():
+        project_path = (self.install_dir / project_name).resolve()
+        if not project_path.is_relative_to(self.install_dir.resolve()):
+            self._error("Project must be inside the configured install directory.")
+            return 1
+        if not project_path.is_dir():
             self._error(f"Project not found: {project_path}")
             self._error(f"Install directory: {self.install_dir}")
             return 1

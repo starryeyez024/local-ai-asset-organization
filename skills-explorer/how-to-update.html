@@ -27,6 +27,7 @@
     --tag-stage-bg: #fbead2;
   }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   body {
     font-family: "Red Hat Text", "Helvetica Neue", Arial, sans-serif;
     background: var(--rh-gray-100);
@@ -41,15 +42,23 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    flex-wrap: wrap;
   }
   header h1 { font-size: 20px; font-weight: 500; margin: 0; }
-  header a.back {
+  .view-tabs { display: flex; gap: 24px; margin-left: auto; }
+  .view-tab {
     color: var(--rh-gray-300);
     text-decoration: none;
     font-size: 13px;
-    margin-left: auto;
+    font-weight: 500;
+    padding: 8px 0;
   }
-  header a.back:hover { color: var(--rh-white); }
+  .view-tab:hover, .view-tab[aria-current="page"] {
+    color: var(--rh-white);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
+  }
   main {
     max-width: 760px;
     margin: 0 auto;
@@ -133,149 +142,56 @@
   .pill.type { background: var(--tag-type-bg); color: var(--tag-type); }
   .pill.phase { background: var(--tag-phase-bg); color: var(--tag-phase); }
   .pill.stage { background: var(--tag-stage-bg); color: var(--tag-stage); }
+  @media (max-width: 600px) {
+    .view-tabs { width: 100%; margin-left: 0; justify-content: space-between; gap: 12px; }
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>About — AI Assets Explorer</h1>
-  <a class="back" href="index.html">&larr; Back to explorer</a>
+  <h1>AI Assets Explorer</h1>
+  <nav class="view-tabs" aria-label="Explorer navigation">
+    <a class="view-tab" href="index.html">Browse Skills</a>
+    <a class="view-tab" href="index.html?view=audit" id="about-audit-tab">Audit Skills</a>
+    <a class="view-tab" href="how-to-update.html" aria-current="page">About</a>
+  </nav>
 </header>
 
 <main>
+  <h2>About</h2>
+  <p>AI Assets Explorer is a snapshot of the skills in a configured directory. <strong>Browse Skills</strong> searches and filters every valid <code>SKILL.md</code> found there. <strong>Audit Skills</strong> shows the local entries, broken links, duplicate names, and file age. Neither view installs, edits, or runs a skill.</p>
 
-  <h2>What this is</h2>
-  <p>
-    A local, filterable browser for the AI skills installed on this machine. It has two
-    views: <strong>Browse Skills</strong> — a curated, filterable catalog of the ixd-firefly
-    "AI-first" skills across 6 persona modules (Product Management, Program Management,
-    Data Science, UX Design, UX Research, Content Creation) — and
-    <strong>Maintain Skills</strong> — a raw audit of everything in your local skills
-    folder, including skills outside that curated set, broken symlinks, duplicates, and
-    stale definitions.
-  </p>
-
-  <h2>How the data is built</h2>
-  <p>
-    Nothing in this tool is dynamic or AI-generated at browse time. A Python script,
-    <code>generate-skills-json.py</code>, runs once (whenever you tell it to — see
-    "Refreshing the data" below) and writes a single static file, <code>skills.json</code>.
-    <code>index.html</code> just does one <code>fetch("skills.json")</code> on page load and
-    renders everything from that. There's no server-side logic, no database, no live
-    re-scanning while you browse.
-  </p>
-  <p>The script's actual steps:</p>
-  <ol>
-    <li>Walk <code>~/.agents/skills</code> (a flat, symlink-only folder — the same list Cursor
-      and Codex CLI read natively; override with the <code>SKILLS_ROOT</code> env var).</li>
-    <li>Resolve each entry to its real target folder and look for a <code>SKILL.md</code> file.</li>
-    <li>Parse that file's YAML frontmatter (<code>name</code>, <code>description</code>,
-      <code>metadata.skill-type</code>, etc.) plus a few specific markdown sections in the
-      body — <code>## Inputs</code>, <code>## Trigger</code> / <code>## When to Use</code>,
-      and <code>## Required skills</code> — using regex-based parsing (no AI, no LLM calls).</li>
-    <li>Run every skill's name + description + first ~1000 characters of body text through
-      several keyword-matching functions (below) to assign tags.</li>
-    <li>If the resolved folder belongs to one of the 6 known ixd-firefly modules, add it to
-      the curated <code>skills</code> array (this is what Browse Skills shows). Every farm
-      entry — curated or not, broken or not — also goes into a separate
-      <code>inventory</code> array (this is what Maintain Skills shows).</li>
-  </ol>
-
-  <h2>How tags get assigned (and why you might disagree with one)</h2>
-  <p>
-    <strong>Every tag on every skill is a keyword-regex guess, not a judgment call by a
-    person or an AI.</strong> The script scans each skill's name, description, and the start
-    of its body text for pattern matches against fixed keyword lists, and assigns whichever
-    tags match. There's no semantic understanding involved — if a skill's description happens
-    to contain the word "plan," it can pick up a Planning-flavored tag even if the skill
-    isn't really about planning. This is exactly why you'll sometimes look at a skill's tags
-    and think "that's not right."
-  </p>
-
-  <table>
-    <tr><th>Tag group</th><th>Example</th><th>How it's decided</th></tr>
-    <tr>
-      <td><span class="pill tool">Tool</span></td>
-      <td>jira, confluence, figma, slack, git...</td>
-      <td>Keyword match per tool (e.g. "jira" tag fires on <code>jira</code>, <code>epic</code>,
-        <code>sprint</code>, <code>backlog</code>, etc.). A skill can get multiple tool tags.</td>
-    </tr>
-    <tr>
-      <td><span class="pill role">Role</span></td>
-      <td>product-manager, ux-designer...</td>
-      <td>Fixed 1:1 mapping from which of the 6 ixd-firefly modules the skill's real folder
-        lives under — not keyword-based, this one's reliable.</td>
-    </tr>
-    <tr>
-      <td><span class="pill task">Task Type</span></td>
-      <td>planning, analysis, generation, validation, reporting...</td>
-      <td>12 keyword buckets (e.g. "generation" fires on <code>generat</code>, <code>draft</code>,
-        <code>create</code>, <code>author</code>, <code>write</code>). A skill can match
-        several buckets at once.</td>
-    </tr>
-    <tr>
-      <td><span class="pill type">Skill Type</span></td>
-      <td>Workflow / Atomic</td>
-      <td>Reads <code>metadata.skill-type</code> from frontmatter if present; otherwise
-        guesses "workflow" if the skill's id starts with <code>workflow-</code>.</td>
-    </tr>
-    <tr>
-      <td><span class="pill phase">Agile Phase</span></td>
-      <td>Planning / In Progress / Retrospective</td>
-      <td>Checked in priority order — retrospective keywords (<code>retro</code>,
-        <code>baseline</code>, <code>trend</code>...) win first, then planning keywords
-        (<code>roadmap</code>, <code>capacity</code>, <code>backlog</code>...), and
-        <strong>everything else defaults to "In Progress"</strong> even if nothing matched.
-        This is the tag most likely to feel wrong, since it's a single guess picked from a
-        short priority list, not a real classification.</td>
-    </tr>
-    <tr>
-      <td><span class="pill stage">Work Stage</span></td>
-      <td>Gather / Produce / Reflect</td>
-      <td>Same idea as Agile Phase — keyword buckets for "gather" (ingest, discover,
-        research...), "produce" (generate, analyze, validate...), "reflect" (retro, baseline,
-        historical...). Workflows additionally inherit every stage tag of the atomic skills
-        they call.</td>
-    </tr>
-  </table>
-
-  <div class="warn">
-    <strong>So if you see 4 skills tagged "In Progress" that you'd actually call
-    "Planning":</strong> that's the keyword lists not covering the words those particular
-    skills happen to use — it's not a bug you can fix by clicking anything in the UI today.
-    The only way to change it right now is to edit the keyword lists
-    (<code>PHASE_KEYWORDS</code>, <code>STAGE_KEYWORDS</code>, <code>TASK_KEYWORDS</code>,
-    etc., near the top of <code>generate-skills-json.py</code>) and re-run
-    <code>make regen</code>. There's no per-skill override and no in-UI tag editor yet.
+  <h2>Where the data comes from</h2>
+  <p><code>generate-skills-json.py</code> scans <code>~/.agents/skills</code> by default. It accepts symlinks and real directories. Set <code>SKILLS_ROOT</code> to scan another directory. It reads skill frontmatter and selected Markdown sections, then uses fixed keyword rules to assign tags. The source <code>SKILL.md</code> files remain authoritative.</p>
+  <div class="card">
+    <p><strong>Shareable catalog:</strong> <code>skills.json</code> contains the Browse Skills data and can be committed or published.</p>
+    <p><strong>Local audit:</strong> <code>skills-local.json</code> also contains absolute paths and inventory details. It is ignored by Git and must stay on the machine that generated it. Without this file, the page hides Audit Skills.</p>
   </div>
 
-  <h2>Refreshing the data</h2>
-  <p>
-    Regenerate <code>skills.json</code> any time skills change, or any time a tag looks
-    wrong after you've adjusted the keyword lists:
-  </p>
+  <h2>How tags work</h2>
+  <p>Tool, task, phase, and stage tags are keyword guesses based on each skill's name, description, and the start of its body. A skill can match several tool, task, or stage tags. Phase uses a priority order and defaults to “In Progress.” Role is inferred from a known AI-first module path; other sources use “Other.” Skill type comes from frontmatter when available, otherwise a name beginning with <code>workflow-</code> is treated as a workflow.</p>
+  <p>If a tag is misleading, update the keyword rules in <code>generate-skills-json.py</code> and regenerate the files. There is no tag editor in the page. A file older than 60 days is marked “Stale” in the local audit as an age cue, not proof that the skill is obsolete.</p>
+
+  <h2>Refresh and preview</h2>
   <div class="card">
     <pre><code>cd /path/to/local-ai-asset-organization/skills-explorer
-make regen   # rebuild skills.json from ~/.agents/skills
-make serve   # or: serve the site locally
+make run
 # open http://localhost:8790</code></pre>
-    <p style="margin-bottom:0">Or do both in one shot: <code>make run</code>.</p>
+    <p><code>make run</code> runs <code>make regen</code> and starts the local server. Run <code>make regen</code> alone to update the data or <code>make serve</code> to preview an existing snapshot. Use <code>PORT=8080 make serve</code> for another port.</p>
   </div>
-
-  <h3>Point at a different skills folder</h3>
-  <div class="card" style="margin-bottom:0">
-    <pre><code>SKILLS_ROOT=/some/other/path make regen</code></pre>
+  <div class="card">
+    <pre><code>SKILLS_ROOT=/another/skills/directory make regen</code></pre>
   </div>
-
-  <div class="note">
-    <strong>Note:</strong> This is a local-only tool with no scheduled or automatic
-    rebuild. <code>skills.json</code> only reflects whatever was on disk the last time
-    someone ran <code>make regen</code> — the page also force-bypasses browser cache on
-    every load, so once you regenerate, a normal reload will always show the latest data.
-    Requires Python 3.10+; no extra installs needed (standard library only).
-  </div>
-
+  <p>After a source skill changes, regenerate and review the catalog. Commit the skill in its source repository and the shareable <code>skills.json</code> in this repository. Do not commit <code>skills-local.json</code>. The local file manager action is available only when using the preview server. This project has no scheduled rebuild; published data reflects the last committed snapshot.</p>
+  <div class="note">Requires Python 3.10+ and Make. The generator uses only Python's standard library.</div>
 </main>
+
+<script>
+  fetch("skills-local.json", { method: "HEAD", cache: "no-store" })
+    .then(response => { document.getElementById("about-audit-tab").hidden = !response.ok; })
+    .catch(() => { document.getElementById("about-audit-tab").hidden = true; });
+</script>
 
 </body>
 </html>

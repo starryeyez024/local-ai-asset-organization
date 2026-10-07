@@ -1,33 +1,28 @@
-# skills-explorer
+# AI Assets Explorer
 
-Filterable single-page explorer for the AI-first skills across the 6 ixd-firefly persona modules (Product Management, Program Management, Data Science, UX Design, UX Research, Content Creation).
+A searchable catalog of valid `SKILL.md` entries found in a configured skills directory. **Browse Skills** shows names, descriptions, inferred tags, and source labels. **Audit Skills** is a local inventory of entries, broken links, name collisions, and file age. The Explorer does not install, invoke, or edit skills.
 
-**Quick start:**
+## Run locally
 
 ```bash
 make run
 # open http://localhost:8790
 ```
 
-`make run` regenerates `skills.json` and starts the local preview server in
-one shot. Individual steps:
+`make run` runs `make regen`, then starts a preview server bound to `127.0.0.1`. You can run the steps separately:
 
 ```bash
-make regen   # regenerate skills.json from ~/.agents/skills
-make serve   # serve the site locally (PORT=8080 make serve to override)
+make regen
+make serve
+PORT=8080 make serve
+SKILLS_ROOT=/another/skills/directory make regen
 ```
 
-See the in-app **How to Update** page (`how-to-update.html`) for the same
-instructions with more context.
+The generator defaults to `~/.agents/skills`. It accepts symlinks and real skill directories, resolves each valid `SKILL.md`, and assigns tags with fixed keyword rules. It writes two files:
 
-The skills source directory defaults to `~/.agents/skills` (the flat symlink
-farm that Cursor/Codex CLI read natively). Override it with the `SKILLS_ROOT`
-environment variable to scan a different directory instead:
+- `skills.json` is the shareable catalog. Commit it when publishing an updated catalog.
+- `skills-local.json` includes absolute paths and the local audit inventory. It is ignored by Git. Keep it local and do not publish it.
 
-```bash
-SKILLS_ROOT=/some/other/path python3 generate-skills-json.py
-```
+The page tries the local file first. If it is absent, the page shows the shareable Browse Skills catalog and hides Audit Skills. The source-file action works only through the local preview server. Catalog data is a snapshot; run `make regen` after changing the source skills or generator rules.
 
-Requires Python 3.10+. No dependencies beyond the standard library.
-
-Deployed via GitLab Pages on push to `main` (see `.gitlab-ci.yml`).
+Requires Python 3.10+ and Make. No Python packages are required. The static site is copied to GitLab Pages by `.gitlab-ci.yml` on `main`; the ignored local inventory is not part of that deployment.

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Assets Explorer</title>
   <style>
+    [hidden] { display: none !important; }
     :root {
       --rh-red: #ee0000;
       --rh-dark: #151515;
@@ -603,6 +604,7 @@
       color: var(--rh-gray-500);
       margin-bottom: 8px;
     }
+    .mobile-table-hint { display: none; }
 
     .maintain-path-caption code {
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
@@ -713,6 +715,11 @@
       .view-tabs { width: 100%; margin-left: 0; justify-content: space-between; gap: 12px; }
       .main { max-width: 100%; }
     }
+    @media (max-width: 800px) {
+      .maintain-table-wrap { overflow-x: auto; }
+      #maintain-table { min-width: 760px; }
+      .mobile-table-hint { display: inline; }
+    }
   </style>
 </head>
 <body>
@@ -721,8 +728,8 @@
   <h1>AI Assets Explorer</h1>
   <span class="header-stats" id="header-stats"></span>
   <div class="view-tabs" id="view-tabs">
-  <button class="view-tab active" data-view="browse">Browse Assets</button>
-  <button class="view-tab" data-view="maintain">Manage Assets</button>
+  <button class="view-tab active" data-view="browse">Browse Skills</button>
+  <button class="view-tab" data-view="maintain" id="audit-tab">Audit Skills</button>
   <a class="view-tab view-tab-link" href="how-to-update.html">About</a>
   </div>
 </header>
@@ -755,7 +762,7 @@
     <span id="maintain-results-count"></span>
   </div>
   <div class="maintain-table-wrap">
-    <div class="maintain-path-caption" id="maintain-path-caption"></div>
+    <div class="maintain-path-caption"><span id="maintain-path-caption"></span><span class="mobile-table-hint"> · Swipe to see all columns</span></div>
     <table id="maintain-table">
       <thead>
         <tr>
@@ -844,8 +851,13 @@
     // cache: "no-store" + a cache-busting query param, because python's
     // http.server sends no Cache-Control header, so browsers can silently
     // serve a stale skills.json from disk cache even on a normal reload.
-    const resp = await fetch(`skills.json?_=${Date.now()}`, { cache: "no-store" });
+    let resp = await fetch(`skills-local.json?_=${Date.now()}`, { cache: "no-store" });
+    if (!resp.ok) {
+      resp = await fetch(`skills.json?_=${Date.now()}`, { cache: "no-store" });
+    }
+    if (!resp.ok) throw new Error("Could not load the skills catalog");
     DATA = await resp.json();
+    document.getElementById("audit-tab").hidden = !Array.isArray(DATA.inventory);
     document.getElementById("header-stats").innerHTML =
       `<strong>${DATA.skillCount}</strong> skills &middot; <strong>${DATA.activeCount}</strong> active &middot; <strong>${DATA.stubCount}</strong> stubs`;
     // Computed once, over the full inventory, regardless of filters -- see
@@ -858,6 +870,9 @@
     renderMaintainStats();
     renderMaintain();
     bindEvents();
+    if (new URLSearchParams(window.location.search).get("view") === "audit" && Array.isArray(DATA.inventory)) {
+      switchView("maintain");
+    }
   }
 
   function renderSidebar() {
@@ -900,9 +915,9 @@
         <div class="filter-options">
           ${options.map(opt => `
             <label class="filter-option">
-              <input type="checkbox" data-group="${group}" data-value="${opt}"
+              <input type="checkbox" data-group="${group}" data-value="${escapeAttr(opt)}"
                 ${activeFilters[group].has(opt) ? "checked" : ""}>
-              <span>${formatLabel(opt, group)}</span>
+              <span>${escapeHtml(formatLabel(opt, group))}</span>
               <span class="count">${counts[opt]}</span>
             </label>
           `).join("")}
@@ -953,7 +968,7 @@
 
   function getSkillFilePath(skill) {
     const entry = (DATA.inventory || []).find(item =>
-      item.name === skill.id && item.hasSkillMd && item.truePath
+      item.skillId === skill.id && item.sourceLabel === skill.sourceLabel && item.hasSkillMd && item.truePath
     );
     if (!entry) return "";
     return entry.truePath.endsWith("SKILL.md")
@@ -1002,13 +1017,13 @@
           <div class="skill-tags">
             <span class="skill-type-badge ${isWorkflow ? "workflow" : "atomic"}">${isWorkflow ? "Workflow" : "Atomic"}</span>
             ${allTags.map(t =>
-              `<span class="tag ${t.group}" data-group="${t.group}" data-value="${t.value}">${formatLabel(t.value, t.group)}</span>`
+              `<span class="tag ${t.group}" data-group="${t.group}" data-value="${escapeAttr(t.value)}">${escapeHtml(formatLabel(t.value, t.group))}</span>`
             ).join("")}
           </div>
           <div class="meta-row">
             <span><strong>Repository:</strong> <code>${escapeHtml(skill.sourceLabel || "Unclassified")}</code>${skillFilePath ? `
-              <button class="source-path-action" type="button" data-file-path="${escapeHtml(skillFilePath)}"
-                title="Show source in Finder" aria-label="Show source in Finder">
+              <button class="source-path-action" type="button" data-file-path="${escapeAttr(skillFilePath)}"
+                title="Show source in file manager" aria-label="Show source in file manager">
                 <svg viewBox="0 0 16 16" aria-hidden="true">
                   <path d="M9 2h5v5"></path>
                   <path d="M8 8l6-6"></path>
@@ -1024,7 +1039,7 @@
                 <h4>Runs these skills in order</h4>
                 <div class="required-skills-chain">
                   ${requiredSkills.map((s, i) =>
-                    `${i > 0 ? '<span class="arrow-sep">&rarr;</span>' : ""}<span class="step"><button class="step-link" data-jump="${escapeHtml(s.id)}" title="${escapeHtml(s.label)}">${escapeHtml(s.label)}</button></span>`
+                    `${i > 0 ? '<span class="arrow-sep">&rarr;</span>' : ""}<span class="step"><button class="step-link" data-jump="${escapeAttr(s.id)}" title="${escapeAttr(s.label)}">${escapeHtml(s.label)}</button></span>`
                   ).join("")}
                 </div>
               </div>
@@ -1052,6 +1067,10 @@
 
   function switchView(view) {
     currentView = view;
+    const url = new URL(window.location.href);
+    if (view === "maintain") url.searchParams.set("view", "audit");
+    else url.searchParams.delete("view");
+    window.history.replaceState(null, "", url);
     document.getElementById("browse-view").classList.toggle("view-hidden", view !== "browse");
     document.getElementById("maintain-view").classList.toggle("view-hidden", view !== "maintain");
     document.getElementById("search-box").classList.toggle("view-hidden", view !== "browse");
@@ -1242,6 +1261,10 @@
   function bindEvents() {
     const mobileFilterShell = document.querySelector(".mobile-filter-shell");
     const mobileFilterToggle = document.getElementById("mobile-filter-toggle");
+    if (window.matchMedia("(max-width: 600px)").matches) {
+      mobileFilterShell.classList.add("collapsed");
+      mobileFilterToggle.setAttribute("aria-expanded", "false");
+    }
     mobileFilterToggle.addEventListener("click", () => {
       const collapsed = mobileFilterShell.classList.toggle("collapsed");
       mobileFilterToggle.setAttribute("aria-expanded", String(!collapsed));
@@ -1312,7 +1335,7 @@
 
     document.getElementById("view-tabs").addEventListener("click", (e) => {
       const btn = e.target.closest(".view-tab");
-      if (!btn) return;
+      if (!btn || !btn.dataset.view) return;
       switchView(btn.dataset.view);
     });
 
@@ -1352,11 +1375,12 @@
 
   async function showInFileManager(filePath) {
     try {
-      const response = await fetch(`/__show-in-file-manager?path=${encodeURIComponent(filePath)}`);
+      const response = await fetch(`/__show-in-file-manager?path=${encodeURIComponent(filePath)}`, {
+        headers: { "X-Explorer-Action": "reveal" }
+      });
       if (!response.ok) throw new Error("File manager endpoint unavailable");
     } catch (error) {
-      // Keep the icon useful when the page is opened without the local server.
-      window.open(`file://${filePath}`, "_blank", "noopener");
+      alert("Open this page through the local preview server to reveal a source file.");
     }
   }
 
@@ -1398,6 +1422,10 @@
     const d = document.createElement("div");
     d.textContent = str;
     return d.innerHTML;
+  }
+
+  function escapeAttr(str) {
+    return escapeHtml(String(str)).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
 
   init();

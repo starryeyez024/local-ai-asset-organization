@@ -1,153 +1,18 @@
 ---
 name: skill-linker
 description: >
-  Help create selective symlinks from a newly-downloaded AI asset project (with multiple skills) into
-  the configured skill-hub directory. Instead of symlinking an entire project folder, this skill lets
-  you choose 1, some, or all skills from that project and symlink just the ones you want.
-  Reads the canonical ~/.config/ai-tools/ai-tools.toml config file to find your install and
-  symlink directories across uses.
+  Selectively link skills from a project under the configured physical asset root
+  into the local skills hub. Use when the user wants one, several, or all skills
+  from a downloaded project available locally.
 ---
 
 # Skill Linker
 
-## Why this exists
+Use this skill for selective local symlinks. It does not edit, move, copy, or install the source skill folders. A link is a local delivery path, not a guarantee that every tool or hosted runtime will discover the skill; check the repository's compatibility guide for the target runtime.
 
-When you download a new project containing many skills (50, 100, or more), you typically only
-want to use a handful of them. Symlinking the entire project folder into `~/.agents/skills`
-makes all skills available at once, which clutters your namespace and wastes tool-discovery
-overhead. This skill solves that by:
+## Configuration
 
-1. Scanning a project for individual skills (supports both `skills/*/SKILL.md` and `*/SKILL.md` structures)
-2. Letting you select which ones to link
-3. Creating symlinks only for the skills you choose, directly into `~/.agents/skills`
-4. Storing your preferred directories in a config file so you don't have to type paths repeatedly
-
-## One-time setup
-
-The first time you run this skill, it will ask you for two directories:
-
-- **Install directory** — `directories.install_dir` in the canonical `ai-tools.toml`
-- **Symlinks directory** — `directories.symlinks_dir` in the canonical `ai-tools.toml`
-
-The skill reads these values from `~/.config/ai-tools/ai-tools.toml`. It does not create a
-second configuration file or maintain another copy of the paths.
-
-## How to use this skill
-
-### Quick start: Direct skill names
-
-If you know which skills you want, just name them directly:
-
-```bash
-skill-linker ktotten/local-ai-asset-organization ai-asset-auditor skill-override-safeguard
-```
-
-This creates symlinks for just those two skills. Done.
-
-### Fuzzy matching
-
-Typos are forgiven — the skill fuzzy-matches your input:
-
-```bash
-skill-linker project-x asset-audit   # Matches "ai-asset-auditor"
-skill-linker project-x override-safe # Matches "skill-override-safeguard"
-```
-
-### Interactive mode (explore and choose)
-
-If you run the skill without specifying skill names, it lists what's available and asks you to pick:
-
-```bash
-$ skill-linker ktotten/local-ai-asset-organization
-
-📁 Project: /absolute/path/to/asset-root/ktotten/local-ai-asset-organization
-📚 Found 3 skill(s): ai-asset-auditor, skill-linker, skill-override-safeguard
-
-Which skills do you want to link? (space-separated names, or 'all')
-> ai-asset-auditor skill-override-safeguard
-
-🔗 Linking 2 skill(s):
-  ✓ ai-asset-auditor
-  ✓ skill-override-safeguard
-
-✅ Successfully linked 2/2 skill(s)
-```
-
-### Link all skills at once
-
-```bash
-skill-linker ktotten/local-ai-asset-organization all
-```
-
-Or in interactive mode, just type `all` when prompted.
-
-### Replace existing symlinks
-
-If you already have symlinks but want to update them to point to a different project:
-
-```bash
-skill-linker --force ktotten/local-ai-asset-organization skill-override-safeguard
-```
-
-The `--force` flag overwrites any existing symlinks without asking.
-
-## What this skill does NOT do
-
-- **Edit skills.** This skill only creates symlinks; it never modifies skill content.
-- **Move or copy files.** Everything stays in your install directory; only symlinks are created.
-- **Delete projects.** If you have leftover skills from an earlier run, this skill won't remove them.
-- **Manage `~/.agents/skills` beyond symlinks.** Real (non-symlink) content already there is left alone.
-- **Manage secrets or config values inside skills.** Each skill's own internal setup (MCP, etc.) is
-  their responsibility, not this skill's.
-
-## Warnings before you start
-
-- **Symlink name collisions.** If two different projects have a skill with the same name
-  (e.g. both have a `foo` skill), only one can be symlinked at a time under `~/.agents/skills/foo`.
-  If this happens, the skill will ask which project's version you prefer, or suggest renaming
-  one locally.
-- **Project folder names vs. remote names.** The skill uses your project's local folder name
-  (e.g. `project-a`) to create symlink targets, not the remote git name. If you've renamed
-  a cloned project locally, those symlinks will use the local name you chose.
-- **Uncommitted changes in projects.** The skill doesn't care whether a project has uncommitted
-  git changes — it will symlink regardless. But if a skill's code changes later, the symlink
-  will automatically reflect the new content (since it points to the live folder).
-
-## Supported Project Structures
-
-This skill works with two common project layouts:
-
-**Structure 1: Organized (skills in subdirectory)**
-```
-project-name/
-├── skills/
-│   ├── skill-a/
-│   │   └── SKILL.md
-│   ├── skill-b/
-│   │   └── SKILL.md
-│   └── skill-c/
-│       └── SKILL.md
-```
-Example: `ktotten/local-ai-asset-organization`
-
-**Structure 2: Root-level (skills at project root)**
-```
-project-name/
-├── skill-a/
-│   └── SKILL.md
-├── skill-b/
-│   └── SKILL.md
-├── skill-c/
-│   └── SKILL.md
-└── README.md
-```
-Example: `ktotten/ktotten-skills`
-
-The skill auto-detects which structure your project uses and scans accordingly.
-
-## Configuration file format
-
-`~/.config/ai-tools/ai-tools.toml`:
+Read `~/.config/ai-tools/ai-tools.toml` before linking. The script expects:
 
 ```toml
 [directories]
@@ -155,53 +20,38 @@ install_dir = "/absolute/path/to/asset-root"
 symlinks_dir = "/absolute/path/to/.agents/skills"
 ```
 
-Use absolute paths for cross-tool configuration. You can edit this canonical file by hand at any time.
+The file must already exist. Use the configured paths; do not create a second configuration file or infer an install root from an example. The linker can create `symlinks_dir` if it is missing.
+The script requires Python 3.11 or newer so it can parse TOML with the standard library.
 
-## Common use cases
+## Run
 
-**Case 1: Link all skills from a new project**
-```
-User: "Link all skills from project-a"
-Skill: Discovers 50 skills, asks for confirmation, creates 50 symlinks
-```
+From this repository's root, invoke the bundled script explicitly:
 
-**Case 2: Link just one skill**
-```
-User: "Link just the foo skill from project-a"
-Skill: Scans project-a, finds 50 skills, asks which one you mean (or finds "foo"), 
-       creates one symlink
+```bash
+python3 skills/skill-linker/skill-linker.py ktotten/local-ai-asset-organization ai-asset-auditor skill-override-safeguard
 ```
 
-**Case 3: Update symlink for a skill**
+The project argument is relative to `install_dir` and must stay inside it. Skill names are optional:
+
+```bash
+python3 skills/skill-linker/skill-linker.py ktotten/local-ai-asset-organization
+python3 skills/skill-linker/skill-linker.py ktotten/local-ai-asset-organization all
 ```
-User: "I already symlinked foo from project-a, but now I want project-b's version instead"
-Skill: Detects existing symlink at ~/.agents/skills/foo, asks to confirm the replacement,
-       updates the symlink target to project-b's foo
+
+With no names, the script lists discovered skills and prompts for space-separated names or `all`. It first scans `skills/*/SKILL.md`; if none are found, it scans `*/SKILL.md` at the project root. It does not recursively discover nested skill folders. Close name matches are selected automatically and printed; review them before relying on a link.
+
+For an intentional replacement of an existing symlink, use `--force`:
+
+```bash
+python3 skills/skill-linker/skill-linker.py --force ktotten/local-ai-asset-organization skill-override-safeguard
 ```
 
-## Edge cases this skill handles carefully
+Without `--force`, a symlink pointing elsewhere is reported and skipped. With `--force`, the script replaces an existing symlink without a prompt. It never replaces a real file or directory. Review the current and proposed target before using `--force`, especially for a same-name skill from another project.
 
-- **Nested skills in a project.** Some projects might have `skills/foo/skills/bar/SKILL.md`
-  (a skill-within-a-skill). The skill will detect this and ask whether you want to symlink
-  the parent (`foo`) or the nested child (`bar`), or both.
-- **No `SKILL.md` in a folder named like a skill.** The skill verifies that a folder
-  actually contains `SKILL.md` at the top level before treating it as a valid skill.
-- **Symlink already exists but points elsewhere.** The skill detects this and asks whether
-  to replace it, leave it alone, or report which project's version you're currently using.
-- **Project folder doesn't exist.** If you type a project name that doesn't exist in your
-  install directory, the skill tells you what it looked for and lists available projects
-  instead of guessing.
+## Boundaries
 
----
-
-## Summary: What you should know before starting
-
-- This is a **safe, read-first, ask-often** skill. It discovers, presents a plan, waits for
-  confirmation, and only then creates symlinks. It never overwrites without asking.
-- **Symlinks are pointers.** They take up almost no disk space and automatically reflect
-  changes in the real folder. If you update a skill in your project later, the symlink
-  will see the new version immediately.
-- **One symlink name = one active skill.** If two projects have a skill with the same name,
-  you choose which one is reachable via `~/.agents/skills/<name>`.
-- **Your install directory stays clean.** This skill creates symlinks only; it never moves
-  or renames anything in your projects.
+- The script uses the local project folder path, not the Git remote, to locate source skills.
+- It does not list available projects when a project path is wrong; it reports the path it checked.
+- It does not detect nested `SKILL.md` files or decide which of two same-name skills should win across different tool roots.
+- It does not verify that Cursor, Codex, Claude Code, or a hosted agent discovered the new link. Test that in the intended runtime.
+- For a team or vendor skill override, follow `skill-override-safeguard` before changing the source or repointing a link.
