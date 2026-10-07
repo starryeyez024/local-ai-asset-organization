@@ -25,10 +25,10 @@ a:hover, a:focus { color: var(--blue); }
 .wrap { width: min(960px, calc(100% - 40px)); margin: 0 auto; }
 .site-nav { position: sticky; top: 0; z-index: 10; background: rgba(21, 21, 40, .97); border-bottom: 1px solid #3a3a57; }
 .site-nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 58px; }
-.site-brand { color: #fff; font-family: RedHatDisplay, "Red Hat Display", system-ui, sans-serif; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.site-brand { color: rgb(231, 231, 240); font-family: RedHatDisplay, "Red Hat Display", system-ui, sans-serif; font-weight: 700; text-decoration: none; white-space: nowrap; }
 .site-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 18px; }
-.site-links a { color: #e7e7f0; font-size: .92rem; text-decoration: none; }
-.site-links a[aria-current="page"] { color: #9ad98a; }
+.site-links a { color: rgb(231, 231, 240); font-size: .92rem; text-decoration: none; }
+.site-nav a:hover, .site-nav a:focus-visible { color: #fff; text-decoration: underline; text-decoration-color: #b8b8c4; text-decoration-thickness: 2px; text-underline-offset: 5px; }
 .hero { padding: 72px 0 64px; background: var(--navy); color: #fff; }
 .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 42px; }
 .hero-image { overflow: hidden; border: 1px solid #45455f; border-radius: 14px; background: #202034; }
