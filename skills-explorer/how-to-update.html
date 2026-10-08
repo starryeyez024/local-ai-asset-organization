@@ -162,6 +162,8 @@
   <h2>About</h2>
   <p>AI Assets Explorer is a snapshot of the skills in a configured directory. <strong>Browse Skills</strong> searches and filters every valid <code>SKILL.md</code> found there. <strong>Audit Skills</strong> shows the local entries, broken links, duplicate names, and file age. Neither view installs, edits, or runs a skill.</p>
 
+  <div class="note"><strong>Coverage:</strong> this catalog covers one configured directory. It does not query marketplace registries or verify runtime enablement. A missing plugin skill may be installed elsewhere. Keep managed installations in place; do not link their caches into the hub just to include them here.</div>
+
   <h2>Where the data comes from</h2>
   <p><code>generate-skills-json.py</code> scans <code>~/.agents/skills</code> by default. It accepts symlinks and real directories. Set <code>SKILLS_ROOT</code> to scan another directory. It reads skill frontmatter and selected Markdown sections, then uses fixed keyword rules to assign tags. The source <code>SKILL.md</code> files remain authoritative.</p>
   <div class="card">

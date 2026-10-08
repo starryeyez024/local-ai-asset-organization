@@ -35,19 +35,19 @@
       <div class="wrap">
         <p class="section-label">The problem</p>
         <h2>AI assets spread across tools</h2>
-        <p class="lead-text">As you add AI tools, skills and MCP servers can end up in several places. Copies drift, links break, and updates can erase local changes. It becomes hard to tell which version to trust and which tools can use it.</p>
-        <p>You do not need to map every folder or learn every tool's discovery rules before asking for help. Start with an audit, then choose the changes that make sense for your setup.</p>
+        <p class="lead-text">Copies drift, links break, and updates can erase local changes. A clear owner and update path tells you which version to maintain and how each tool receives it.</p>
+        <p>You do not need to map every folder or learn every tool's discovery rules before asking for help. Ask for a focused check of one asset, or a broader audit when consolidating your setup.</p>
       </div>
     </section>
 
     <section>
       <div class="wrap">
         <p class="section-label">The idea</p>
-        <h2>Keep one source, then link what you need</h2>
+        <h2>Link skills from repositories you maintain</h2>
         <p class="lead-text">The original skill stays in its project. A local skills folder can point to the skills you want your tools to use.</p>
         <div class="diagram root-diagram">
           <p class="diagram-title">Physical root vs. tool-facing symlink views</p>
-          <h3><code class="inline">~/AI Assets/</code> — real files live here, once</h3>
+          <h3><code class="inline">~/AI Assets/</code> — maintained repository sources</h3>
           <pre><span class="tree">data-org/</span>
 <span class="tree-mark">└── </span><span class="tree">repo-one/</span>
 <span class="tree-mark">    └── </span><span class="tree">skills/</span>
@@ -73,6 +73,8 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
       </div>
     </section>
 
+    <section id="marketplace-packages"><div class="wrap"><p class="section-label">Marketplace packages</p><h2>Let the installer manage its files</h2><p class="lead-text">Keep marketplace caches and generated installs where their package manager expects them. Record the package, source, version, scope, and update method alongside your repository sources.</p><p>A plugin can also come from a local repository: “plugin” describes packaging, while the installer record tells you who manages it. Check for overlapping loose skills before cleanup, and preserve shared links needed by other tools. For customization, maintain a deliberate fork and select it through the target tool’s controls.</p><p><a href="https://docs.getlola.dev/dev-guide/architecture/">Lola copies modules and generates assistant files</a>; <a href="https://code.claude.com/docs/en/discover-plugins">Claude Code manages plugins by installation scope</a>. Neither requires moving installed files into this repository layout.</p><div class="callout amber"><strong>Lola bridge:</strong> this repository’s relocation script is an unsupported experiment. Testing showed it can move unrelated skills. It is excluded from the recommended setup.</div></div></section>
+
     <section class="band">
       <div class="wrap">
         <p class="section-label">Use the skills</p>
@@ -95,6 +97,11 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
             <p><a href="skills/skill-override-safeguard/SKILL.md" data-local-href="../skills/skill-override-safeguard/SKILL.md">Read the safeguard skill</a></p>
           </article>
         </div>
+        <div class="callout" id="working-linker" style="margin-top:24px;"><strong>Working linker configuration:</strong> the bundled linker defaults to <code class="inline">~/.config/ai-tools/ai-tools.toml</code>, using <code class="inline">directories.install_dir</code> and <code class="inline">directories.symlinks_dir</code>. The <a href="agentic-setup.html">private setup repository</a> is a proposed migration. The linker creates selected links; it does not change tool discovery settings, disable old installations, or configure marketplace plugins.</div>
+        <figure>
+          <img class="guide-figure" src="images/skill-linker-example.png" width="1616" height="858" loading="lazy" alt="Conversation example asking the skill-linker to make a Humanizer project skill available to local agents, followed by the assistant's plan to create a link-only entry.">
+          <figcaption class="muted">Example: ask the skill linker to make an existing project skill available to your agents. The screenshot shows the assistant's plan to link the skill; it does not show the completed change.</figcaption>
+        </figure>
       </div>
     </section>
 

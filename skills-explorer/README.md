@@ -2,6 +2,8 @@
 
 A searchable catalog of valid `SKILL.md` entries found in a configured skills directory. **Browse Skills** shows names, descriptions, inferred tags, and source labels. **Audit Skills** is a local inventory of entries, broken links, name collisions, and file age. The Explorer does not install, invoke, or edit skills.
 
+Both views cover only the configured directory. They do not query marketplace registries, scan every tool's roots, or establish runtime enablement. A missing plugin skill may be installed elsewhere. Keep installer-managed files in place; do not add cache links just to include them here. A complete runtime inventory requires separate package and discovery checks.
+
 ## Run locally
 
 ```bash

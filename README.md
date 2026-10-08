@@ -2,7 +2,7 @@
 
 A reference for keeping AI agent assets understandable across local tools and hosted runtimes. The [documentation site](pages/index.html) explains the setup model, physical organization, and tool compatibility. The [AI Assets Explorer guide](pages/skills-explorer-guide.html) explains the searchable catalog and local audit view.
 
-Keep each asset in a clear source location. Deliver it through the path or package the consuming tool actually supports. A symlink can be a convenient local adapter; shared repositories and hosted agents may need committed files, generated copies, or native configuration.
+Give each asset a clear owner and update path. Link selected skills from repositories you maintain; let marketplace installers manage their own caches and installed copies. Shared repositories and hosted agents may need committed files, generated copies, or native configuration.
 
 ## What is in this repository
 
@@ -13,7 +13,7 @@ Keep each asset in a clear source location. Deliver it through the path or packa
 | [`skills/skill-linker/`](skills/skill-linker/SKILL.md) | Agent instructions and a script for selectively linking skills from one project. |
 | [`skills/ai-asset-auditor/`](skills/ai-asset-auditor/SKILL.md) | Read-first inventory and migration planning procedure. |
 | [`skills/skill-override-safeguard/`](skills/skill-override-safeguard/SKILL.md) | Procedure for personal overrides of team or vendor skills. |
-| [`scripts/lola-post-install-hub-bridge.sh`](scripts/lola-post-install-hub-bridge.sh) | Optional bridge for a specific Lola installer behavior; read its version notes before use. |
+| [`scripts/lola-post-install-hub-bridge.sh`](scripts/lola-post-install-hub-bridge.sh) | Unsupported relocation experiment; excluded from the recommended setup because it can move unrelated skills. |
 
 The [documentation maintenance plan](PAGES-RESTRUCTURING-PLAN.md) records the design rationale. For current setup instructions, use the guides and commands below.
 
@@ -29,7 +29,7 @@ symlinks_dir = "/absolute/path/to/.agents/skills"
 
 `install_dir` contains real repositories. `symlinks_dir` is the local hub in which the linker creates one symlink per selected skill. The linker does not create this configuration file. TOML does not expand `~` on its own; use absolute paths for portable behavior across adapters. Keep personal paths and secrets out of this repository.
 
-The broader setup model can also use a canonical global `AGENTS.md`, a machine configuration file, and short tool-native instruction files. See the [agentic setup guide](pages/agentic-setup.html) for scope and path rules.
+The [agentic setup guide](pages/agentic-setup.html) proposes a private repository at `~/.config/agent-tools/`. That migration is optional and not implemented by these tools. The linker still defaults to the configuration above; creating only the proposed `agent-config.toml` will not configure it. Preserve working paths until their consumers and native entry points are updated and tested.
 
 ## Link selected skills
 
@@ -56,9 +56,17 @@ make run
 
 `make run` regenerates the catalog from `~/.agents/skills` and starts the local preview server. Set `SKILLS_ROOT=/another/skills/directory` to scan a different directory. The checked-in `skills.json` contains shareable catalog data. Regeneration also writes an ignored `skills-local.json` with local paths for the **Audit Skills** view. That local file stays on the machine and must not be committed or published. See the [Explorer README](skills-explorer/README.md) for individual commands.
 
+The Explorer scans one directory, not plugin registries or every tool's skills roots. It does not establish which skills are enabled or running. Do not add links into managed plugin caches just to include them in the catalog.
+
 ## Verify a tool-facing setup
 
-1. Identify the real source folder and the tool and runtime that need it.
-2. Check the [compatibility matrix](pages/tool-compatibility.html) for the supported path or delivery method.
-3. Confirm a local link resolves and the tool actually discovers the asset. For shared or hosted use, verify the committed or packaged copy in that runtime.
-4. Record any intentional copy and how it is refreshed from its source.
+1. Inventory the relevant tool's skill roots and installed packages from the intended project. Record source, installer, version, scope, and existing delivery routes.
+2. Choose the owner and updater: maintained repository, marketplace package, or project/team source. Check the [compatibility matrix](pages/tool-compatibility.html) for delivery options.
+3. Verify discovery and a representative invocation in that runtime. Installed, enabled, discovered, and successfully invoked are separate checks.
+4. Retire obsolete links or installations only after the replacement works and other tools' dependencies are accounted for. Keep required or intentional copies documented.
+
+## Marketplace packages
+
+Use the package manager's install, update, and removal controls. A plugin can also be loaded from a local repository, so its package format alone does not establish marketplace ownership. Keep customized versions as deliberate forks with a recorded upstream source; use tool-specific controls to select the intended version.
+
+The Lola bridge is not part of this workflow. A temporary-fixture test showed that it relocates every immediate real directory in the chosen skills folder, including unrelated skills, under the supplied module name. Leave Lola's delivery files under Lola's control.

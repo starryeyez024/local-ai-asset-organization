@@ -26,7 +26,7 @@
     <div class="wrap hero-grid">
       <div>
         <p class="eyebrow">A reference architecture for local AI tools</p>
-        <h1>One canonical source.<br>Tool-aware delivery.</h1>
+        <h1>One clear owner per asset.<br>Tool-aware delivery.</h1>
         <p class="lede">Organize skills, instructions, context, MCP servers, and configuration so they stay understandable and maintainable across Cursor, Claude Code, Codex, ChatGPT Work, and hosted runtimes.</p>
       </div>
       <div class="hero-image">
@@ -41,25 +41,23 @@
         <p class="section-label">The problem</p>
         <h2>Problem #1: the same asset ends up in several places</h2>
         <p class="lead-text">As you use more than one AI coding tool or installation method—<a href="https://docs.getlola.dev/">Lola</a>, <a href="https://docs.npmjs.com/cli/v11/commands/npx/">NPX</a>, <a href="https://git-scm.com/docs">Git</a>, or <a href="https://code.claude.com/docs/en/plugin-marketplaces">plugin marketplaces</a>—your skills and MCP servers can end up spread across different folders. Each installer and runtime sees a different slice of that setup.</p>
-        <p class="hype"><strong>Why is this a problem?</strong></p>
         <ul class="steps">
           <li><strong>Unclear ownership:</strong> a skill may be a tracked folder in one repository, a copied install in another tool, and a symlink elsewhere. It becomes hard to know which version to edit or update.</li>
           <li><strong>Overwritten customization:</strong> local tweaks to an installed skill can disappear when its vendor or package manager refreshes it.</li>
           <li><strong>Runtime mismatch:</strong> a local path or symlink does not automatically travel with a project or become available to a hosted agent.</li>
         </ul>
-        <p>These problems grow from several tools having different discovery and delivery rules. The goal is to make the source of each asset clear, then deliver it through the path each tool actually supports.</p>
         <h3>What the model changes</h3>
         <div class="card-grid">
-          <article class="card"><h3>Clear source locations</h3><p>Keep skills and code in tracked repositories, with personal instructions, configuration, and context in a separate private repo.</p></article>
+          <article class="card"><h3>Clear source locations</h3><p>Keep maintained skills and code in tracked repositories. Let package managers own their installed copies; keep personal setup files private.</p></article>
           <article class="card"><h3>Verified delivery</h3><p>Use a symlink, committed file, generated copy, native configuration, or platform-managed package according to the consuming tool.</p></article>
           <article class="card"><h3>Documented exceptions</h3><p>Allow intentional duplication when a tool or runtime cannot consume the canonical representation safely.</p></article>
         </div>
     <br/>
-         <p class="lead-text">The diagram below shows the storage model for skill repositories. The proposed private setup repo lives separately under <code class="inline">~/.config/agent-tools/</code>. Each tool may need a different view of the same canonical content; symlinks are an adapter option, not a universal compatibility guarantee.</p>
+         <p class="lead-text">The diagram below shows the storage model for repositories you maintain. Marketplace caches and installer-generated files stay in their supported locations. The proposed private setup repo lives separately under <code class="inline">~/.config/agent-tools/</code>. Each tool may need a different view of the same canonical content; symlinks are an adapter option, not a universal compatibility guarantee.</p>
          <br/>
         <div class="diagram">
           <p class="diagram-title">Physical root vs. tool-facing symlink views</p>
-          <h3><code class="inline">~/AI Assets/</code> — real files live here, once</h3>
+          <h3><code class="inline">~/AI Assets/</code> — maintained repository sources</h3>
           <pre><span class="tree">data-org/</span>
 <span class="tree-mark">└── </span><span class="tree">repo-one/</span>
 <span class="tree-mark">    └── </span><span class="tree">skills/</span>
@@ -107,10 +105,11 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
     <section>
       <div class="wrap">
         <p class="section-label">Getting started</p>
-        <h2>Audit first, then change with confirmation</h2>
+        <h2>Start with the asset and tool you want to change</h2>
+        <p>A known skill needs a focused source, delivery, and duplicate check. Use a broader audit when consolidating folders or changing several tools.</p>
         <ol class="steps">
-          <li>Inventory current skills, instructions, MCP configurations, and runtime targets.</li>
-          <li>Identify canonical sources and any existing copies or symlink views.</li>
+          <li>Inventory the relevant skill roots, installed packages, instructions, MCP configurations, and runtime targets.</li>
+          <li>Identify each asset’s owner and update method, including intentional installed copies or symlink views.</li>
           <li>Start with the tool and asset you plan to change. Use the relevant part of the <a href="tool-compatibility.html">compatibility guide</a> when its path, scope, or runtime is unclear.</li>
           <li>Use the <a href="https://github.com/starryeyez024/local-ai-asset-organization/tree/main/skills/ai-asset-auditor">ai-asset-auditor</a> for a read-first migration plan.</li>
           <li>Make filesystem changes only after reviewing and confirming the plan.</li>

@@ -2,6 +2,12 @@
 #
 # lola-post-install-hub-bridge.sh
 #
+# UNSUPPORTED EXPERIMENT — excluded from the recommended setup.
+# An isolated fixture test on 2026-10-08 confirmed that this script moves
+# unrelated real directories too: it never verifies module ownership.
+# Do not run it on a live skills folder. Let Lola manage its delivery files.
+# The historical implementation and assumptions below are retained for reference.
+#
 # =============================================================================
 # WHAT THIS SCRIPT IS
 # =============================================================================

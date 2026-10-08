@@ -38,6 +38,8 @@ personal namespace.
 
 ## Procedure
 
+For installer-managed packages, do not edit the cache or installed copy in place. Record the package ID, version, installer, and scope. Create an explicit personal fork from the upstream source, then use the target tool's supported controls to select it or disable the managed version where permitted. Repointing a hub link alone does not disable a plugin. Keep required team packages under team control, and preserve shared links needed by other tools.
+
 1. **Identify ownership.** Check the Git remote and local checkout before changing a team or vendor skill. A path alone is a useful clue, but it does not prove who owns the repository. If the checkout is your own personal repository, edit it normally.
 
 2. **Copy the whole skill folder** into a personal repository under `~/AI Assets/<your-git-username>/<repo-name>/skills/<skill-name>/`. Include scripts, references, and assets. Keep the original team or vendor checkout untouched. Use a distinct personal repository folder if the name would collide with an existing checkout.

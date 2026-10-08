@@ -50,6 +50,8 @@ Without `--force`, a symlink pointing elsewhere is reported and skipped. With `-
 
 ## Boundaries
 
+- Link maintained repository skills only. Do not link into marketplace caches or relocate installer-managed copies to make them fit the hub. Use the installer's controls and record package identity, version, scope, and update method separately.
+- Before replacing a delivery path, check whether other tools depend on it. A shared hub link can affect several tools, while a project-scoped plugin may affect only one project.
 - The script uses the local project folder path, not the Git remote, to locate source skills.
 - It does not list available projects when a project path is wrong; it reports the path it checked.
 - It does not detect nested `SKILL.md` files or decide which of two same-name skills should win across different tool roots.
