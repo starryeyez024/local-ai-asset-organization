@@ -165,7 +165,7 @@
   <div class="note"><strong>Coverage:</strong> this catalog covers one configured directory. It does not query marketplace registries or verify runtime enablement. A missing plugin skill may be installed elsewhere. Keep managed installations in place; do not link their caches into the hub just to include them here.</div>
 
   <h2>Where the data comes from</h2>
-  <p><code>generate-skills-json.py</code> scans <code>~/.agents/skills</code> by default. It accepts symlinks and real directories. Set <code>SKILLS_ROOT</code> to scan another directory. It reads skill frontmatter and selected Markdown sections, then uses fixed keyword rules to assign tags. The source <code>SKILL.md</code> files remain authoritative.</p>
+  <p><code>generate-skills-json.py</code> reads the same setup configuration as the linker and scans the folder set by <code>directories.symlinks_dir</code>. Without a configuration file, it scans <code>~/.agents/skills</code>. It accepts symlinks and real directories. Set <code>SKILLS_ROOT</code> to scan another directory. It reads skill frontmatter and selected Markdown sections, then uses fixed keyword rules to assign tags. The source <code>SKILL.md</code> files remain authoritative.</p>
   <div class="card">
     <p><strong>Shareable catalog:</strong> <code>skills.json</code> contains the Browse Skills data and can be committed or published.</p>
     <p><strong>Local audit:</strong> <code>skills-local.json</code> also contains absolute paths and inventory details. It is ignored by Git and must stay on the machine that generated it. Without this file, the page hides Audit Skills.</p>
@@ -186,7 +186,7 @@ make run
     <pre><code>SKILLS_ROOT=/another/skills/directory make regen</code></pre>
   </div>
   <p>After a source skill changes, regenerate and review the catalog. Commit the skill in its source repository and the shareable <code>skills.json</code> in this repository. Do not commit <code>skills-local.json</code>. The local file manager action is available only when using the preview server. This project has no scheduled rebuild; published data reflects the last committed snapshot.</p>
-  <div class="note">Requires Python 3.10+ and Make. The generator uses only Python's standard library.</div>
+  <div class="note">Requires Python 3.11+ and Make. The generator uses only Python's standard library.</div>
 </main>
 
 <script>

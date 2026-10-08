@@ -13,13 +13,12 @@ Give each asset a clear owner and update path. Link selected skills from reposit
 | [`skills/skill-linker/`](skills/skill-linker/SKILL.md) | Agent instructions and a script for selectively linking skills from one project. |
 | [`skills/ai-asset-auditor/`](skills/ai-asset-auditor/SKILL.md) | Read-first inventory and migration planning procedure. |
 | [`skills/skill-override-safeguard/`](skills/skill-override-safeguard/SKILL.md) | Procedure for personal overrides of team or vendor skills. |
-| [`scripts/lola-post-install-hub-bridge.sh`](scripts/lola-post-install-hub-bridge.sh) | Unsupported relocation experiment; excluded from the recommended setup because it can move unrelated skills. |
 
 The [documentation maintenance plan](PAGES-RESTRUCTURING-PLAN.md) records the design rationale. For current setup instructions, use the guides and commands below.
 
 ## Local configuration
 
-The skill linker reads `~/.config/ai-tools/ai-tools.toml`. Create it on your own machine with absolute paths:
+The linker and Explorer read `~/.config/agent-tools/agent-config.toml`. Create it with absolute paths for your machine:
 
 ```toml
 [directories]
@@ -29,20 +28,22 @@ symlinks_dir = "/absolute/path/to/.agents/skills"
 
 `install_dir` contains real repositories. `symlinks_dir` is the local hub in which the linker creates one symlink per selected skill. The linker does not create this configuration file. TOML does not expand `~` on its own; use absolute paths for portable behavior across adapters. Keep personal paths and secrets out of this repository.
 
-The [agentic setup guide](pages/agentic-setup.html) proposes a private repository at `~/.config/agent-tools/`. That migration is optional and not implemented by these tools. The linker still defaults to the configuration above; creating only the proposed `agent-config.toml` will not configure it. Preserve working paths until their consumers and native entry points are updated and tested.
+The [agentic setup guide](pages/agentic-setup.html) explains how to keep this configuration with your private instructions and context. Existing installations using `~/.config/ai-tools/ai-tools.toml` continue to work when the new path is absent. Both commands accept `--config` to select a file explicitly. The Explorer also accepts `SKILLS_ROOT` to override its scan directory for one run.
 
 ## Link selected skills
 
 From this repository's root:
 
 ```bash
-python3 skills/skill-linker/skill-linker.py ktotten/local-ai-asset-organization ai-asset-auditor skill-override-safeguard
+python3 skills/skill-linker/skill-linker.py --dry-run /absolute/path/to/project all
+python3 skills/skill-linker/skill-linker.py /absolute/path/to/project all
 ```
 
-The first argument is a project path relative to `install_dir`. The script looks for `skills/*/SKILL.md`, or `*/SKILL.md` when no organized skills are found. Omit skill names to choose interactively, or pass `all` to select every discovered skill. It may automatically choose a close name match, so review its output before relying on a newly linked skill.
-The linker script requires Python 3.11 or newer.
+Replace the example path with the repository containing the skills you want. The source can be an absolute path to an existing checkout or a project path relative to `install_dir`. The script finds a root `SKILL.md`, `skills/*/SKILL.md`, or immediate `*/SKILL.md` folders. Supply exact names to select particular skills, omit names to choose interactively, or use `all`. Misspelled names produce suggestions without changing any links.
 
-Existing symlinks pointing elsewhere are left alone unless you pass `--force`. Real files and directories are always left alone. `--force` replaces a symlink without an interactive confirmation. The script does not install a `skill-linker` shell command; use the Python command above or invoke the agent skill through a runtime that has discovered it.
+Python 3.11 or newer is required. `--dry-run` previews destinations and checks conflicts without writing files. Existing links to the same source are left in place; different targets require `--force`. Real files and directories are never replaced.
+
+If a tool needs a native skills directory, use `--target-dir /absolute/path/to/tool/skills` after verifying that discovery path. The linker skill handles source selection, delivery, and runtime verification as one workflow. To get started before the skill is installed, ask your assistant to read `skills/skill-linker/SKILL.md` in this checkout and follow it for the project and tools you name.
 
 Before changing a shared skill, read the [override safeguard](skills/skill-override-safeguard/SKILL.md). The [auditor](skills/ai-asset-auditor/SKILL.md) is intended for a broader inventory and an explicit migration plan.
 
@@ -54,7 +55,7 @@ make run
 # open http://localhost:8790
 ```
 
-`make run` regenerates the catalog from `~/.agents/skills` and starts the local preview server. Set `SKILLS_ROOT=/another/skills/directory` to scan a different directory. The checked-in `skills.json` contains shareable catalog data. Regeneration also writes an ignored `skills-local.json` with local paths for the **Audit Skills** view. That local file stays on the machine and must not be committed or published. See the [Explorer README](skills-explorer/README.md) for individual commands.
+`make run` reads `directories.symlinks_dir` from the same configuration as the linker, regenerates the catalog, and starts the local preview server. Without a configuration file, the standalone Explorer scans `~/.agents/skills`. Set `SKILLS_ROOT=/another/skills/directory` to scan a different directory. The checked-in `skills.json` contains shareable catalog data. Regeneration also writes an ignored `skills-local.json` with local paths for the **Audit Skills** view. That local file stays on the machine and must not be committed or published. See the [Explorer README](skills-explorer/README.md) for individual commands.
 
 The Explorer scans one directory, not plugin registries or every tool's skills roots. It does not establish which skills are enabled or running. Do not add links into managed plugin caches just to include them in the catalog.
 
@@ -69,4 +70,7 @@ The Explorer scans one directory, not plugin registries or every tool's skills r
 
 Use the package manager's install, update, and removal controls. A plugin can also be loaded from a local repository, so its package format alone does not establish marketplace ownership. Keep customized versions as deliberate forks with a recorded upstream source; use tool-specific controls to select the intended version.
 
-The Lola bridge is not part of this workflow. A temporary-fixture test showed that it relocates every immediate real directory in the chosen skills folder, including unrelated skills, under the supplied module name. Leave Lola's delivery files under Lola's control.
+
+## Check the setup workflow
+
+Run `python3 -B -m unittest discover -s tests -v` from the repository root. The tests use temporary repositories, configurations, and skill folders; they do not change installed tools or user configuration.

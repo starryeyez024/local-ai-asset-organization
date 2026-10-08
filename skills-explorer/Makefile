@@ -5,7 +5,7 @@ PORT ?= 8790
 help:
 	@echo "Skills Explorer -- available commands:"
 	@echo ""
-	@echo "  make regen   Regenerate skills.json from ~/.agents/skills (or \$$SKILLS_ROOT)"
+	@echo "  make regen   Regenerate skills.json from the configured skills folder (or \$$SKILLS_ROOT)"
 	@echo "  make serve   Serve the site locally at http://localhost:$(PORT)"
 	@echo "  make run     Regenerate then serve (the usual 'just run it' command)"
 	@echo ""

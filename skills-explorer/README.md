@@ -20,11 +20,11 @@ PORT=8080 make serve
 SKILLS_ROOT=/another/skills/directory make regen
 ```
 
-The generator defaults to `~/.agents/skills`. It accepts symlinks and real skill directories, resolves each valid `SKILL.md`, and assigns tags with fixed keyword rules. It writes two files:
+The generator reads `directories.symlinks_dir` from `~/.config/agent-tools/agent-config.toml`, shared with the linker. It also supports the existing `~/.config/ai-tools/ai-tools.toml` when the recommended file is absent. With neither configuration present, it scans `~/.agents/skills`. Use `--config /path/to/config.toml` with the generator to select a configuration, or `SKILLS_ROOT` to override the scan folder. It accepts symlinks and real skill directories, resolves each valid `SKILL.md`, and assigns tags with fixed keyword rules. It writes two files:
 
 - `skills.json` is the shareable catalog. Commit it when publishing an updated catalog.
 - `skills-local.json` includes absolute paths and the local audit inventory. It is ignored by Git. Keep it local and do not publish it.
 
 The page tries the local file first. If it is absent, the page shows the shareable Browse Skills catalog and hides Audit Skills. The source-file action works only through the local preview server. Catalog data is a snapshot; run `make regen` after changing the source skills or generator rules.
 
-Requires Python 3.10+ and Make. No Python packages are required. The static site is copied to GitLab Pages by `.gitlab-ci.yml` on `main`; the ignored local inventory is not part of that deployment.
+Requires Python 3.11+ and Make. No Python packages are required. The static site is copied to GitLab Pages by `.gitlab-ci.yml` on `main`; the ignored local inventory is not part of that deployment.

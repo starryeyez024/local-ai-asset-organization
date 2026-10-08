@@ -6,8 +6,8 @@ local inventory for the Explorer's audit view.
 Usage:
     python3 generate-skills-json.py
 
-    Set SKILLS_ROOT to scan a different skills directory; defaults to
-    ~/.agents/skills.
+    Read the same setup configuration as the skill linker. Set SKILLS_ROOT
+    to override the configured directory for a particular run.
 
         SKILLS_ROOT=/some/other/path python3 generate-skills-json.py
 
@@ -17,11 +17,15 @@ inventory details for use on the machine that generated it.
 """
 
 import json
+import argparse
 import os
 import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "skills" / "skill-linker"))
+from asset_config import default_config_path, read_directories
 
 HOME = Path.home()
 
@@ -33,6 +37,16 @@ STALE_THRESHOLD_DAYS = 60
 # directories, and tool discovery still depends on each tool and runtime.
 # SKILLS_ROOT can point the generator at another directory for testing.
 AGENTS_SKILLS_FARM = Path(os.environ.get("SKILLS_ROOT", str(HOME / ".agents" / "skills")))
+
+
+def skills_root(config_path=None):
+    """Use an explicit scan root, the shared configuration, or the standalone default."""
+    if os.environ.get("SKILLS_ROOT"):
+        return Path(os.environ["SKILLS_ROOT"]).expanduser()
+    path = Path(config_path).expanduser() if config_path is not None else default_config_path()
+    if config_path is not None or path.exists():
+        return Path(read_directories(path)["symlinks_dir"])
+    return HOME / ".agents" / "skills"
 
 AI_FIRST_MODULES = [
     "ai-first-product-management",
@@ -658,6 +672,17 @@ def process_skill(module: str, skill_path: Path) -> dict | None:
 
 
 def main():
+    global AGENTS_SKILLS_FARM
+    parser = argparse.ArgumentParser(description="Generate the Explorer catalog from your configured skills folder.")
+    parser.add_argument("--config", type=Path, help="Use a specific setup TOML file")
+    parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parent,
+                        help="Directory for generated catalogs (default: this Explorer directory)")
+    args = parser.parse_args()
+    try:
+        AGENTS_SKILLS_FARM = skills_root(args.config)
+    except ValueError as error:
+        print(f"Error: {error}", file=sys.stderr)
+        sys.exit(1)
     if not AGENTS_SKILLS_FARM.exists():
         print(f"Error: skills farm not found at {AGENTS_SKILLS_FARM}", file=sys.stderr)
         sys.exit(1)
@@ -726,7 +751,8 @@ def main():
         "skills": sorted(deduped, key=lambda s: s["displayName"]),
     }
 
-    out_dir = Path(__file__).resolve().parent
+    out_dir = args.output_dir.expanduser()
+    out_dir.mkdir(parents=True, exist_ok=True)
     local_path = out_dir / "skills-local.json"
     with open(local_path, "w") as f:
         json.dump({**output, "inventory": inventory, "inventoryStats": inventory_stats}, f, indent=2)
