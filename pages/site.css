@@ -28,7 +28,7 @@ a:hover, a:focus { color: var(--blue); }
 .site-brand { color: rgb(231, 231, 240); font-family: RedHatDisplay, "Red Hat Display", system-ui, sans-serif; font-weight: 700; text-decoration: none; white-space: nowrap; }
 .site-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 18px; }
 .site-links a { color: rgb(231, 231, 240); font-size: .92rem; text-decoration: none; }
-.site-nav a:hover, .site-nav a:focus-visible { color: #fff; text-decoration: underline; text-decoration-color: #b8b8c4; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.site-nav a:hover, .site-nav a:focus-visible, .site-links a[aria-current="page"] { color: #fff; text-decoration: underline; text-decoration-color: #b8b8c4; text-decoration-thickness: 2px; text-underline-offset: 5px; }
 .hero { padding: 72px 0 64px; background: var(--navy); color: #fff; }
 .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 42px; }
 .hero-image { overflow: hidden; border: 1px solid #45455f; border-radius: 14px; background: #202034; }
@@ -45,6 +45,7 @@ h4 { margin: var(--paragraph-spacing) 0 8px; font-size: 1.05rem; }
 p, ul, ol, table, figure, .card, .callout, pre { margin-top: var(--paragraph-spacing); margin-bottom: 0; }
 .lede { max-width: 760px; margin: 24px 0 0; color: #e7e7f0; font-size: 1.18rem; }
 .lead-text { max-width: 780px; font-size: 1.08rem; }
+.hype {color: #c00;}
 section { padding: 48px 0; }
 section.band { background: #f1f5fa; }
 .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
@@ -56,7 +57,7 @@ section.band { background: #f1f5fa; }
 .callout.green { border-left-color: var(--green); background: var(--soft-green); }
 .callout.amber { border-left-color: var(--amber); background: var(--soft-amber); }
 .diagram h3 { margin-top: 20px; }
-.diagram-title { margin: 0 0 24px; color: var(--muted); font-size: 1.08rem; letter-spacing: .12em; text-align: center; text-transform: uppercase; }
+.diagram-title { color: #c00;margin: 10px 0 24px;  font-size: 1.4rem;  text-align: center;  font-weight: 700; }
 .root-compare-arrow-vert { display: grid; justify-items: center; gap: 2px; margin: 26px 0 8px; color: var(--blue); }
 .root-compare-arrow-vert .glyph { font-size: 2.5rem; line-height: 1; }
 .root-compare-arrow-vert .caption { color: var(--muted); font-size: .95rem; }

@@ -11,8 +11,9 @@
 <body>
   <nav class="site-nav" aria-label="Primary navigation">
     <div class="wrap site-nav-inner">
-      <a class="site-brand" href="index.html">AI Asset Organization</a>
+      <span class="site-brand">AI Asset Organization</span>
       <div class="site-links">
+        <a href="index.html" aria-current="page">Overview</a>
         <a href="agentic-setup.html">Agentic setup</a>
         <a href="asset-organization.html">Asset organization</a>
         <a href="tool-compatibility.html">Compatibility</a>
@@ -26,10 +27,10 @@
       <div>
         <p class="eyebrow">A reference architecture for local AI tools</p>
         <h1>One canonical source.<br>Tool-aware delivery.</h1>
-        <p class="lede">Organize skills, instructions, context, MCP servers, and configuration so they stay understandable and maintainable across Cursor, Claude Code, Codex CLI, the ChatGPT desktop app, and hosted runtimes.</p>
+        <p class="lede">Organize skills, instructions, context, MCP servers, and configuration so they stay understandable and maintainable across Cursor, Claude Code, Codex, ChatGPT Work, and hosted runtimes.</p>
       </div>
       <div class="hero-image">
-        <img src="images/ai-assets-sot.jpeg" alt="Diagram of a single physical root for AI assets with tool-facing symlink views.">
+        <img src="images/ai-assets-sot.jpeg" alt="Diagram of skill repositories in one physical root with tool-facing symlink views.">
       </div>
     </div>
   </header>
@@ -38,29 +39,24 @@
     <section>
       <div class="wrap">
         <p class="section-label">The problem</p>
-        <h2>Why this exists: the same asset ends up in several places</h2>
-        <p class="lead-text">As you use more than one AI coding tool, skills and MCP servers spread across different folders while instructions and settings live in each product's own format. Each installer and runtime sees a different slice of that setup. A change that works in one place may never reach another.</p>
+        <h2>Problem #1: the same asset ends up in several places</h2>
+        <p class="lead-text">As you use more than one AI coding tool, or installer (Lola, NPX, Git, Marketplaces, etc), your skills and MCP servers can end up spread across different folders. Each installer and runtime sees a different slice of that setup.</p>
+        <p class="hype"><strong>Why is this a problem?</strong></p>
         <ul class="steps">
           <li><strong>Unclear ownership:</strong> a skill may be a tracked folder in one repository, a copied install in another tool, and a symlink elsewhere. It becomes hard to know which version to edit or update.</li>
           <li><strong>Overwritten customization:</strong> local tweaks to an installed skill can disappear when its vendor or package manager refreshes it.</li>
-          <li><strong>Hard to recover or reuse:</strong> untracked edits and undocumented links make it harder to review changes, roll back mistakes, or set up another machine.</li>
           <li><strong>Runtime mismatch:</strong> a local path or symlink does not automatically travel with a project or become available to a hosted agent.</li>
         </ul>
         <p>These problems grow from several tools having different discovery and delivery rules. The goal is to make the source of each asset clear, then deliver it through the path each tool actually supports.</p>
         <h3>What the model changes</h3>
         <div class="card-grid">
-          <article class="card"><h3>One canonical source</h3><p>Keep portable procedures, context, and code in a version-controlled physical root.</p></article>
+          <article class="card"><h3>Clear source locations</h3><p>Keep skills and code in tracked repositories, with personal instructions, configuration, and context in a separate private repo.</p></article>
           <article class="card"><h3>Verified delivery</h3><p>Use a symlink, committed file, generated copy, native configuration, or platform-managed package according to the consuming tool.</p></article>
           <article class="card"><h3>Documented exceptions</h3><p>Allow intentional duplication when a tool or runtime cannot consume the canonical representation safely.</p></article>
         </div>
-      </div>
-    </section>
-
-    <section class="band">
-      <div class="wrap">
-        <p class="section-label">The model</p>
-        <h2>Physical root vs. tool-facing views</h2>
-        <p class="lead-text">The diagram below shows the storage model. Each tool may need a different view of the same canonical content; symlinks are an adapter option, not a universal compatibility guarantee.</p>
+    <br/>
+         <p class="lead-text">The diagram below shows the storage model for skill repositories. The proposed private setup repo lives separately under <code class="inline">~/.config/agent-tools/</code>. Each tool may need a different view of the same canonical content; symlinks are an adapter option, not a universal compatibility guarantee.</p>
+         <br/>
         <div class="diagram">
           <p class="diagram-title">Physical root vs. tool-facing symlink views</p>
           <h3><code class="inline">~/AI Assets/</code> — real files live here, once</h3>
@@ -69,24 +65,16 @@
 <span class="tree-mark">    └── </span><span class="tree">skills/</span>
 <span class="tree-mark">        └── </span><span class="tree">concaten-gator/</span>
 <span class="tree-mark">            └── </span><span class="tree-file">SKILL.md</span>
-<span class="tree pink">platform-org/</span>
-<span class="tree-mark">└── </span><span class="tree pink">sub-group/</span>
-<span class="tree-mark">    └── </span><span class="tree pink">repo-two/</span>
-<span class="tree-mark">        └── </span><span class="tree pink">skills/</span>
-<span class="tree-mark">            └── </span><span class="tree pink">meeting-maxi/</span>
-<span class="tree-mark">                └── </span><span class="tree-file">SKILL.md</span>
 <span class="tree green">your-username/</span>
 <span class="tree-mark">└── </span><span class="tree green">repo-three/</span>
 <span class="tree-mark">    └── </span><span class="tree green">skills/</span>
 <span class="tree-mark">        └── </span><span class="tree green">build-automation/</span>
 <span class="tree-mark">            └── </span><span class="tree-file">SKILL.md</span></pre>
-          <div class="root-compare-arrow-vert" aria-hidden="true"><span class="glyph">↓</span><span class="caption">linked to a tested local skills hub</span></div>
+          <div class="root-compare-arrow-vert" aria-hidden="true"><span class="glyph">↓</span> </div>
           <h3><code class="inline">~/.agents/skills/</code> — an example local hub: selected skills can be linked here</h3>
           <pre>concaten-gator            <span class="tree-mark">→</span> <span class="tree">~/AI Assets/data-org/repo-one/skills/concaten-gator/</span>
-meeting-maxi              <span class="tree-mark">→</span> <span class="tree pink">~/AI Assets/platform-org/sub-group/repo-two/skills/meeting-maxi/</span>
 build-automation          <span class="tree-mark">→</span> <span class="tree green">~/AI Assets/your-username/repo-three/skills/build-automation/</span></pre>
         </div>
-        <div class="callout amber"><strong>Important:</strong> verify every tool-facing view against the tool, version, and runtime you actually use. Hosted agents may require synced, packaged, or committed files instead of local symlinks.</div>
       </div>
     </section>
 
@@ -95,7 +83,7 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
         <p class="section-label">Choose a guide</p>
         <h2>Go deeper where the decisions live</h2>
         <div class="card-grid">
-          <article class="card"><h3><a href="agentic-setup.html">Agentic setup</a></h3><p>Separate instructions, configuration, and context. Learn how global and project scopes fit together.</p></article>
+          <article class="card"><h3><a href="agentic-setup.html">Agentic setup</a></h3><p>See a proposed private repo for instructions, configuration, and personal context, with tool-native connections.</p></article>
           <article class="card"><h3><a href="asset-organization.html">Asset organization</a></h3><p>Organize repositories, skills, MCP code, naming, collisions, and safe overrides.</p></article>
           <article class="card"><h3><a href="tool-compatibility.html">Compatibility matrix</a></h3><p>Map each asset type to Codex CLI, Cursor, Claude Code, and the ChatGPT desktop app across local, project, and cloud runtimes.</p></article>
         </div>
@@ -123,7 +111,7 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
         <ol class="steps">
           <li>Inventory current skills, instructions, MCP configurations, and runtime targets.</li>
           <li>Identify canonical sources and any existing copies or symlink views.</li>
-          <li>Check the <a href="tool-compatibility.html">compatibility matrix</a> for the target tool and scope.</li>
+          <li>Start with the tool and asset you plan to change. Use the relevant part of the <a href="tool-compatibility.html">compatibility guide</a> when its path, scope, or runtime is unclear.</li>
           <li>Use the <a href="https://github.com/starryeyez024/local-ai-asset-organization/tree/main/skills/ai-asset-auditor">ai-asset-auditor</a> for a read-first migration plan.</li>
           <li>Make filesystem changes only after reviewing and confirming the plan.</li>
         </ol>

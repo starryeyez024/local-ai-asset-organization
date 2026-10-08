@@ -9,10 +9,46 @@
   <link rel="stylesheet" href="site.css">
 </head>
 <body>
-  <nav class="site-nav" aria-label="Primary navigation"><div class="wrap site-nav-inner"><a class="site-brand" href="index.html">AI Asset Organization</a><div class="site-links"><a href="agentic-setup.html">Agentic setup</a><a href="asset-organization.html" aria-current="page">Asset organization</a><a href="tool-compatibility.html">Compatibility</a><a href="skills-explorer-guide.html">Skills explorer</a></div></div></nav>
-  <header class="hero"><div class="wrap"><p class="eyebrow">Guide 2 · Physical organization</p><h1>Organize the assets once, then deliver them safely</h1><p class="lede">A physical root gives real files a clear home. Tool-facing directories are views or adapters, not competing sources of truth.</p></div></header>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="wrap site-nav-inner">
+      <span class="site-brand">AI Asset Organization</span>
+      <div class="site-links">
+        <a href="index.html">Overview</a>
+        <a href="agentic-setup.html">Agentic setup</a>
+        <a href="asset-organization.html" aria-current="page">Asset organization</a>
+        <a href="tool-compatibility.html">Compatibility</a>
+        <a href="skills-explorer-guide.html">Skills explorer</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Guide 2 · Asset organization</p>
+      <h1>Get a clear source for every AI asset</h1>
+      <p class="lede">You may have installed marketplace plugins, cloned git repos with skills, and created custom scripts and skills... which means your assets are scattered. This is a suggested approach of how to easily tidy and manage your assets going forward.  You decide what should be active and review any proposed cleanup.</p>
+    </div>
+  </header>
+
   <main>
-    <section><div class="wrap"><p class="section-label">Physical root</p><h2>Derive identity from the repository</h2><p class="lead-text">Organize checkouts by the git remote owner, complete subgroup path, and repository name. Lowercase every path segment so the local structure remains predictable.</p><div class="diagram root-diagram"><p class="diagram-title">Physical root vs. tool-facing symlink views</p><h3><code class="inline">~/AI Assets/</code> — real files live here, once</h3><pre><span class="tree">data-org/</span>
+    <section>
+      <div class="wrap">
+        <p class="section-label">The problem</p>
+        <h2>AI assets spread across tools</h2>
+        <p class="lead-text">As you add AI tools, skills and MCP servers can end up in several places. Copies drift, links break, and updates can erase local changes. It becomes hard to tell which version to trust and which tools can use it.</p>
+        <p>You do not need to map every folder or learn every tool's discovery rules before asking for help. Start with an audit, then choose the changes that make sense for your setup.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <p class="section-label">The idea</p>
+        <h2>Keep one source, then link what you need</h2>
+        <p class="lead-text">The original skill stays in its project. A local skills folder can point to the skills you want your tools to use.</p>
+        <div class="diagram root-diagram">
+          <p class="diagram-title">Physical root vs. tool-facing symlink views</p>
+          <h3><code class="inline">~/AI Assets/</code> — real files live here, once</h3>
+          <pre><span class="tree">data-org/</span>
 <span class="tree-mark">└── </span><span class="tree">repo-one/</span>
 <span class="tree-mark">    └── </span><span class="tree">skills/</span>
 <span class="tree-mark">        └── </span><span class="tree">concaten-gator/</span>
@@ -27,30 +63,60 @@
 <span class="tree-mark">└── </span><span class="tree green">repo-three/</span>
 <span class="tree-mark">    └── </span><span class="tree green">skills/</span>
 <span class="tree-mark">        └── </span><span class="tree green">build-automation/</span>
-<span class="tree-mark">            └── </span><span class="tree-file">SKILL.md</span></pre><div class="root-compare-arrow-vert" aria-hidden="true"><span class="glyph">↓</span><span class="caption">linked to a tested local skills hub</span></div><h3><code class="inline">~/.agents/skills/</code> — an example local hub: selected skills can be linked here</h3><pre>concaten-gator            <span class="tree-mark">→</span> <span class="tree">~/AI Assets/data-org/repo-one/skills/concaten-gator/</span>
+<span class="tree-mark">            └── </span><span class="tree-file">SKILL.md</span></pre>
+          <div class="root-compare-arrow-vert" aria-hidden="true"><span class="glyph">↓</span><span class="caption">linked to a tested local skills hub</span></div>
+          <h3><code class="inline">~/.agents/skills/</code> — an example local hub: selected skills can be linked here</h3>
+          <pre>concaten-gator            <span class="tree-mark">→</span> <span class="tree">~/AI Assets/data-org/repo-one/skills/concaten-gator/</span>
 meeting-maxi              <span class="tree-mark">→</span> <span class="tree pink">~/AI Assets/platform-org/sub-group/repo-two/skills/meeting-maxi/</span>
-build-automation          <span class="tree-mark">→</span> <span class="tree green">~/AI Assets/your-username/repo-three/skills/build-automation/</span></pre></div><div class="callout"><strong>Identity rule:</strong> preserve nested remote groups. If a remote owner is <code class="inline">RHEcosystemAppEng</code>, use <code class="inline">rhecosystemappeng/</code> locally, not a mixed-case variant.</div></div></section>
+build-automation          <span class="tree-mark">→</span> <span class="tree green">~/AI Assets/your-username/repo-three/skills/build-automation/</span></pre>
+        </div>
+      </div>
+    </section>
 
-    <section class="band"><div class="wrap"><p class="section-label">Tool-facing views</p><h2>One name, one active delivery path</h2><p class="lead-text">A symlink hub can make local discovery convenient, but it is only one delivery mechanism. Some tools follow links, some runtimes require committed files, and hosted agents may need a plugin or synced copy.</p><table><thead><tr><th>Delivery mechanism</th><th>Use when</th><th>Risk to manage</th></tr></thead><tbody><tr><td><strong>Symlink</strong></td><td>A local tool has been tested to follow the link.</td><td>Broken targets, unsupported discovery, remote/cloud isolation.</td></tr><tr><td><strong>Committed file</strong></td><td>A team or hosted runtime must receive the asset with the project.</td><td>Drift if it is copied from another source without an update rule.</td></tr><tr><td><strong>Generated copy</strong></td><td>A tool requires a different package shape or native wrapper.</td><td>Unclear ownership; document the canonical source and regeneration command.</td></tr><tr><td><strong>Native/platform configuration</strong></td><td>The tool owns settings, MCP connections, memory, or plugins.</td><td>Configuration may not be portable or visible in the repository.</td></tr></tbody></table></div></section>
+    <section class="band">
+      <div class="wrap">
+        <p class="section-label">Use the skills</p>
+        <h2>Ask for the job you need done</h2>
+        <p class="lead-text">Use these with an assistant that can access your files and has the skills available. The skills carry the detailed steps.</p>
+        <div class="card-grid">
+          <article class="card">
+            <h3>Find and organize what you have</h3>
+            <p>Ask for an <strong>AI asset audit</strong>. The auditor finds your skills and MCP servers, flags duplicates and broken links, and proposes a cleanup plan for you to review before it changes files.</p>
+            <p><a href="skills/ai-asset-auditor/SKILL.md" data-local-href="../skills/ai-asset-auditor/SKILL.md">Read the auditor skill</a></p>
+          </article>
+          <article class="card">
+            <h3>Make selected skills available locally</h3>
+            <p>Ask the <strong>skill linker</strong> to make selected project skills available in your local skills folder. It reports name conflicts and leaves the original skills in place.</p>
+            <p><a href="skills/skill-linker/SKILL.md" data-local-href="../skills/skill-linker/SKILL.md">Read the linker skill</a></p>
+          </article>
+          <article class="card">
+            <h3>Customize a shared skill safely</h3>
+            <p>Ask for the <strong>override safeguard</strong> before changing a team or vendor skill. It guides the assistant to check who owns it, make your changes in a personal copy, and update the intended local link. This is guidance for the assistant, not an automatic file lock.</p>
+            <p><a href="skills/skill-override-safeguard/SKILL.md" data-local-href="../skills/skill-override-safeguard/SKILL.md">Read the safeguard skill</a></p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    <section><div class="wrap"><p class="section-label">Collisions</p><h2>Never let duplicate names choose silently</h2><p>Two repositories may ship a skill with the same folder or frontmatter name. Do not overwrite an existing tool-facing entry without confirmation.</p><ol class="steps"><li>Show the existing target and the proposed target.</li><li>Prefer a unique or organization-prefixed name if both skills need to remain active.</li><li>If one is an intentional override, record the canonical source and re-point the one active delivery path.</li><li>When precedence is undocumented, test the actual tool rather than assuming project wins over global.</li></ol><div class="callout amber"><strong>Safe default:</strong> one active skill name per tool-facing namespace. Duplicates should be deliberate, visible, and explainable.</div></div></section>
-
-    <section class="band"><div class="wrap"><p class="section-label">Overrides</p><h2>Copy → edit → re-point</h2><p class="lead-text">Never edit a vendor or team skill directly inside its shared checkout. A pull or package update can overwrite the change and leave untracked drift.</p><div class="card-grid"><article class="card"><h3>1. Copy</h3><p>Copy the whole skill folder into your personal namespace, including scripts, references, and assets.</p></article><article class="card"><h3>2. Edit</h3><p>Make the change in the personal copy and keep the upstream checkout clean.</p></article><article class="card"><h3>3. Re-point</h3><p>Point the tool-facing entry at the personal copy. Keep the original name when the override is intentional.</p></article></div><pre><span class="code-path">~/AI Assets/vendor-org/repo/skills/fiddlewidget/</span>
-<span class="code-path">~/AI Assets/your-username/fiddlewidget/</span>             <span class="code-comment"># edited copy</span>
-
-<span class="code-path">~/.agents/skills/fiddlewidget</span> <span class="code-arrow">→</span> <span class="code-path">~/AI Assets/your-username/fiddlewidget/</span></pre></div></section>
-
-    <section><div class="wrap"><p class="section-label">Audit before action</p><h2>Read first, then propose a change</h2><ol class="steps"><li>Discover skills, MCP configuration, symlinks, aliases, and git remotes read-only.</li><li>Flag duplicates, broken targets, real copies, and unsupported layouts.</li><li>Present the full plan, including every move, copy, delete, or link change.</li><li>Ask for confirmation before changing the filesystem.</li></ol><p>Use the <a href="https://github.com/starryeyez024/local-ai-asset-organization/tree/main/skills/ai-asset-auditor">ai-asset-auditor</a> for this workflow and the <a href="https://github.com/starryeyez024/local-ai-asset-organization/tree/main/skills/skill-linker">skill-linker</a> for selective local links.</p></div></section>
-    <section class="band"><div class="wrap"><p class="section-label">Bootstrap and configuration</p><h2>Let native files point to the shared setup</h2><p class="lead-text">A tool-native <code class="inline">CLAUDE.md</code> can point Claude Code to the canonical <code class="inline">AGENTS.md</code>. The TOML file belongs beside the canonical instructions as machine configuration; it gives scripts and setup helpers a stable place to read paths, but Claude Code does not automatically interpret arbitrary TOML as instructions.</p><div class="code-grid"><div><h3>Claude bootstrap</h3><pre><span class="code-comment"># ~/.claude/CLAUDE.md</span>
-<span class="code-key">Read and follow</span>:
-  <span class="code-path">~/.config/ai-tools/AGENTS.md</span>
-
-<span class="code-key">Use machine paths from</span>:
-  <span class="code-path">~/.config/ai-tools/ai-tools.toml</span></pre></div><div><h3>Canonical machine configuration</h3><pre><span class="code-comment"># ~/.config/ai-tools/ai-tools.toml</span>
-<span class="code-section">[directories]</span>
-<span class="code-key">install_dir</span> = <span class="code-string">"/absolute/path/to/AI Assets"</span>
-<span class="code-key">symlinks_dir</span> = <span class="code-string">"/absolute/path/to/.agents/skills"</span></pre></div></div><div class="callout amber"><strong>Important:</strong> the example uses the repository’s actual configuration keys. Treat the TOML as a contract for your scripts and adapters; keep private paths, credentials, and personal context out of a shareable repository.</div></div></section>
+    <section>
+      <div class="wrap">
+        <p class="section-label">Your part</p>
+        <h2>Review the choices that need your judgment</h2>
+        <p class="lead-text">Tell the assistant which project and tools matter to you. If it finds two skills with the same name or proposes moving files, choose the version you want and review the plan before approving changes. Then check the result in the tool that should use the asset.</p>
+        <div class="callout green"><strong>A good first request:</strong> “Use the AI asset auditor to show me where my skills and MCP servers live, flag duplicates or broken links, and propose a cleanup plan for me to review.”</div>
+        <p>For the underlying storage model, see the <a href="index.html">overview</a>. For differences between local tools and hosted runtimes, use the <a href="tool-compatibility.html">compatibility guide</a>.</p>
+      </div>
+    </section>
   </main>
-  <footer><div class="wrap">Next: review the <a href="tool-compatibility.html">tool compatibility matrix</a>.</div></footer>
+
+  <footer><div class="wrap">Next: check <a href="tool-compatibility.html">which delivery methods your tools support</a>.</div></footer>
+  <script>
+    // Source checkout keeps skills/ beside pages/; the published site places both at its root.
+    if (location.pathname.includes('/pages/')) {
+      document.querySelectorAll('a[data-local-href]').forEach(link => {
+        link.href = link.dataset.localHref;
+      });
+    }
+  </script>
 </body>
 </html>
