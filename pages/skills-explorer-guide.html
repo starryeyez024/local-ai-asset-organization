@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Assets Explorer Guide | AI Asset Organization</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="https://static.redhat.com/libs/redhat/redhat-font/latest/webfonts/red-hat-font.min.css">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <nav class="site-nav" aria-label="Primary navigation"><div class="wrap site-nav-inner"><span class="site-brand">AI Asset Organization</span><div class="site-links"><a href="index.html">Overview</a><a href="agentic-setup.html">Agentic setup</a><a href="asset-organization.html">Asset organization</a><a href="tool-compatibility.html">Compatibility</a><a href="skills-explorer-guide.html" aria-current="page">Skills explorer</a></div></div></nav>
+
+  <header class="hero"><div class="wrap hero-grid"><div><p class="eyebrow">Guide 4 · Skill catalog</p><h1>Find a skill and trace it to its source</h1><p class="lede">AI Assets Explorer lets you browse skills from a configured local directory. It displays a catalog of the <code class="inline">SKILL.md</code> files. Use your agent or other tools separately to install or run a skill.</p></div><div class="hero-image"><img src="images/skills-explorer-catalog.svg" alt="Illustrated AI Assets Explorer catalog with a search field, filters, and skill cards."></div></div></header>
+
+  <main>
+    <section>
+      <div class="wrap">
+        <p class="section-label">What it is</p>
+        <h2>Search your catalog</h2>
+        <p class="lead-text">The explorer reads <code class="inline">skills.json</code> to show searchable names, descriptions, capability groupings, and source repositories. Each skill’s <code class="inline">SKILL.md</code> and supporting files stay in its source folder.</p>
+        <div class="card-grid">
+          <article class="card"><h3>Browse</h3><p>Search by name, description, source grouping, or trigger text to find a relevant skill.</p></article>
+          <article class="card"><h3>Filter by source</h3><p>Use the <strong>Source repository</strong> filter to narrow the catalog to labels such as <code class="inline">ixd-firefly</code> or <code class="inline">tailwind</code>.</p></article>
+          <article class="card"><h3>Browse without changing files</h3><p>Browsing leaves skills unchanged and does not install or run them. Each agent still has its own rules for finding skills.</p></article>
+        </div>
+        <figure>
+          <img class="guide-figure" src="images/skills-explorer-browse.png" width="1958" height="1360" loading="lazy" alt="AI Assets Explorer Browse Skills view with filters on the left and expandable skill cards, tags, and source repository details on the right.">
+          <figcaption class="muted">A local Browse Skills snapshot. Skill counts change when the catalog is regenerated.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="band"><div class="wrap"><p class="section-label">Source files</p><h2>Keep changes in the source skill</h2><p class="lead-text">The generator reads each resolved <code class="inline">SKILL.md</code> and writes catalog data to <code class="inline">skills-explorer/skills.json</code>. If the catalog differs from the source, correct the source skill or generator and regenerate it. The local <code class="inline">skills-local.json</code> audit file contains absolute paths, is ignored by Git, and should never be published.</p><figure><img class="guide-figure" src="images/skills-explorer-update.svg" alt="Illustrated three-step flow from an edited skill folder, through catalog generation, to the published explorer."><figcaption class="muted">The catalog is generated from local skills and points back to their source files.</figcaption></figure></div></section>
+
+    <section><div class="wrap"><p class="section-label">Setup</p><h2>Set it up locally</h2><ol class="steps"><li>Clone this project or open the working copy that contains <code class="inline">skills-explorer/</code>.</li><li>From that directory, run <code class="inline">make regen</code>. The equivalent direct command is <code class="inline">python3 generate-skills-json.py</code>.</li><li>Run <code class="inline">make serve</code> for the local preview server, or use the repository’s normal static-site preview workflow.</li><li>Open <code class="inline">http://localhost:8790</code> in your browser. On the published site, <a href="../skills-explorer/index.html">open the shareable catalog</a>. The site navigation opens this guide.</li></ol><div class="callout amber"><strong>Source directory:</strong> the generator uses the skills folder in your setup configuration, the same folder as the linker. Without a configuration file, it scans <code class="inline">~/.agents/skills</code>. Set <code class="inline">SKILLS_ROOT</code> to scan a different folder for one run.</div></div></section>
+
+    <section class="band"><div class="wrap"><p class="section-label">Update workflow</p><h2>Change the skill, then refresh the index</h2><ol class="steps"><li>For a skill you maintain, edit its source repository, including <code class="inline">SKILL.md</code> and supporting files. Update managed packages through their installer; their caches are outside this catalog’s default scope.</li><li>Run <code class="inline">cd skills-explorer &amp;&amp; make regen</code>.</li><li>Review the generated <code class="inline">skills.json</code> and open the explorer to confirm the name, description, and grouping.</li><li>Commit the source skill in its repository and the shareable <code class="inline">skills.json</code> in this repository. Keep <code class="inline">skills-local.json</code> on the local machine.</li></ol><p>GitLab Pages publishes the shareable catalog. The local Audit Skills view and source-file action require the ignored local inventory and preview server. Publishing the catalog does not make local filesystem skills available to a cloud agent.</p></div></section>
+
+    <section><div class="wrap"><p class="section-label">Boundaries</p><h2>What needs a separate tool</h2><div class="callout amber"><strong>Catalog coverage:</strong> the generator scans one configured skill directory. Check marketplace registries, other tools’ folders, and runtime enablement separately. A marketplace skill missing from the catalog may be installed elsewhere. Leave managed files in place instead of linking their caches just to include them here.</div><div class="code-grid"><article class="card"><h3>Agent discovery</h3><p>Configure skill discovery in Cursor, Claude Code, Codex CLI, or ChatGPT Work Local. The Explorer cannot do that for you. Check the <a href="tool-compatibility.html">compatibility matrix</a> for tool-facing paths and runtime constraints.</p></article><article class="card"><h3>Installation</h3><p>Use a separate setup workflow to create symlinks, copy folders, register plugins, or configure MCP. The Explorer makes none of those changes.</p></article><article class="card"><h3>Skill maintenance</h3><p>Keep descriptions in the source skill’s metadata, and procedures and implementation details in its tracked folder.</p></article><article class="card"><h3>Running a skill</h3><p>Opening a card does not run its scripts. The local source-file button asks the preview server to show an inventoried file in your file manager. Use your configured agent or tool to review and run the skill.</p></article></div></div></section>
+  </main>
+  <footer><div class="wrap">Next: <a href="asset-organization.html">organize the assets</a>, review the <a href="tool-compatibility.html">compatibility matrix</a>, or run the local explorer at <code class="inline">http://localhost:8790</code>.</div></footer>
+  <script>
+    // The source tree keeps pages/ beside skills-explorer/; Pages publishes both at one level.
+    if (!location.pathname.includes('/pages/')) {
+      document.querySelectorAll('a[href="../skills-explorer/index.html"]').forEach(link => {
+        link.href = 'skills-explorer/index.html';
+      });
+    }
+  </script>
+</body>
+</html>

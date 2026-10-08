@@ -2,72 +2,62 @@
 """
 skill-linker: Selective symlink creation for AI project skills.
 
-Creates symlinks from individual skills in an AI project directory into
-~/.agents/skills, with fuzzy matching on skill names.
+Creates symlinks from individual skills in an AI project directory into the
+configured skill hub.
 
 Usage:
-  skill-linker <project-name> [skill1] [skill2] ...
-  skill-linker <project-name>  # interactive mode
-  skill-linker --force <project-name> [skill1] [skill2] ...  # replace existing symlinks
+  python3 skills/skill-linker/skill-linker.py <project-name> [skill1] [skill2] ...
+  python3 skills/skill-linker/skill-linker.py <project-name>  # interactive mode
+  python3 skills/skill-linker/skill-linker.py --force <project-name> [skill1] [skill2] ...
 """
 
-import os
 import sys
-import json
-import re
-import subprocess
+import argparse
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 import difflib
+from asset_config import default_config_path, read_directories
 
 
 class SkillLinker:
     def __init__(self, config_path: Optional[Path] = None):
         """Initialize with config file location."""
-        self.config_path = config_path or Path.home() / ".config" / "ai-tools" / "ai-tools.toml"
+        self.config_path = Path(config_path).expanduser() if config_path else default_config_path()
         self.config = self._read_config()
         self.install_dir = Path(self.config["install_dir"]).expanduser()
         self.symlinks_dir = Path(self.config["symlinks_dir"]).expanduser()
 
     def _read_config(self) -> Dict[str, str]:
-        """Read and parse ai-tools.toml config file."""
+        """Read the shared setup configuration."""
         if not self.config_path.exists():
             self._error(f"Config file not found: {self.config_path}")
-            self._error("Create ~/.config/ai-tools/ai-tools.toml with:")
+            self._error("Create ~/.config/agent-tools/agent-config.toml with these directories:")
             self._error("""
 [directories]
-install_dir = "~/AI Tools"
-symlinks_dir = "~/.agents/skills"
+install_dir = "/absolute/path/to/asset-root"
+symlinks_dir = "/absolute/path/to/.agents/skills"
 """)
             sys.exit(1)
 
-        config = {"install_dir": "~/AI Tools", "symlinks_dir": "~/.agents/skills"}
         try:
-            with open(self.config_path, "r") as f:
-                for line in f:
-                    line = line.strip()
-                    if "=" in line and not line.startswith("["):
-                        key, value = line.split("=", 1)
-                        key = key.strip()
-                        value = value.strip().strip('"')
-                        if key in ["install_dir", "symlinks_dir"]:
-                            config[key] = value
-        except Exception as e:
+            return read_directories(self.config_path)
+        except ValueError as e:
             self._error(f"Error reading config: {e}")
             sys.exit(1)
-
-        return config
 
     def _discover_skills(self, project_path: Path) -> Dict[str, Path]:
         """
         Scan project for skills (directories containing SKILL.md).
         Returns dict: {skill_name: skill_folder_path}
         
-        Supports two structures:
+        Supports a single root SKILL.md, or two multi-skill structures:
         1. skills/*/SKILL.md (organized in skills/ subdirectory)
         2. */SKILL.md (skills at root level)
         """
         skills = {}
+
+        if (project_path / "SKILL.md").is_file():
+            return {project_path.name: project_path}
         
         # First, try organized structure: skills/*/SKILL.md
         skills_dir = project_path / "skills"
@@ -75,7 +65,7 @@ symlinks_dir = "~/.agents/skills"
             for skill_folder in skills_dir.iterdir():
                 if skill_folder.is_dir():
                     skill_md = skill_folder / "SKILL.md"
-                    if skill_md.exists():
+                    if skill_md.is_file():
                         skills[skill_folder.name] = skill_folder
         
         # If no organized skills found, try root-level structure: */SKILL.md
@@ -83,7 +73,7 @@ symlinks_dir = "~/.agents/skills"
             for item in project_path.iterdir():
                 if item.is_dir() and not item.name.startswith("."):
                     skill_md = item / "SKILL.md"
-                    if skill_md.exists():
+                    if skill_md.is_file():
                         skills[item.name] = item
 
         return skills
@@ -110,13 +100,11 @@ symlinks_dir = "~/.agents/skills"
                 # Exact match
                 resolved[requested] = available_skills[requested]
             else:
-                # Try fuzzy match
+                # Suggest close names, but never link a different skill silently.
                 fuzzy = self._fuzzy_match(requested, available_names)
                 if fuzzy:
-                    self._log(f"  '{requested}' → fuzzy matched to '{fuzzy}'")
-                    resolved[fuzzy] = available_skills[fuzzy]
-                else:
-                    unmatched.append(requested)
+                    self._log(f"  '{requested}' was not found. Did you mean '{fuzzy}'?")
+                unmatched.append(requested)
 
         return resolved, unmatched
 
@@ -137,12 +125,12 @@ symlinks_dir = "~/.agents/skills"
         """
         try:
             if symlink_path.exists() or symlink_path.is_symlink():
+                if not symlink_path.is_symlink():
+                    self._log(f"  ⚠ {symlink_path.name} is real content, not a symlink — skipping")
+                    return False
                 if not force:
                     existing_target = self._check_existing_symlink(symlink_path)
-                    if existing_target == "REAL_DIR":
-                        self._log(f"  ⚠ {symlink_path.name} is a real directory, not a symlink — skipping")
-                        return False
-                    elif existing_target == str(target_path):
+                    if symlink_path.resolve() == target_path.resolve():
                         self._log(f"  ✓ {symlink_path.name} already points to correct target")
                         return True
                     else:
@@ -169,24 +157,29 @@ symlinks_dir = "~/.agents/skills"
         """Print error message to stderr."""
         print(f"✗ {message}", file=sys.stderr)
 
-    def run(self, project_name: str, requested_skills: List[str], force: bool = False) -> int:
+    def run(self, project_name: str, requested_skills: List[str], force: bool = False, dry_run: bool = False) -> int:
         """
         Main execution logic.
         Returns 0 on success, 1 on failure.
         """
         # Phase 1: Locate project
-        project_path = self.install_dir / project_name
-        if not project_path.exists():
+        source = Path(project_name).expanduser()
+        project_path = (self.install_dir / source).resolve()
+        if not source.is_absolute() and not project_path.is_relative_to(self.install_dir.resolve()):
+            self._error("Relative project paths must stay inside the install directory. Use an explicit absolute path for an existing repository elsewhere.")
+            return 1
+        if not project_path.is_dir():
             self._error(f"Project not found: {project_path}")
             self._error(f"Install directory: {self.install_dir}")
             return 1
 
+        self._log(f"Configuration: {self.config_path}")
         self._log(f"📁 Project: {project_path}")
 
         # Phase 2: Discover skills
         available_skills = self._discover_skills(project_path)
         if not available_skills:
-            self._error(f"No skills found in {project_path}/skills/")
+            self._error(f"No SKILL.md found at {project_path}, skills/*/, or */.")
             return 1
 
         self._log(f"📚 Found {len(available_skills)} skill(s): {', '.join(sorted(available_skills.keys()))}")
@@ -209,11 +202,31 @@ symlinks_dir = "~/.agents/skills"
             resolved_skills, unmatched = self._resolve_skill_names(requested_skills, available_skills)
 
             if unmatched:
-                self._error(f"Skills not found (or fuzzy-matched): {', '.join(unmatched)}")
+                self._error(f"Skills not found: {', '.join(unmatched)}. No links changed.")
+                return 1
 
             if not resolved_skills:
                 self._error("No skills to link.")
                 return 1
+
+        # Report conflicts before making any change, including in preview mode.
+        conflicts = []
+        for name, target in resolved_skills.items():
+            link = self.symlinks_dir / name
+            if link.is_symlink():
+                if link.resolve() != target.resolve() and not force:
+                    conflicts.append(f"{link} already points to {link.readlink()}; use --force only for an intended replacement")
+            elif link.exists():
+                conflicts.append(f"{link} contains real content and will not be replaced")
+        if conflicts:
+            for conflict in conflicts:
+                self._error(conflict)
+            return 1
+        if dry_run:
+            for name, target in sorted(resolved_skills.items()):
+                self._log(f"Would link: {self.symlinks_dir / name} -> {target}")
+            self._log("Preview only; no links changed.")
+            return 0
 
         self._log(f"\n🔗 Linking {len(resolved_skills)} skill(s):")
 
@@ -235,26 +248,21 @@ symlinks_dir = "~/.agents/skills"
 
 
 def main():
-    if len(sys.argv) < 2:
-        print(__doc__)
-        sys.exit(1)
-
-    force = False
-    args = sys.argv[1:]
-    
-    if args[0] == "--force":
-        force = True
-        args = args[1:]
-    
-    if not args:
-        print(__doc__)
-        sys.exit(1)
-
-    project_name = args[0]
-    requested_skills = args[1:] if len(args) > 1 else []
-
-    linker = SkillLinker()
-    exit_code = linker.run(project_name, requested_skills, force=force)
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--config", type=Path, help="Use a specific setup TOML file")
+    parser.add_argument("--target-dir", type=Path, help="Link into a verified native tool directory instead of the configured hub")
+    parser.add_argument("--dry-run", action="store_true", help="Preview links without changing files")
+    parser.add_argument("--force", action="store_true", help="Replace conflicting symlinks; never replace real content")
+    parser.add_argument("project", help="Project relative to install_dir, or an absolute path to an existing source")
+    parser.add_argument("skills", nargs="*", help="Exact skill names, or all; omit to choose interactively")
+    args = parser.parse_args()
+    linker = SkillLinker(config_path=args.config)
+    if args.target_dir is not None:
+        target = args.target_dir.expanduser()
+        if not target.is_absolute():
+            parser.error("--target-dir must be an absolute path")
+        linker.symlinks_dir = target
+    exit_code = linker.run(args.project, args.skills, force=args.force, dry_run=args.dry_run)
     sys.exit(exit_code)
 
 

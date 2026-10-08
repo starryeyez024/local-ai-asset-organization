@@ -1,8 +1,8 @@
 ---
 name: skill-override-safeguard
 description: >
-   CRITICAL GUARDRAIL: Must be consulted before modifying, editing, patching, or updating
-   ANY existing agent skill, vendor package, or team-shared asset on disk.
+  Protect team and vendor skills from local drift. Use before modifying a
+  shared skill or repointing its local symlink to a personal override.
 ---
 
 # Skill Override Safeguard
@@ -38,38 +38,17 @@ personal namespace.
 
 ## Procedure
 
-1. **Copy the whole skill folder** (not just `SKILL.md` — every file inside the skill
-   directory: scripts, references, assets) to a personal fork location under your
-   own username namespace, treating it exactly like you forked the upstream repo
-   yourself (even if no actual git fork/remote exists yet):
-   ```
-   ~/AI Assets/<your-git-username>/<repo-name>/
-   ```
-   There is no dedicated `overrides/` folder — the override lives as a personal
-   fork, organized the same as any other personal repo under your username.
-   Example: overriding
-   `~/AI Assets/org-a/project-name/skills/example-skill/`
-   means copying the `example-skill` folder to
-   `~/AI Assets/<your-git-username>/example-skill/`.
+For installer-managed packages, do not edit the cache or installed copy in place. Record the package ID, version, installer, and scope. Create an explicit personal fork from the upstream source, then use the target tool's supported controls to select it or disable the managed version where permitted. Repointing a hub link alone does not disable a plugin. Keep required team packages under team control, and preserve shared links needed by other tools.
 
-2. **Make the requested edit in the copy**, never in the original. Leave the original
-   team/vendor clone untouched and clean (`git status` should show nothing).
+1. **Identify ownership.** Check the Git remote and local checkout before changing a team or vendor skill. A path alone is a useful clue, but it does not prove who owns the repository. If the checkout is your own personal repository, edit it normally.
 
-3. **Re-point the `~/.agents/skills/<name>` symlink** at the new override location
-   instead of the original — the symlink name itself does NOT change, only its
-   target:
-   ```bash
-   rm ~/.agents/skills/<name>
-   ln -s "~/AI Assets/<your-git-username>/<repo-name>" ~/.agents/skills/<name>
-   ```
-   Only `~/.agents/skills/<name>` needs repointing — `~/.claude/skills` is a single
-   symlink to `~/.agents/skills` and follows through automatically. Cursor and Codex
-   CLI read `~/.agents/skills` natively, so no further action is needed for them.
+2. **Copy the whole skill folder** into a personal repository under `~/AI Assets/<your-git-username>/<repo-name>/skills/<skill-name>/`. Include scripts, references, and assets. Keep the original team or vendor checkout untouched. Use a distinct personal repository folder if the name would collide with an existing checkout.
 
-4. **Never leave two active copies of the same skill name.** After repointing, the
-   original team/vendor version is no longer reachable through
-   `~/.agents/skills/<name>` — that's intentional. Do not create a second symlink
-   elsewhere with the same skill name pointing at the original.
+3. **Edit and verify the personal copy.** Confirm its `SKILL.md` and supporting files work together. Record where the copy came from and how you will review upstream changes.
+
+4. **Re-point only the intended local delivery path.** Show the existing link and proposed target first. If the user wants this override active in the configured skills hub, use the bundled skill linker with `--force` and the personal repository path. `--force` replaces an existing symlink without a prompt; it never replaces real files or directories. Check other tool roots separately, because a change to `~/.agents/skills` does not guarantee a change in every tool or runtime.
+
+5. **Verify discovery.** Resolve the new link, confirm it contains the edited `SKILL.md`, and test the intended tool. Keep same-name copies deliberate and documented; project, user, and platform scopes may have different precedence.
 
 ## What this does NOT guarantee
 

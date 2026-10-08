@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Asset Organization | AI Asset Organization</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="https://static.redhat.com/libs/redhat/redhat-font/latest/webfonts/red-hat-font.min.css">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="wrap site-nav-inner">
+      <span class="site-brand">AI Asset Organization</span>
+      <div class="site-links">
+        <a href="index.html">Overview</a>
+        <a href="agentic-setup.html">Agentic setup</a>
+        <a href="asset-organization.html" aria-current="page">Asset organization</a>
+        <a href="tool-compatibility.html">Compatibility</a>
+        <a href="skills-explorer-guide.html">Skills explorer</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Guide 2 · Asset organization</p>
+        <h1>Know which copy to maintain</h1>
+        <p class="lede">Marketplace plugins, cloned repositories, and custom scripts can leave your AI assets scattered across folders. Use this approach to organize them and keep track of updates. You choose what stays active and review any cleanup before it happens.</p>
+      </div>
+      <div class="hero-image">
+        <img src="images/confusion.png" alt="Two identical Spider-Man characters pointing at each other in confusion.">
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="wrap">
+        <p class="section-label">The problem</p>
+        <h2>AI assets spread across tools</h2>
+        <p class="lead-text">Copies drift, links break, and updates can erase local changes. Knowing who maintains an asset and how it gets updated helps you choose which copy each tool should use.</p>
+        <p>Ask an assistant to check one asset or audit the whole setup. It can inspect the folders and discovery rules for you.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <p class="section-label">The idea</p>
+        <h2>Link skills from repositories you maintain</h2>
+        <p class="lead-text">The original skill stays in its project. A local skills folder can point to the skills you want your tools to use.</p>
+        <div class="diagram root-diagram">
+          <p class="diagram-title">Repository folders and links for your tools</p>
+          <h3><code class="inline">~/AI Assets/</code>: maintained repository sources</h3>
+          <pre><span class="tree">data-org/</span>
+<span class="tree-mark">└── </span><span class="tree">repo-one/</span>
+<span class="tree-mark">    └── </span><span class="tree">skills/</span>
+<span class="tree-mark">        └── </span><span class="tree">concaten-gator/</span>
+<span class="tree-mark">            └── </span><span class="tree-file">SKILL.md</span>
+<span class="tree pink">platform-org/</span>
+<span class="tree-mark">└── </span><span class="tree pink">sub-group/</span>
+<span class="tree-mark">    └── </span><span class="tree pink">repo-two/</span>
+<span class="tree-mark">        └── </span><span class="tree pink">skills/</span>
+<span class="tree-mark">            └── </span><span class="tree pink">meeting-maxi/</span>
+<span class="tree-mark">                └── </span><span class="tree-file">SKILL.md</span>
+<span class="tree green">your-username/</span>
+<span class="tree-mark">└── </span><span class="tree green">repo-three/</span>
+<span class="tree-mark">    └── </span><span class="tree green">skills/</span>
+<span class="tree-mark">        └── </span><span class="tree green">build-automation/</span>
+<span class="tree-mark">            └── </span><span class="tree-file">SKILL.md</span></pre>
+          <div class="root-compare-arrow-vert" aria-hidden="true"><span class="glyph">↓</span><span class="caption">linked to a tested local skills hub</span></div>
+          <h3><code class="inline">~/.agents/skills/</code>: an example hub for links to selected skills</h3>
+          <pre>concaten-gator            <span class="tree-mark">→</span> <span class="tree">~/AI Assets/data-org/repo-one/skills/concaten-gator/</span>
+meeting-maxi              <span class="tree-mark">→</span> <span class="tree pink">~/AI Assets/platform-org/sub-group/repo-two/skills/meeting-maxi/</span>
+build-automation          <span class="tree-mark">→</span> <span class="tree green">~/AI Assets/your-username/repo-three/skills/build-automation/</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="marketplace-packages"><div class="wrap"><p class="section-label">Marketplace packages</p><h2>Let the installer manage its files</h2><p class="lead-text">Keep marketplace caches and generated installs where their package manager expects them. Record the package, source, version, scope, and update method alongside your repository sources.</p><p>A plugin can also come from a local repository. Its format tells you how it is packaged; check the installation record to find out who manages it. Before cleanup, look for the same skill in loose folders and preserve links that other tools still need. To customize a package, maintain your own fork and select it in the target tool.</p><p><a href="https://docs.getlola.dev/dev-guide/architecture/">Lola copies modules and generates assistant files</a>; <a href="https://code.claude.com/docs/en/discover-plugins">Claude Code manages plugins by installation scope</a>. Neither requires moving installed files into this repository layout.</p></div></section>
+
+    <section class="band" id="working-linker">
+      <div class="wrap">
+        <p class="section-label">Use the skills</p>
+        <h2>Ask for the job you need done</h2>
+        <p class="lead-text">Open this repository in an assistant that can access your local files. Ask it to read the skill linked below and follow its instructions for your project. The skill guides the assistant through the work, including checks in the tools you want to use.</p>
+        <div class="card-grid">
+          <article class="card">
+            <h3>Find and organize what you have</h3>
+            <p>Ask for an <strong>AI asset audit</strong>. The auditor finds your skills and MCP servers, flags duplicates and broken links, and proposes a cleanup plan for you to review before it changes files.</p>
+            <p><a href="skills/ai-asset-auditor/SKILL.md" data-local-href="../skills/ai-asset-auditor/SKILL.md">Read the auditor skill</a></p>
+          </article>
+          <article class="card">
+            <h3>Make selected skills available locally</h3>
+            <p>Ask the <strong>skill linker</strong> to make selected project skills available to the agents you name. It checks existing installations, previews the links, and verifies discovery in those tools. Your source files stay in their repository.</p>
+            <p><a href="skills/skill-linker/SKILL.md" data-local-href="../skills/skill-linker/SKILL.md">Read the linker skill</a></p>
+          </article>
+          <article class="card">
+            <h3>Customize a shared skill safely</h3>
+            <p>Ask for the <strong>override safeguard</strong> before changing a team or vendor skill. It tells the assistant to check ownership, edit a personal copy, and update the intended local link. The assistant must follow those instructions; the skill cannot lock files.</p>
+            <p><a href="skills/skill-override-safeguard/SKILL.md" data-local-href="../skills/skill-override-safeguard/SKILL.md">Read the safeguard skill</a></p>
+          </article>
+        </div>
+        <figure>
+          <img class="guide-figure" src="images/skill-linker-example.png" width="1616" height="858" loading="lazy" alt="Conversation showing a request to make the Humanizer skill available to local agents and the assistant’s response.">
+          <figcaption class="muted">Example: asking the skill linker to make Humanizer available to local agents.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <p class="section-label">Your part</p>
+        <h2>Choose what to keep and what to change</h2>
+        <p class="lead-text">Tell the assistant which project and tools matter to you. If it finds two skills with the same name or proposes moving files, choose the version you want and review the plan before approving changes. Then check the result in the tool that should use the asset.</p>
+        <div class="callout green"><strong>A good first request:</strong> “Use the AI asset auditor to show me where my skills and MCP servers live, flag duplicates or broken links, and propose a cleanup plan for me to review.”</div>
+        <p>For the folder layout, see the <a href="index.html">overview</a>. For differences between local tools and hosted runtimes, use the <a href="tool-compatibility.html">compatibility guide</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap">Next: check <a href="tool-compatibility.html">which delivery methods your tools support</a>.</div></footer>
+  <script>
+    // Source checkout keeps skills/ beside pages/; the published site places both at its root.
+    if (location.pathname.includes('/pages/')) {
+      document.querySelectorAll('a[data-local-href]').forEach(link => {
+        link.href = link.dataset.localHref;
+      });
+    }
+  </script>
+</body>
+</html>

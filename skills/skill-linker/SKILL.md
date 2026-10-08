@@ -1,208 +1,59 @@
 ---
 name: skill-linker
 description: >
-  Help create selective symlinks from a newly-downloaded AI asset project (with multiple skills) into
-  ~/.agents/skills directory. Instead of symlinking an entire project folder, this skill lets
-  you choose 1, some, or all skills from that project and symlink just the ones you want.
-  Manages the ~/.config/ai-tools.ai-tools.toml config file to remember your install and
-  symlink directories across uses.
+  Make selected repository skills available to local agents. Read the shared
+  setup configuration, inspect the source and target tools, preview the links,
+  then verify discovery in the intended runtime.
 ---
 
 # Skill Linker
 
-## Why this exists
+Use this skill to link repository skills without moving or editing their source files. The task is complete when the intended tool can find and use the selected skill, not just when a link exists.
 
-When you download a new project containing many skills (50, 100, or more), you typically only
-want to use a handful of them. Symlinking the entire project folder into `~/.agents/skills`
-makes all skills available at once, which clutters your namespace and wastes tool-discovery
-overhead. This skill solves that by:
+## Configuration
 
-1. Scanning a project for individual skills (supports both `skills/*/SKILL.md` and `*/SKILL.md` structures)
-2. Letting you select which ones to link
-3. Creating symlinks only for the skills you choose, directly into `~/.agents/skills`
-4. Storing your preferred directories in a config file so you don't have to type paths repeatedly
-
-## One-time setup
-
-The first time you run this skill, it will ask you for two directories:
-
-- **Install directory** (default: `~/AI Tools`) — where you download new projects
-- **Symlinks directory** (default: `~/.agents/skills`) — where symlinks should be created
-
-These get saved to `~/.config/ai-tools.ai-tools.toml`. You only enter these once; later
-runs reuse them. You can edit the config file by hand if your preferences change, or ask this
-skill to re-configure them.
-
-## How to use this skill
-
-### Quick start: Direct skill names
-
-If you know which skills you want, just name them directly:
-
-```bash
-skill-linker ktotten/local-ai-asset-organization ai-asset-auditor skill-override-safeguard
-```
-
-This creates symlinks for just those two skills. Done.
-
-### Fuzzy matching
-
-Typos are forgiven — the skill fuzzy-matches your input:
-
-```bash
-skill-linker project-x asset-audit   # Matches "ai-asset-auditor"
-skill-linker project-x override-safe # Matches "skill-override-safeguard"
-```
-
-### Interactive mode (explore and choose)
-
-If you run the skill without specifying skill names, it lists what's available and asks you to pick:
-
-```bash
-$ skill-linker ktotten/local-ai-asset-organization
-
-📁 Project: ~/AI Tools/ktotten/local-ai-asset-organization
-📚 Found 3 skill(s): ai-asset-auditor, skill-linker, skill-override-safeguard
-
-Which skills do you want to link? (space-separated names, or 'all')
-> ai-asset-auditor skill-override-safeguard
-
-🔗 Linking 2 skill(s):
-  ✓ ai-asset-auditor
-  ✓ skill-override-safeguard
-
-✅ Successfully linked 2/2 skill(s)
-```
-
-### Link all skills at once
-
-```bash
-skill-linker ktotten/local-ai-asset-organization all
-```
-
-Or in interactive mode, just type `all` when prompted.
-
-### Replace existing symlinks
-
-If you already have symlinks but want to update them to point to a different project:
-
-```bash
-skill-linker --force ktotten/local-ai-asset-organization skill-override-safeguard
-```
-
-The `--force` flag overwrites any existing symlinks without asking.
-
-## What this skill does NOT do
-
-- **Edit skills.** This skill only creates symlinks; it never modifies skill content.
-- **Move or copy files.** Everything stays in your install directory; only symlinks are created.
-- **Delete projects.** If you have leftover skills from an earlier run, this skill won't remove them.
-- **Manage `~/.agents/skills` beyond symlinks.** Real (non-symlink) content already there is left alone.
-- **Manage secrets or config values inside skills.** Each skill's own internal setup (MCP, etc.) is
-  their responsibility, not this skill's.
-
-## Warnings before you start
-
-- **Symlink name collisions.** If two different projects have a skill with the same name
-  (e.g. both have a `foo` skill), only one can be symlinked at a time under `~/.agents/skills/foo`.
-  If this happens, the skill will ask which project's version you prefer, or suggest renaming
-  one locally.
-- **Project folder names vs. remote names.** The skill uses your project's local folder name
-  (e.g. `project-a`) to create symlink targets, not the remote git name. If you've renamed
-  a cloned project locally, those symlinks will use the local name you chose.
-- **Uncommitted changes in projects.** The skill doesn't care whether a project has uncommitted
-  git changes — it will symlink regardless. But if a skill's code changes later, the symlink
-  will automatically reflect the new content (since it points to the live folder).
-
-## Supported Project Structures
-
-This skill works with two common project layouts:
-
-**Structure 1: Organized (skills in subdirectory)**
-```
-project-name/
-├── skills/
-│   ├── skill-a/
-│   │   └── SKILL.md
-│   ├── skill-b/
-│   │   └── SKILL.md
-│   └── skill-c/
-│       └── SKILL.md
-```
-Example: `ktotten/local-ai-asset-organization`
-
-**Structure 2: Root-level (skills at project root)**
-```
-project-name/
-├── skill-a/
-│   └── SKILL.md
-├── skill-b/
-│   └── SKILL.md
-├── skill-c/
-│   └── SKILL.md
-└── README.md
-```
-Example: `ktotten/ktotten-skills`
-
-The skill auto-detects which structure your project uses and scans accordingly.
-
-## Configuration file format
-
-`~/.config/ai-tools.ai-tools.toml`:
+Read `~/.config/agent-tools/agent-config.toml`. The linker and Explorer use the same settings:
 
 ```toml
 [directories]
-install_dir = "~/AI Tools"
-symlinks_dir = "~/.agents/skills"
+install_dir = "/absolute/path/to/asset-root"
+symlinks_dir = "/absolute/path/to/.agents/skills"
 ```
 
-Both paths support `~/` expansion. You can edit this file by hand at any time.
+For an existing setup, the script also reads `~/.config/ai-tools/ai-tools.toml` when the recommended file is absent. An explicit `--config /path/to/config.toml` takes precedence. If both files exist, the recommended path wins; inspect the configuration path printed by the script. Do not create a second configuration or migrate the user's files just to link one skill. Honor an explicitly selected configuration.
 
-## Common use cases
+On a new machine, agree on the repository root and skills folder with the user and create the configuration as part of setup. Use absolute paths. Python 3.11 or newer is required. Keep `asset_config.py` beside `skill-linker.py` when copying this skill.
 
-**Case 1: Link all skills from a new project**
-```
-User: "Link all skills from project-a"
-Skill: Discovers 50 skills, asks for confirmation, creates 50 symlinks
-```
+## Workflow
 
-**Case 2: Link just one skill**
-```
-User: "Link just the foo skill from project-a"
-Skill: Scans project-a, finds 50 skills, asks which one you mean (or finds "foo"), 
-       creates one symlink
-```
+1. **Identify the source and tools.** Locate the existing repository and confirm which local tools/projects should use the skill. Inspect native skill roots, managed plugins, and same-name skills before changing anything. A marketplace package stays under its installer’s control; use that tool’s install or enable controls for it.
+2. **Choose the source skill.** The script accepts a project relative to `install_dir`, or an explicit absolute path to an existing repository elsewhere. It supports a root `SKILL.md`, `skills/*/SKILL.md`, or immediate `*/SKILL.md` folders. Check for nested skills before linking a parent folder, and select individual folders if the runtime would discover them twice. Do not create a wrapper repository or relocate an existing checkout to satisfy the linker.
+3. **Preview the links.** Run the bundled script with `--dry-run`, using exact skill names or `all`. Show source, destination, and any conflict. Misspellings produce suggestions and no changes.
+4. **Apply the selected links.** Run the same command without `--dry-run` once the requested selection and destination are clear. An existing link to the same source is a no-op. Different targets require an intentional `--force` replacement; real files and directories are never overwritten. Preserve sources needed by other tools.
+5. **Connect the target tool.** Check the compatibility guide and the installed tool's native discovery paths. If it reads the configured hub, no additional link is needed. Otherwise use `--target-dir` to link only the selected skills into the tool's verified skills directory. Preserve existing directories and other skills; do not replace an entire native directory with a hub link. Hosted runtimes need their supported package or project delivery instead of local symlinks.
+6. **Verify in the intended runtime.** Resolve the links, confirm discovery from the relevant project, and try a representative invocation. Retire an obsolete route only after its replacement works and other tools' dependencies are checked. Report exactly what was verified; if you cannot inspect or invoke the target runtime, report that remaining check to the user.
 
-**Case 3: Update symlink for a skill**
-```
-User: "I already symlinked foo from project-a, but now I want project-b's version instead"
-Skill: Detects existing symlink at ~/.agents/skills/foo, asks to confirm the replacement,
-       updates the symlink target to project-b's foo
+## Commands
+
+Run from this repository's root. Replace the example path with the source repository you want to use:
+
+```bash
+python3 skills/skill-linker/skill-linker.py --dry-run /absolute/path/to/project all
+python3 skills/skill-linker/skill-linker.py /absolute/path/to/project all
 ```
 
-## Edge cases this skill handles carefully
+For a repository under `install_dir`, use its relative path and selected names:
 
-- **Nested skills in a project.** Some projects might have `skills/foo/skills/bar/SKILL.md`
-  (a skill-within-a-skill). The skill will detect this and ask whether you want to symlink
-  the parent (`foo`) or the nested child (`bar`), or both.
-- **No `SKILL.md` in a folder named like a skill.** The skill verifies that a folder
-  actually contains `SKILL.md` at the top level before treating it as a valid skill.
-- **Symlink already exists but points elsewhere.** The skill detects this and asks whether
-  to replace it, leave it alone, or report which project's version you're currently using.
-- **Project folder doesn't exist.** If you type a project name that doesn't exist in your
-  install directory, the skill tells you what it looked for and lists available projects
-  instead of guessing.
+```bash
+python3 skills/skill-linker/skill-linker.py your-username/your-project first-skill second-skill
+```
 
----
+Omit names to select interactively. For a repository with a root `SKILL.md`, the selectable name is the repository folder's name; `all` also selects it.
 
-## Summary: What you should know before starting
+When the target tool needs its own skills directory, preview that destination first:
 
-- This is a **safe, read-first, ask-often** skill. It discovers, presents a plan, waits for
-  confirmation, and only then creates symlinks. It never overwrites without asking.
-- **Symlinks are pointers.** They take up almost no disk space and automatically reflect
-  changes in the real folder. If you update a skill in your project later, the symlink
-  will see the new version immediately.
-- **One symlink name = one active skill.** If two projects have a skill with the same name,
-  you choose which one is reachable via `~/.agents/skills/<name>`.
-- **Your install directory stays clean.** This skill creates symlinks only; it never moves
-  or renames anything in your projects.
+```bash
+python3 skills/skill-linker/skill-linker.py --dry-run --target-dir ~/.claude/skills /absolute/path/to/project all
+```
+
+Use `--force` only after comparing the old and new targets for a deliberate override. For customization of a team or vendor skill, follow `skill-override-safeguard` before changing its source or delivery path.
