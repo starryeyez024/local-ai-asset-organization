@@ -7,7 +7,7 @@ Use Python 3.11 or newer. Locate the repository containing this skill and the
 active configuration from the preceding setup. For a standalone Explorer request,
 inspect the existing config first; do not migrate it. Inspect `SKILLS_ROOT` if set
 and resolve its conflict with the chosen config rather than scanning an unintended
-folder. The preparation helper requires an explicit config and rejects that override.
+folder. Pass the chosen configuration explicitly during guided setup; the helper also supports the recommended or legacy default configuration for direct use. It rejects the environment override to avoid scanning the wrong folder.
 
 Run the helper from the repository root, substituting the actual configuration:
 
@@ -49,6 +49,6 @@ session, or clearly report if the environment cannot retain it.
 
 At handoff, tell the user they can ask “open my Skills Explorer” or “refresh my
 skill catalog.” On either request, read their saved configuration, rerun the helper
-when a refresh is needed, and open or restart their local server. Never publish
-these catalogs as part of onboarding. Publication is a separate explicit request
-with a content review, since skill descriptions themselves may contain private work.
+when a refresh is needed, and open or restart their local server. Both catalog files stay local and are ignored by Git. This repository publishes
+guidance, skills, and a separate fictional demo catalog. Never copy `sample-skills.json` into a personal installation. Skill descriptions themselves may
+contain private work; do not copy the generated data into the published site.

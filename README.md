@@ -10,20 +10,18 @@ Open this checkout in an assistant with local file access and ask:
 
 > Read `skills/agent-setup/SKILL.md` and guide me through setting up my AI tools. Help me build my personal context, organize my assets, and open my Skills Explorer. Check what already works and prepare changes for review before applying them.
 
-The setup skill conducts a short context interview, connects your tools, uses the auditor and linker as needed, and prepares a local Explorer. You stay in one conversation. Progress is recorded privately so you can say “continue my setup” later. The guides explain the stages; the commands below are available for direct use and maintenance.
+The setup skill first inspects your configuration, known skill locations, and installed packages, then asks about tools or custom locations it could not establish. Those findings guide its setup recommendations. It conducts a short context interview, connects your tools, uses the auditor and linker for approved changes, and prepares a local Explorer. You stay in one conversation. Progress is recorded privately so you can say “continue my setup” later. The guides explain the stages; the commands below are available for direct use and maintenance.
 
 ## What is in this repository
 
 | Location | Purpose |
 | --- | --- |
-| [`pages/`](pages/index.html) | Four guides and the overview page for the published documentation site. |
+| [`pages/`](pages/index.html) | Overview, guides, and a [quick reference](pages/quick-reference.html) for the published documentation site. |
 | [`skills-explorer/`](skills-explorer/README.md) | Searchable skill catalog and local audit view. |
 | [`skills/agent-setup/`](skills/agent-setup/SKILL.md) | Guided onboarding: personal context interview, tool setup, asset audit and linking, and local Explorer launch. |
 | [`skills/skill-linker/`](skills/skill-linker/SKILL.md) | Agent instructions and a script for selectively linking skills from one project. |
 | [`skills/ai-asset-auditor/`](skills/ai-asset-auditor/SKILL.md) | Read-first inventory and migration planning procedure. |
 | [`skills/skill-override-safeguard/`](skills/skill-override-safeguard/SKILL.md) | Procedure for personal overrides of team or vendor skills. |
-
-The [documentation maintenance plan](PAGES-RESTRUCTURING-PLAN.md) records the design rationale. For current setup instructions, use the guides and commands below.
 
 ## Local configuration
 
@@ -60,9 +58,9 @@ Before changing a shared skill, read the [override safeguard](skills/skill-overr
 
 ## Explore the catalog
 
-During onboarding, agent-setup runs its `scripts/prepare-explorer.py` helper and opens the generated viewer in `~/.local/share/ai-assets-explorer/`. Refreshing this local catalog leaves the repository's checked-in example unchanged. See the [Explorer setup procedure](skills/agent-setup/references/explorer.md).
+During onboarding, agent-setup runs its `scripts/prepare-explorer.py` helper and opens the generated viewer in `~/.local/share/ai-assets-explorer/`. The repository contains the application code; each user’s catalog is generated locally and stays outside Git. See the [Explorer setup procedure](skills/agent-setup/references/explorer.md).
 
-For development or intentional changes to the repository's example catalog:
+To prepare and run a personal Explorer directly with an existing setup configuration:
 
 ```bash
 cd skills-explorer
@@ -70,7 +68,7 @@ make run
 # open http://localhost:8790
 ```
 
-`make run` reads `directories.symlinks_dir` from the same configuration as the linker, regenerates the catalog, and starts the local preview server. Without a configuration file, the standalone Explorer scans `~/.agents/skills`. Set `SKILLS_ROOT=/another/skills/directory` to scan a different directory. The checked-in `skills.json` contains shareable catalog data. Regeneration also writes an ignored `skills-local.json` with local paths for the **Audit Skills** view. That local file stays on the machine and must not be committed or published. See the [Explorer README](skills-explorer/README.md) for individual commands.
+`make run` reads `directories.symlinks_dir` from the same configuration as the linker, prepares the app and catalogs in `~/.local/share/ai-assets-explorer/`, and starts its local server. Use `CONFIG=/path/to/agent-config.toml` for another configuration or `EXPLORER_DIR=/path/to/local/explorer` for another output folder. Both generated JSON files stay local and are excluded from Git. GitLab Pages publishes the guides, skills, and an Explorer demo using only the fictional `sample-skills.json` catalog. See the [Explorer README](skills-explorer/README.md) for individual commands.
 
 The Explorer scans one directory, not plugin registries or every tool's skills roots. It does not establish which skills are enabled or running. Do not add links into managed plugin caches just to include them in the catalog.
 

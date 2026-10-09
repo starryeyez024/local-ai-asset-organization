@@ -1,22 +1,27 @@
 .PHONY: help regen serve run
 
 PORT ?= 8790
+PYTHON ?= python3
+EXPLORER_DIR ?= $(HOME)/.local/share/ai-assets-explorer
+CONFIG ?=
 
 help:
 	@echo "Skills Explorer -- available commands:"
 	@echo ""
-	@echo "  make regen   Regenerate skills.json from the configured skills folder (or \$$SKILLS_ROOT)"
+	@echo "  make regen   Prepare or refresh your local Explorer and catalog"
 	@echo "  make serve   Serve the site locally at http://localhost:$(PORT)"
 	@echo "  make run     Regenerate then serve (the usual 'just run it' command)"
 	@echo ""
 	@echo "Override the port: make serve PORT=8080"
-	@echo "Override the skills source: SKILLS_ROOT=/some/path make regen"
+	@echo "Select configuration: make run CONFIG=/path/to/agent-config.toml"
+	@echo "Select local output: make run EXPLORER_DIR=/path/to/local/explorer"
 
 regen:
-	python3 generate-skills-json.py
+	$(PYTHON) -B ../skills/agent-setup/scripts/prepare-explorer.py $(if $(CONFIG),--config "$(CONFIG)",) --output-dir "$(EXPLORER_DIR)"
 
 serve:
 	@echo "Serving at http://localhost:$(PORT) -- press Ctrl+C to stop"
-	python3 serve.py $(PORT)
+	$(PYTHON) -B "$(EXPLORER_DIR)/serve.py" $(PORT)
 
-run: regen serve
+run: regen
+	$(MAKE) serve

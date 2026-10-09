@@ -133,15 +133,21 @@ class SetupWorkflow(unittest.TestCase):
         return result
 
     def test_onboarding_prepares_and_refreshes_isolated_explorer(self):
-        published = (REPO / "skills-explorer/skills.json").read_bytes()
+        self.assertFalse((REPO / "skills-explorer/skills.json").exists())
         original = (self.source / "SKILL.md").read_bytes()
         self.run_linker("example/skills", "report")
         output = self.root / "local viewer"
         self.prepare_explorer(output)
+        self.assertFalse((output / "sample-skills.json").exists())
         catalog = json.loads((output / "skills.json").read_text())
         self.assertEqual(catalog["skillCount"], 1)
+        self.assertRegex(catalog["generatedAt"], r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00$")
+        self.assertNotIn("scannedDirectory", catalog)
+        local = json.loads((output / "skills-local.json").read_text())
+        self.assertEqual(local["scannedDirectory"], str(self.hub.resolve()))
+        self.assertEqual(local["generatedAt"], catalog["generatedAt"])
         self.assertEqual(catalog["skills"][0]["id"], "report")
-        for filename in ("serve.py", "index.html", "how-to-update.html"):
+        for filename in ("serve.py", "index.html", "about.html"):
             self.assertEqual((output / filename).read_bytes(),
                              (REPO / "skills-explorer" / filename).read_bytes())
         self.assertEqual(json.loads((output / "skills-local.json").read_text())
@@ -153,7 +159,7 @@ class SetupWorkflow(unittest.TestCase):
         self.assertEqual(json.loads((output / "skills.json").read_text())["skillCount"], 2)
         self.assertEqual((output / "my-notes.txt").read_text(), "keep")
         self.assertEqual((self.source / "SKILL.md").read_bytes(), original)
-        self.assertEqual((REPO / "skills-explorer/skills.json").read_bytes(), published)
+        self.assertFalse((REPO / "skills-explorer/skills.json").exists())
 
     def test_empty_catalog_is_valid_and_failed_refresh_preserves_it(self):
         self.hub.mkdir()
@@ -164,6 +170,36 @@ class SetupWorkflow(unittest.TestCase):
         self.config.write_text("invalid toml [[")
         self.prepare_explorer(output, expected=1)
         self.assertEqual((output / "skills.json").read_bytes(), previous)
+
+    def test_make_regen_uses_personal_output_and_explicit_config(self):
+        self.run_linker("example/skills", "report")
+        output = self.root / "personal explorer"
+        env = dict(os.environ)
+        env.pop("SKILLS_ROOT", None)
+        result = subprocess.run([
+            "make", "-C", str(REPO / "skills-explorer"), "regen",
+            f"CONFIG={self.config}", f"EXPLORER_DIR={output}",
+            f"PYTHON={sys.executable}",
+        ], capture_output=True, text=True, env=env)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertTrue((output / "serve.py").is_file())
+        self.assertEqual(json.loads((output / "skills.json").read_text())["skillCount"], 1)
+        self.assertFalse((REPO / "skills-explorer/skills.json").exists())
+
+    def test_generator_defaults_to_personal_data_directory(self):
+        self.run_linker("example/skills", "report")
+        spec = importlib.util.spec_from_file_location("fixture_generator", GENERATOR)
+        generator = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(generator)
+        env = dict(os.environ)
+        env.pop("SKILLS_ROOT", None)
+        with patch.object(Path, "home", return_value=self.root), \
+                patch.object(sys, "argv", [str(GENERATOR), "--config", str(self.config)]), \
+                patch.dict(os.environ, env, clear=True):
+            generator.main()
+        output = self.root / ".local/share/ai-assets-explorer"
+        self.assertEqual(json.loads((output / "skills.json").read_text())["skillCount"], 1)
+        self.assertFalse((REPO / "skills-explorer/skills.json").exists())
 
     def test_explorer_refuses_unmanaged_output_and_public_repository(self):
         output = self.root / "existing"

@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Assets Explorer</title>
-  <style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+<style>
     [hidden] { display: none !important; }
     :root {
       --rh-red: #ee0000;
@@ -49,18 +52,11 @@
       flex-wrap: wrap;
     }
 
-    header h1 {
-      font-size: 20px;
-      font-weight: 500;
+    header h1 { color: #a4fbea; font-family: "Luckiest Guy", cursive;
+      font-size: 23px;
+      font-weight: 400;
       white-space: nowrap;
     }
-
-    .header-stats {
-      font-size: 13px;
-      color: var(--rh-gray-300);
-    }
-
-    .header-stats strong { color: var(--rh-white); }
 
     #search-box {
       margin: 0;
@@ -221,6 +217,8 @@
       padding: 20px 24px;
       max-width: 900px;
     }
+
+    .results-count { color: #211d1d; font-size: .8rem; }
 
     .results-header {
       display: flex;
@@ -508,7 +506,7 @@
     .view-tab.active {
       color: var(--rh-white);
       text-decoration: underline;
-      text-decoration-thickness: 2px;
+      text-decoration-thickness: 1px;
       text-underline-offset: 5px;
     }
 
@@ -726,15 +724,19 @@
 
 <header>
   <h1>AI Assets Explorer</h1>
-  <span class="header-stats" id="header-stats"></span>
   <div class="view-tabs" id="view-tabs">
   <button class="view-tab active" data-view="browse">Browse Skills</button>
   <button class="view-tab" data-view="maintain" id="audit-tab">Audit Skills</button>
-  <a class="view-tab view-tab-link" href="how-to-update.html">About</a>
+  <a class="view-tab view-tab-link" href="about.html">About</a>
   </div>
 </header>
 
-<p style="margin:16px 24px;color:var(--rh-gray-700);">Snapshot of one configured skills directory. Marketplace installations and runtime enablement are not inventoried. <a href="how-to-update.html">About this catalog</a></p>
+
+<section id="catalog-notice" hidden role="status" style="margin:24px;max-width:720px;">
+  <h2>Prepare your local catalog</h2>
+  <p>The catalog could not be loaded. Ask your assistant to use the agent-setup skill to prepare or refresh your Skills Explorer, then open the local server address it provides.</p>
+  <p><a href="about.html">How local setup works</a></p>
+</section>
 
 <div id="browse-view">
   <div class="layout">
@@ -744,7 +746,7 @@
     </div>
     <main class="main">
       <div class="results-header">
-        <span id="results-count"></span>
+        <span id="results-count" class="results-count"></span>
         <label class="toggle-expand">
           <input type="checkbox" id="expand-skills"> Expand/Collapse Skills
         </label>
@@ -853,15 +855,20 @@
     // cache: "no-store" + a cache-busting query param, because python's
     // http.server sends no Cache-Control header, so browsers can silently
     // serve a stale skills.json from disk cache even on a normal reload.
-    let resp = await fetch(`skills-local.json?_=${Date.now()}`, { cache: "no-store" });
-    if (!resp.ok) {
-      resp = await fetch(`skills.json?_=${Date.now()}`, { cache: "no-store" });
+    for (const filename of ["skills-local.json", "skills.json", "sample-skills.json"]) {
+      const response = await fetch(`${filename}?_=${Date.now()}`, { cache: "no-store" });
+      if (response.ok) {
+        DATA = await response.json();
+        break;
+      }
     }
-    if (!resp.ok) throw new Error("Could not load the skills catalog");
-    DATA = await resp.json();
+    if (!DATA) throw new Error("Could not load the skills catalog");
+    if (DATA.catalogType === "demo") {
+      delete DATA.inventory;
+      delete DATA.inventoryStats;
+      document.querySelector("header h1").textContent = "AI Assets Explorer — Demo";
+    }
     document.getElementById("audit-tab").hidden = !Array.isArray(DATA.inventory);
-    document.getElementById("header-stats").innerHTML =
-      `<strong>${DATA.skillCount}</strong> skills &middot; <strong>${DATA.activeCount}</strong> active &middot; <strong>${DATA.stubCount}</strong> stubs`;
     // Computed once, over the full inventory, regardless of filters -- see
     // computeHomePrefix() for why this is intentionally static.
     homePathPrefix = computeHomePrefix(DATA.inventory || []);
@@ -875,6 +882,16 @@
     if (new URLSearchParams(window.location.search).get("view") === "audit" && Array.isArray(DATA.inventory)) {
       switchView("maintain");
     }
+  }
+
+  function refreshLabel() {
+    if (DATA.catalogType === "demo") return " · Sample catalog";
+    const date = new Date(DATA.generatedAt || "");
+    if (Number.isNaN(date.getTime())) return " · Last refreshed: unavailable";
+    return " · Last refreshed " + new Intl.DateTimeFormat(undefined, {
+      year: "numeric", month: "short", day: "numeric",
+      hour: "numeric", minute: "2-digit", timeZoneName: "short"
+    }).format(date);
   }
 
   function renderSidebar() {
@@ -982,6 +999,7 @@
     const list = document.getElementById("skills-list");
     list.innerHTML = "";
     let visibleCount = 0;
+    let visibleStubs = 0;
 
     for (const skill of DATA.skills) {
       const matchesFilters = matchesActiveFilters(skill);
@@ -989,7 +1007,10 @@
       const isStub = skill.status === "stub";
       const visible = matchesFilters && matchesSearch;
 
-      if (visible) visibleCount++;
+      if (visible) {
+        visibleCount++;
+        if (isStub) visibleStubs++;
+      }
 
       const card = document.createElement("details");
       card.className = `skill-card${isStub ? " stub" : ""}${!visible ? " hidden" : ""}`;
@@ -1055,8 +1076,11 @@
       list.appendChild(card);
     }
 
+    const countLabel = visibleCount === DATA.skillCount
+      ? `${visibleCount} skills`
+      : `${visibleCount} of ${DATA.skillCount} skills`;
     document.getElementById("results-count").textContent =
-      `Showing ${visibleCount} of ${DATA.skillCount} skills`;
+      `${countLabel} · ${visibleCount - visibleStubs} active · ${visibleStubs} stubs${refreshLabel()}`;
 
     if (visibleCount === 0) {
       const msg = document.createElement("div");
@@ -1215,7 +1239,7 @@
     }).join("");
 
     document.getElementById("maintain-results-count").textContent =
-      `Showing ${rows.length} of ${inventory.length} entries`;
+      `Showing ${rows.length} of ${inventory.length} entries${refreshLabel()}`;
 
     if (rows.length === 0) {
       tbody.innerHTML = `<tr><td colspan="4" class="no-results">No entries match the current filters.</td></tr>`;
@@ -1430,7 +1454,12 @@
     return escapeHtml(String(str)).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
 
-  init();
+  init().catch(() => {
+    document.getElementById("browse-view").hidden = true;
+    document.getElementById("maintain-view").hidden = true;
+    document.querySelectorAll("button[data-view]").forEach(button => { button.hidden = true; });
+    document.getElementById("catalog-notice").hidden = false;
+  });
 })();
 </script>
 

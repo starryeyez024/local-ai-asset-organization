@@ -9,9 +9,12 @@ import sys
 import tempfile
 
 REPO = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO / "skills/skill-linker"))
+from asset_config import default_config_path
+
 MARKER = ".agent-setup-explorer"
 MARKER_CONTENT = "AI Assets Explorer local output v1\n"
-VIEWER_FILES = ("index.html", "how-to-update.html", "serve.py")
+VIEWER_FILES = ("index.html", "about.html", "serve.py")
 GENERATED_FILES = ("skills.json", "skills-local.json")
 
 
@@ -54,7 +57,8 @@ def prepare(config, output):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", type=Path, required=True)
+    parser.add_argument("--config", type=Path, default=default_config_path(),
+                        help="Setup configuration (default: recommended location or existing legacy config)")
     parser.add_argument("--output-dir", type=Path,
                         default=Path.home() / ".local/share/ai-assets-explorer")
     args = parser.parse_args()

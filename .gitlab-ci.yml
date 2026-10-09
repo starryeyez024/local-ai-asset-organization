@@ -5,10 +5,10 @@ pages:
   script:
     - mkdir -p public
     - cp -r pages/. public/
-    - mkdir -p public/skills-explorer
-    - cp skills-explorer/index.html skills-explorer/how-to-update.html skills-explorer/skills.json public/skills-explorer/
     - mkdir -p public/skills
     - cp -r skills/. public/skills/
+    - mkdir -p public/skills-explorer
+    - cp skills-explorer/index.html skills-explorer/about.html skills-explorer/sample-skills.json public/skills-explorer/
   artifacts:
     paths:
       - public
