@@ -27,7 +27,7 @@
       <div>
         <p class="eyebrow">Guide 2 · Asset organization</p>
         <h1>Know which copy to maintain</h1>
-        <p class="lede">Marketplace plugins, cloned repositories, and custom scripts can leave your AI assets scattered across folders. Use this approach to organize them and keep track of updates. You choose what stays active and review any cleanup before it happens.</p>
+        <p class="lede">Marketplace plugins, cloned repositories, and custom scripts can leave your AI assets scattered across folders. The setup assistant inspects them, recommends how to organize them, and applies the changes you approve. It explains any conflicts before asking you which version to keep.</p>
       </div>
       <div class="hero-image">
         <img src="images/confusion.png" alt="Two identical Spider-Man characters pointing at each other in confusion.">
@@ -41,7 +41,7 @@
         <p class="section-label">The problem</p>
         <h2>AI assets spread across tools</h2>
         <p class="lead-text">Copies drift, links break, and updates can erase local changes. Knowing who maintains an asset and how it gets updated helps you choose which copy each tool should use.</p>
-        <p>Ask an assistant to check one asset or audit the whole setup. It can inspect the folders and discovery rules for you.</p>
+        <p>During <a href="index.html#start-here">guided setup</a>, the assistant inspects the folders and discovery rules for you. You can also ask it to check just one asset.</p>
       </div>
     </section>
 
@@ -78,27 +78,27 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
       </div>
     </section>
 
-    <section id="marketplace-packages"><div class="wrap"><p class="section-label">Marketplace packages</p><h2>Let the installer manage its files</h2><p class="lead-text">Keep marketplace caches and generated installs where their package manager expects them. Record the package, source, version, scope, and update method alongside your repository sources.</p><p>A plugin can also come from a local repository. Its format tells you how it is packaged; check the installation record to find out who manages it. Before cleanup, look for the same skill in loose folders and preserve links that other tools still need. To customize a package, maintain your own fork and select it in the target tool.</p><p><a href="https://docs.getlola.dev/dev-guide/architecture/">Lola copies modules and generates assistant files</a>; <a href="https://code.claude.com/docs/en/discover-plugins">Claude Code manages plugins by installation scope</a>. Neither requires moving installed files into this repository layout.</p></div></section>
+    <section id="marketplace-packages"><div class="wrap"><p class="section-label">Marketplace packages</p><h2>Let the installer manage its files</h2><p class="lead-text">The auditor leaves marketplace caches and generated installs where their package manager expects them. It records the package, source, version, scope, and update method alongside your repository sources.</p><p>A plugin can also come from a local repository. Its format tells you how it is packaged; the assistant checks the installation record to find out who manages it. Before cleanup, it looks for the same skill in loose folders and checks which links other tools still need. If you want to customize a package, it helps you maintain your own fork and select it in the target tool.</p><p><a href="https://docs.getlola.dev/dev-guide/architecture/">Lola copies modules and generates assistant files</a>; <a href="https://code.claude.com/docs/en/discover-plugins">Claude Code manages plugins by installation scope</a>. Neither requires moving installed files into this repository layout.</p></div></section>
 
     <section class="band" id="working-linker">
       <div class="wrap">
         <p class="section-label">Use the skills</p>
         <h2>Ask for the job you need done</h2>
-        <p class="lead-text">Open this repository in an assistant that can access your local files. Ask it to read the skill linked below and follow its instructions for your project. The skill guides the assistant through the work, including checks in the tools you want to use.</p>
+        <p class="lead-text">During <a href="index.html#start-here">guided setup</a>, agent-setup uses these skills as needed and carries your choices forward. You stay in the same conversation. For a single task later, ask your assistant to use the relevant skill below.</p>
         <div class="card-grid">
           <article class="card">
             <h3>Find and organize what you have</h3>
-            <p>Ask for an <strong>AI asset audit</strong>. The auditor finds your skills and MCP servers, flags duplicates and broken links, and proposes a cleanup plan for you to review before it changes files.</p>
+            <p>The <strong>AI asset auditor</strong> finds your skills and MCP servers, flags duplicates and broken links, and proposes a cleanup plan for you to review before it changes files.</p>
             <p><a href="skills/ai-asset-auditor/SKILL.md" data-local-href="../skills/ai-asset-auditor/SKILL.md">Read the auditor skill</a></p>
           </article>
           <article class="card">
             <h3>Make selected skills available locally</h3>
-            <p>Ask the <strong>skill linker</strong> to make selected project skills available to the agents you name. It checks existing installations, previews the links, and verifies discovery in those tools. Your source files stay in their repository.</p>
+            <p>The <strong>skill linker</strong> makes selected project skills available to your agents. It checks existing installations, previews the links, and verifies discovery in those tools. Your source files stay in their repository.</p>
             <p><a href="skills/skill-linker/SKILL.md" data-local-href="../skills/skill-linker/SKILL.md">Read the linker skill</a></p>
           </article>
           <article class="card">
             <h3>Customize a shared skill safely</h3>
-            <p>Ask for the <strong>override safeguard</strong> before changing a team or vendor skill. It tells the assistant to check ownership, edit a personal copy, and update the intended local link. The assistant must follow those instructions; the skill cannot lock files.</p>
+            <p>The <strong>override safeguard</strong> guides changes to team or vendor skills. It tells the assistant to check ownership, edit a personal copy, and update the intended local link. The assistant must follow those instructions; the skill cannot lock files.</p>
             <p><a href="skills/skill-override-safeguard/SKILL.md" data-local-href="../skills/skill-override-safeguard/SKILL.md">Read the safeguard skill</a></p>
           </article>
         </div>
@@ -111,16 +111,16 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
 
     <section>
       <div class="wrap">
-        <p class="section-label">Your part</p>
-        <h2>Choose what to keep and what to change</h2>
-        <p class="lead-text">Tell the assistant which project and tools matter to you. If it finds two skills with the same name or proposes moving files, choose the version you want and review the plan before approving changes. Then check the result in the tool that should use the asset.</p>
-        <div class="callout green"><strong>A good first request:</strong> “Use the AI asset auditor to show me where my skills and MCP servers live, flag duplicates or broken links, and propose a cleanup plan for me to review.”</div>
+        <p class="section-label">Your input</p>
+        <h2>Review the choices when they arise</h2>
+        <p class="lead-text">You don’t need to sort through the folders before starting. If the assistant finds two skills with the same name or a reason to move files, it compares the options and recommends what to do. You review that plan before it applies the changes. It then checks discovery and use in the intended tool, reporting any check it could not complete.</p>
+        <div class="callout green"><strong>For an audit on its own:</strong> “Use the AI asset auditor to show me where my skills and MCP servers live, flag duplicates or broken links, and propose a cleanup plan for me to review.”</div>
         <p>For the folder layout, see the <a href="index.html">overview</a>. For differences between local tools and hosted runtimes, use the <a href="tool-compatibility.html">compatibility guide</a>.</p>
       </div>
     </section>
   </main>
 
-  <footer><div class="wrap">Next: check <a href="tool-compatibility.html">which delivery methods your tools support</a>.</div></footer>
+  <footer><div class="wrap">Next in guided setup: your assistant prepares and opens the <a href="skills-explorer-guide.html">Skills Explorer</a>. <a href="index.html#start-here">See the full workflow</a>.</div></footer>
   <script>
     // Source checkout keeps skills/ beside pages/; the published site places both at its root.
     if (location.pathname.includes('/pages/')) {
