@@ -41,10 +41,10 @@
       <div class="wrap">
         <p class="section-label">Start here</p>
         <h2>One conversation, from setup to a working catalog</h2>
-        <p class="lead-text">Open a local copy of <a href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization">this repository</a> in an assistant that can read and change your files. Give it the request below. The <strong>agent-setup</strong> skill checks your existing setup and guides the whole process. You can start without choosing a folder layout, preparing context files, or knowing which skills to run.</p>
+        <p class="lead-text">Open a local copy of <a href="https://github.com/starryeyez024/local-ai-asset-organization">this repository</a> in an assistant that can read and change your files. Give it the request below. The <strong>agent-setup</strong> skill checks your existing configuration, skills folders, and installed packages, then asks about anything it could not find. It uses those findings to guide the whole process. You can start without choosing a folder layout, preparing context files, or knowing which skills to run.</p>
         <div class="callout green"><strong>Ask your assistant:</strong> “Read <code class="inline">skills/agent-setup/SKILL.md</code> and help me set this up.”</div>
         <ol class="steps">
-          <li><strong>Personal setup and context.</strong> The assistant checks your tools, asks about your work and preferences, drafts context for you to correct, and connects your tools to your private setup repository.</li>
+          <li><strong>Personal setup and context.</strong> Using what it found, the assistant recommends a setup, asks about your work and preferences, drafts context for you to correct, and connects your tools to your private setup repository.</li>
           <li><strong>Asset organization.</strong> It uses the AI asset auditor to inspect what you have and recommend any cleanup. After you review the plan, it applies approved changes and uses the linker where needed.</li>
           <li><strong>Your Skills Explorer.</strong> It builds your local catalog, starts the Explorer, and helps you find and try a skill.</li>
         </ol>
@@ -124,7 +124,7 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
 
   </main>
 
-  <footer><div class="wrap">A general methodology for organizing AI agent assets across multiple tools and runtimes.</div></footer>
+  <footer><div class="wrap">A general methodology for organizing AI agent assets across multiple tools and runtimes. · <a href="quick-reference.html">Quick reference</a></div></footer>
   <script>
     if (location.pathname.includes('/pages/')) {
       document.querySelectorAll('a[data-local-href]').forEach(link => {

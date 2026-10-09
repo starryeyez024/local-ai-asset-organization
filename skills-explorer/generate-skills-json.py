@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Scan the configured skills directory and generate a shareable catalog plus a
+Scan the configured skills directory and generate a local browse catalog plus a
 local inventory for the Explorer's audit view.
 
 Usage:
@@ -11,9 +11,9 @@ Usage:
 
         SKILLS_ROOT=/some/other/path python3 generate-skills-json.py
 
-Includes every valid SKILL.md entry. The committed skills.json contains catalog
-metadata only; the ignored skills-local.json also contains absolute paths and
-inventory details for use on the machine that generated it.
+Includes every valid SKILL.md entry. Both files default to
+~/.local/share/ai-assets-explorer/ and stay out of Git. skills.json contains browse
+metadata; skills-local.json also contains absolute paths and inventory details.
 """
 
 import json
@@ -675,8 +675,8 @@ def main():
     global AGENTS_SKILLS_FARM
     parser = argparse.ArgumentParser(description="Generate the Explorer catalog from your configured skills folder.")
     parser.add_argument("--config", type=Path, help="Use a specific setup TOML file")
-    parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parent,
-                        help="Directory for generated catalogs (default: this Explorer directory)")
+    parser.add_argument("--output-dir", type=Path, default=Path.home() / ".local/share/ai-assets-explorer",
+                        help="Directory for generated catalogs (default: ~/.local/share/ai-assets-explorer)")
     args = parser.parse_args()
     try:
         AGENTS_SKILLS_FARM = skills_root(args.config)
@@ -736,6 +736,7 @@ def main():
 
     output = {
         "generated": "auto",
+        "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "skillCount": len(deduped),
         "activeCount": sum(1 for s in deduped if s["status"] != "stub"),
         "stubCount": sum(1 for s in deduped if s["status"] == "stub"),
@@ -755,7 +756,7 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
     local_path = out_dir / "skills-local.json"
     with open(local_path, "w") as f:
-        json.dump({**output, "inventory": inventory, "inventoryStats": inventory_stats}, f, indent=2)
+        json.dump({**output, "scannedDirectory": str(AGENTS_SKILLS_FARM.resolve()), "inventory": inventory, "inventoryStats": inventory_stats}, f, indent=2)
 
     out_path = out_dir / "skills.json"
     with open(out_path, "w") as f:

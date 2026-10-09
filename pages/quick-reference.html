@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quick Reference | AI Asset Organization</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="https://static.redhat.com/libs/redhat/redhat-font/latest/webfonts/red-hat-font.min.css">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <main class="wrap">
+    <section>
+      <h1 style="font-size:2rem;">Quick reference</h1>
+      <p>Pick the step you need. Ask your assistant to read the linked skill and follow it.</p>
+      <ol class="steps">
+        <li>Create local AI configuration — <a href="skills/agent-setup/SKILL.md" data-local-href="../skills/agent-setup/SKILL.md">agent-setup</a>.</li>
+        <li>Build or update personal context — <a href="skills/agent-setup/references/personal-context.md" data-local-href="../skills/agent-setup/references/personal-context.md">context interview</a>.</li>
+        <li>Audit your assets — <a href="skills/ai-asset-auditor/SKILL.md" data-local-href="../skills/ai-asset-auditor/SKILL.md">ai-asset-auditor</a>.</li>
+        <li>Add skill symlinks — <a href="skills/skill-linker/SKILL.md" data-local-href="../skills/skill-linker/SKILL.md">skill-linker</a>.</li>
+        <li>View your skills — <a id="open-explorer" href="skills-explorer-guide.html">open the Explorer</a>, or ask “Open my Skills Explorer.”</li>
+        <li>Refresh your catalog — ask “Refresh my skill catalog.” <a href="skills/agent-setup/references/explorer.md" data-local-href="../skills/agent-setup/references/explorer.md">Setup and refresh instructions</a>.</li>
+        <li>Customize a shared skill — <a href="skills/skill-override-safeguard/SKILL.md" data-local-href="../skills/skill-override-safeguard/SKILL.md">skill-override-safeguard</a>.</li>
+        <li>Check tool support — <a href="tool-compatibility.html">compatibility chart</a>.</li>
+      </ol>
+    </section>
+  </main>
+  <footer><div class="wrap"><a href="index.html">Full guide</a></div></footer>
+  <script>
+    if (location.pathname.includes('/pages/')) {
+      document.querySelectorAll('a[data-local-href]').forEach(link => {
+        link.href = link.dataset.localHref;
+      });
+    }
+  </script>
+</body>
+</html>

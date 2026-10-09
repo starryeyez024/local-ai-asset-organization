@@ -13,9 +13,10 @@ inspection cannot resolve; do the file, configuration, and command-line work.
 
 ## Start or resume
 
-For full onboarding, explain the sequence briefly: personal setup and context,
-asset audit and selected links, then a working Explorer. Ask which tools they use
-and what they already have, using known answers. A request for only one stage
+For full onboarding, explain the sequence briefly: discover the existing setup,
+prepare personal configuration and context, organize selected assets, then open
+the Explorer. Inspect first, then ask targeted questions about gaps in the findings.
+A request for only one stage
 does not authorize the rest. Skip completed stages after checking their state.
 
 Keep a brief `setup-progress.md` in the private setup repository once its creation
@@ -38,6 +39,26 @@ tools, their global instruction files, and any existing context location. Inspec
 both `~/.config/agent-tools/agent-config.toml` and the older
 `~/.config/ai-tools/ai-tools.toml` when present. Preserve unrelated configuration
 keys, instruction content, symlinks, and existing Git history.
+
+Before choosing directory values or creating a configuration, read
+[ai-asset-auditor](../ai-asset-auditor/SKILL.md) and perform its read-only discovery
+phase for the relevant tools. Inspect configured paths, known native skill roots,
+project-local skills in the user's working repositories, resolved symlink targets,
+and installed-package records. Do not scan the entire disk or assume that every
+installed tool is in active use. Skip absent conventional locations.
+
+Summarize what was found and ask which detected tools the person uses, whether
+there are custom skill or project locations to include, and which sources should
+remain separate. Reuse answers already given. The user should not have to name
+every directory or choose a layout before discovery. If a location is inaccessible,
+record that gap rather than treating it as empty.
+
+Use these findings to recommend `install_dir` and `symlinks_dir`. Preserve working
+paths by default. A new user with no existing setup can use the example below;
+it is not a reason to move an established setup. Show which maintained sources
+will be represented by selected links in the Explorer's configured folder and
+which managed packages stay outside that catalog. Discovery does not authorize
+creating links, moving files, or cleaning up duplicates.
 
 Use `~/.config/agent-tools/` for a new setup unless the user selects another path.
 For an established setup, identify the scripts and tool settings that depend on
@@ -137,10 +158,10 @@ independent stages when possible, carrying the pending check in the progress fil
 
 ## Organize the assets
 
-Read and follow [ai-asset-auditor](../ai-asset-auditor/SKILL.md). Carry forward the
-known tools, paths, and user decisions. Inspect existing sources, loose skills,
-managed packages, and duplicate routes; show the concrete plan and apply approved
-changes under that skill's safeguards. The setup request alone does not approve
+Continue [ai-asset-auditor](../ai-asset-auditor/SKILL.md) from the earlier discovery.
+Carry forward the findings, paths, and user decisions; refresh findings affected
+by setup changes instead of restarting the interview. Show the concrete asset
+plan and apply approved changes under that skill's safeguards. The setup request alone does not approve
 unknown moves or removals. If the user has no assets yet, record that result and
 continue without installing a collection just to populate their catalog.
 
