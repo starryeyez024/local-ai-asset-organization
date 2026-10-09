@@ -41,13 +41,14 @@
       <div class="wrap">
         <p class="section-label">Start here</p>
         <h2>One conversation, from setup to a working catalog</h2>
-        <p class="lead-text">Open a local copy of <a href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization">this repository</a> in an assistant that can read and change your files. Give it the request below. The <strong>agent-setup</strong> skill guides the whole process, bringing in the other skills when they’re needed.</p>
-        <div class="callout green"><strong>Ask your assistant:</strong> “Read <code class="inline">skills/agent-setup/SKILL.md</code> and guide me through setting up my AI tools. Help me build my personal context, organize the assets I already have, and open my Skills Explorer. Check what already works, walk me through the decisions, and show me proposed changes before applying them.”</div>
+        <p class="lead-text">Open a local copy of <a href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization">this repository</a> in an assistant that can read and change your files. Give it the request below. The <strong>agent-setup</strong> skill checks your existing setup and guides the whole process. You can start without choosing a folder layout, preparing context files, or knowing which skills to run.</p>
+        <div class="callout green"><strong>Ask your assistant:</strong> “Read <code class="inline">skills/agent-setup/SKILL.md</code> and help me set this up.”</div>
         <ol class="steps">
-          <li><strong>Set up your tools and context.</strong> The assistant asks about your work and preferences, drafts context for you to correct, and connects your tools to your private setup repository.</li>
-          <li><strong>Organize your assets.</strong> It uses the AI asset auditor to inspect what you have, then the linker for skills you choose to make available. You review any proposed cleanup.</li>
-          <li><strong>Open your Skills Explorer.</strong> It builds your local catalog, starts the Explorer, and helps you find and try a skill.</li>
+          <li><strong>Personal setup and context.</strong> The assistant checks your tools, asks about your work and preferences, drafts context for you to correct, and connects your tools to your private setup repository.</li>
+          <li><strong>Asset organization.</strong> It uses the AI asset auditor to inspect what you have and recommend any cleanup. After you review the plan, it applies approved changes and uses the linker where needed.</li>
+          <li><strong>Your Skills Explorer.</strong> It builds your local catalog, starts the Explorer, and helps you find and try a skill.</li>
         </ol>
+        <p>The assistant recommends a plan based on what it finds and explains choices when they arise. It asks for your input when preferences, conflicting files, or a proposed change need your judgment.</p>
         <p>You can pause and say “continue my setup” later. The assistant records progress, checks what is already complete, and picks up the next step. If you already have a working setup, ask for just the part you need.</p>
         <p><a href="skills/agent-setup/SKILL.md" data-local-href="../skills/agent-setup/SKILL.md">Read the setup skill</a>. No separate skill installation is needed to begin.</p>
       </div>
@@ -62,14 +63,14 @@
           <li>Local changes to an installed skill can disappear when its vendor or package manager updates it.</li>
           <li>A local path or symlink does not automatically travel with a project or become available to a hosted agent.</li>
         </ul>
-        <h3>How to organize them</h3>
+        <h3>How the skills organize them</h3>
         <div class="card-grid">
-          <article class="card"><h4>Keep track of the source</h4><p>Keep maintained skills and code in tracked repositories. Let package managers own their installed copies; keep personal setup files private.</p></article>
-          <article class="card"><h4>Check what each tool supports</h4><p>Use the method the tool supports: a symlink, committed file, generated copy, native configuration, or platform-managed package.</p></article>
-          <article class="card"><h4>Record copies you need to keep</h4><p>Some tools need their own copy. Record why it exists and which source it comes from.</p></article>
+          <article class="card"><h4>Keep track of the source</h4><p>The assistant keeps maintained skills and code in tracked repositories, leaves installed packages with their package managers, and keeps personal setup files private.</p></article>
+          <article class="card"><h4>Check what each tool supports</h4><p>The assistant checks which method the tool supports: a symlink, committed file, generated copy, native configuration, or platform-managed package.</p></article>
+          <article class="card"><h4>Record copies you need to keep</h4><p>Some tools need their own copy. The assistant records why each copy exists and which source it comes from.</p></article>
         </div>
     <br/>
-         <p class="lead-text">Group repositories you maintain under one folder. Leave marketplace caches and generated installs where their installers expect them. Your private setup repo lives separately under <code class="inline">~/.config/agent-tools/</code>. Use symlinks where the tool supports them; other tools may need a different way to read the same content.</p>
+         <p class="lead-text">The recommended layout groups repositories you maintain under one folder. Marketplace caches and generated installs stay where their installers expect them. Your private setup repo lives separately under <code class="inline">~/.config/agent-tools/</code>. The linker uses symlinks where the tool supports them; other tools may need a different way to read the same content.</p>
          <br/>
         <div class="diagram">
           <p class="diagram-title">Repository folders and links for your tools</p>
@@ -96,7 +97,7 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
       <div class="wrap">
         <p class="section-label">Explore the details</p>
         <h2>Choose what to work on</h2>
-        <p>These guides explain each part of the workflow. For help doing it, <a href="#start-here">start with agent-setup</a>.</p>
+        <p>These guides explain what the assistant does and why, with examples you can refer to when reviewing its plan. You can <a href="#start-here">start with agent-setup</a> and read the details as they become useful.</p>
         <div class="card-grid">
           <article class="card"><h3><a href="agentic-setup.html">Agentic setup</a></h3><p>Keep instructions, configuration, and personal context in a private repo, then connect it to your tools.</p></article>
           <article class="card"><h3><a href="asset-organization.html">Asset organization</a></h3><p>Organize repositories, skills, and MCP code. Resolve naming conflicts and keep custom versions separate.</p></article>
@@ -108,7 +109,8 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
     <section class="band">
       <div class="wrap">
         <p class="section-label">Five principles</p>
-        <h2>Guidelines to follow</h2>
+        <h2>Principles behind the setup</h2>
+        <p>The skills use these principles when preparing and checking your setup.</p>
         <ol class="steps">
           <li>Keep instructions, configuration, and context in separate files.</li>
           <li>Record who maintains each asset and how to update it.</li>
