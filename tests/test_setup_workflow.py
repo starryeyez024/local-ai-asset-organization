@@ -2,6 +2,7 @@
 
 import importlib.util
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -12,6 +13,7 @@ from unittest.mock import patch
 REPO = Path(__file__).resolve().parents[1]
 LINKER = REPO / "skills/skill-linker/skill-linker.py"
 GENERATOR = REPO / "skills-explorer/generate-skills-json.py"
+PREPARE_EXPLORER = REPO / "skills/agent-setup/scripts/prepare-explorer.py"
 sys.path.insert(0, str(LINKER.parent))
 from asset_config import default_config_path, read_directories
 
@@ -117,6 +119,72 @@ class SetupWorkflow(unittest.TestCase):
         self.config.write_text('directories = "not a table"')
         with self.assertRaises(ValueError):
             read_directories(self.config)
+
+    def prepare_explorer(self, output, expected=0, override=None):
+        env = dict(os.environ)
+        env.pop("SKILLS_ROOT", None)
+        if override:
+            env["SKILLS_ROOT"] = str(override)
+        result = subprocess.run([
+            sys.executable, "-B", str(PREPARE_EXPLORER),
+            "--config", str(self.config), "--output-dir", str(output),
+        ], capture_output=True, text=True, env=env)
+        self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+        return result
+
+    def test_onboarding_prepares_and_refreshes_isolated_explorer(self):
+        published = (REPO / "skills-explorer/skills.json").read_bytes()
+        original = (self.source / "SKILL.md").read_bytes()
+        self.run_linker("example/skills", "report")
+        output = self.root / "local viewer"
+        self.prepare_explorer(output)
+        catalog = json.loads((output / "skills.json").read_text())
+        self.assertEqual(catalog["skillCount"], 1)
+        self.assertEqual(catalog["skills"][0]["id"], "report")
+        for filename in ("serve.py", "index.html", "how-to-update.html"):
+            self.assertEqual((output / filename).read_bytes(),
+                             (REPO / "skills-explorer" / filename).read_bytes())
+        self.assertEqual(json.loads((output / "skills-local.json").read_text())
+                         ["inventory"][0]["truePath"], str(self.source))
+        (output / "my-notes.txt").write_text("keep")
+        self.skill(self.source.parent / "new-skill", "new-skill")
+        self.run_linker("example/skills", "new-skill")
+        self.prepare_explorer(output)
+        self.assertEqual(json.loads((output / "skills.json").read_text())["skillCount"], 2)
+        self.assertEqual((output / "my-notes.txt").read_text(), "keep")
+        self.assertEqual((self.source / "SKILL.md").read_bytes(), original)
+        self.assertEqual((REPO / "skills-explorer/skills.json").read_bytes(), published)
+
+    def test_empty_catalog_is_valid_and_failed_refresh_preserves_it(self):
+        self.hub.mkdir()
+        output = self.root / "empty viewer"
+        self.prepare_explorer(output)
+        previous = (output / "skills.json").read_bytes()
+        self.assertEqual(json.loads(previous)["skillCount"], 0)
+        self.config.write_text("invalid toml [[")
+        self.prepare_explorer(output, expected=1)
+        self.assertEqual((output / "skills.json").read_bytes(), previous)
+
+    def test_explorer_refuses_unmanaged_output_and_public_repository(self):
+        output = self.root / "existing"
+        output.mkdir()
+        (output / "index.html").write_text("user content")
+        self.prepare_explorer(output, expected=1)
+        self.assertEqual((output / "index.html").read_text(), "user content")
+        self.prepare_explorer(REPO / "skills-explorer", expected=1)
+
+    def test_explorer_refuses_environment_override_and_output_symlink(self):
+        self.hub.mkdir()
+        output = self.root / "viewer"
+        self.prepare_explorer(output, expected=1, override=self.hub)
+        self.assertFalse(output.exists())
+        self.prepare_explorer(output)
+        (output / "index.html").unlink()
+        target = self.root / "keep.html"
+        target.write_text("keep")
+        (output / "index.html").symlink_to(target)
+        self.prepare_explorer(output, expected=1)
+        self.assertEqual(target.read_text(), "keep")
 
 
 if __name__ == "__main__":

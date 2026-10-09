@@ -4,7 +4,11 @@ A searchable catalog of valid `SKILL.md` entries found in a configured skills di
 
 Both views cover only the configured directory. They do not query marketplace registries, scan every tool's roots, or establish runtime enablement. A missing plugin skill may be installed elsewhere. Keep installer-managed files in place; do not add cache links just to include them here. A complete runtime inventory requires separate package and discovery checks.
 
-## Run locally
+## Guided local setup
+
+Ask your assistant to follow [agent-setup](../skills/agent-setup/SKILL.md). It prepares your catalog in `~/.local/share/ai-assets-explorer/`, starts the copied local server, and opens the browser. The [Explorer procedure](../skills/agent-setup/references/explorer.md) covers refreshes and resuming. Personal catalogs stay outside this repository and are not published during onboarding.
+
+## Maintainer preview
 
 ```bash
 make run

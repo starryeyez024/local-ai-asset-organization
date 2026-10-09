@@ -175,7 +175,11 @@
   <p>Tool, task, phase, and stage tags are keyword guesses based on each skill's name, description, and the start of its body. A skill can match several tool, task, or stage tags. Phase uses a priority order and defaults to “In Progress.” Role is inferred from a known AI-first module path; other sources use “Other.” Skill type comes from frontmatter when available, otherwise a name beginning with <code>workflow-</code> is treated as a workflow.</p>
   <p>If a tag is misleading, update the keyword rules in <code>generate-skills-json.py</code> and regenerate the files. There is no tag editor in the page. A file older than 60 days is marked “Stale” in the local audit as an age cue, not proof that the skill is obsolete.</p>
 
-  <h2>Refresh and preview</h2>
+  <h2>Open or refresh your catalog</h2>
+  <p>Ask your assistant to “open my Skills Explorer” or “refresh my skill catalog.” The agent-setup skill prepares your local viewer and catalog, starts the server, and opens it for you. It records the location in your private setup notes so you can resume later.</p>
+  <p>Guided setup keeps generated files in <code>~/.local/share/ai-assets-explorer/</code>, separate from the repository’s published example. Personal catalogs stay local. Publishing one requires a separate review of its content.</p>
+  <details><summary>Maintainer commands for the repository’s example catalog</summary>
+  <p>Run these in the source checkout, where the generator and Makefile live.</p>
   <div class="card">
     <pre><code>cd /path/to/local-ai-asset-organization/skills-explorer
 make run
@@ -186,7 +190,8 @@ make run
     <pre><code>SKILLS_ROOT=/another/skills/directory make regen</code></pre>
   </div>
   <p>After a source skill changes, regenerate and review the catalog. Commit the skill in its source repository and the shareable <code>skills.json</code> in this repository. Do not commit <code>skills-local.json</code>. The local file manager action is available only when using the preview server. This project has no scheduled rebuild; published data reflects the last committed snapshot.</p>
-  <div class="note">Requires Python 3.11+ and Make. The generator uses only Python's standard library.</div>
+  <div class="note">Requires Python 3.11+ and Make for these commands. Guided setup needs Python 3.11+ without Make. The generator uses only Python's standard library.</div>
+  </details>
 </main>
 
 <script>

@@ -4,12 +4,21 @@ A reference for keeping AI agent assets understandable across local tools and ho
 
 Give each asset a clear owner and update path. Link selected skills from repositories you maintain; let marketplace installers manage their own caches and installed copies. Shared repositories and hosted agents may need committed files, generated copies, or native configuration.
 
+## Start here
+
+Open this checkout in an assistant with local file access and ask:
+
+> Read `skills/agent-setup/SKILL.md` and guide me through setting up my AI tools. Help me build my personal context, organize my assets, and open my Skills Explorer. Check what already works and prepare changes for review before applying them.
+
+The setup skill conducts a short context interview, connects your tools, uses the auditor and linker as needed, and prepares a local Explorer. You stay in one conversation. Progress is recorded privately so you can say “continue my setup” later. The guides explain the stages; the commands below are available for direct use and maintenance.
+
 ## What is in this repository
 
 | Location | Purpose |
 | --- | --- |
 | [`pages/`](pages/index.html) | Four guides and the overview page for the published documentation site. |
 | [`skills-explorer/`](skills-explorer/README.md) | Searchable skill catalog and local audit view. |
+| [`skills/agent-setup/`](skills/agent-setup/SKILL.md) | Guided onboarding: personal context interview, tool setup, asset audit and linking, and local Explorer launch. |
 | [`skills/skill-linker/`](skills/skill-linker/SKILL.md) | Agent instructions and a script for selectively linking skills from one project. |
 | [`skills/ai-asset-auditor/`](skills/ai-asset-auditor/SKILL.md) | Read-first inventory and migration planning procedure. |
 | [`skills/skill-override-safeguard/`](skills/skill-override-safeguard/SKILL.md) | Procedure for personal overrides of team or vendor skills. |
@@ -18,15 +27,17 @@ The [documentation maintenance plan](PAGES-RESTRUCTURING-PLAN.md) records the de
 
 ## Local configuration
 
-The linker and Explorer read `~/.config/agent-tools/agent-config.toml`. Create it with absolute paths for your machine:
+For assisted setup, ask your assistant to read [the agent setup skill](skills/agent-setup/SKILL.md) in this checkout and follow it for your tools. It prepares changes for review, applies the approved plan, and verifies the connections.
+
+The linker and Explorer read `~/.config/agent-tools/agent-config.toml`. The recommended directory settings are:
 
 ```toml
 [directories]
-install_dir = "/absolute/path/to/asset-root"
-symlinks_dir = "/absolute/path/to/.agents/skills"
+install_dir = "~/AI Assets"
+symlinks_dir = "~/.agents/skills"
 ```
 
-`install_dir` contains real repositories. `symlinks_dir` is the local hub in which the linker creates one symlink per selected skill. The linker does not create this configuration file. TOML does not expand `~` on its own; use absolute paths for portable behavior across adapters. Keep personal paths and secrets out of this repository.
+`install_dir` contains real repositories. `symlinks_dir` is the local hub in which the linker creates one symlink per selected skill. The setup skill creates this configuration; the linker and Explorer expand `~` to your home directory. Other scripts reading these settings must also expand it or use resolved absolute paths. Keep personal paths and secrets out of this repository.
 
 The [agentic setup guide](pages/agentic-setup.html) explains how to keep this configuration with your private instructions and context. Existing installations using `~/.config/ai-tools/ai-tools.toml` continue to work when the new path is absent. Both commands accept `--config` to select a file explicitly. The Explorer also accepts `SKILLS_ROOT` to override its scan directory for one run.
 
@@ -48,6 +59,10 @@ If a tool needs a native skills directory, use `--target-dir /absolute/path/to/t
 Before changing a shared skill, read the [override safeguard](skills/skill-override-safeguard/SKILL.md). The [auditor](skills/ai-asset-auditor/SKILL.md) is intended for a broader inventory and an explicit migration plan.
 
 ## Explore the catalog
+
+During onboarding, agent-setup runs its `scripts/prepare-explorer.py` helper and opens the generated viewer in `~/.local/share/ai-assets-explorer/`. Refreshing this local catalog leaves the repository's checked-in example unchanged. See the [Explorer setup procedure](skills/agent-setup/references/explorer.md).
+
+For development or intentional changes to the repository's example catalog:
 
 ```bash
 cd skills-explorer

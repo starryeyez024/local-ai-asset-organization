@@ -36,6 +36,22 @@
   </header>
 
   <main>
+
+    <section id="start-here" class="band">
+      <div class="wrap">
+        <p class="section-label">Start here</p>
+        <h2>One conversation, from setup to a working catalog</h2>
+        <p class="lead-text">Open a local copy of <a href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization">this repository</a> in an assistant that can read and change your files. Give it the request below. The <strong>agent-setup</strong> skill guides the whole process, bringing in the other skills when they’re needed.</p>
+        <div class="callout green"><strong>Ask your assistant:</strong> “Read <code class="inline">skills/agent-setup/SKILL.md</code> and guide me through setting up my AI tools. Help me build my personal context, organize the assets I already have, and open my Skills Explorer. Check what already works, walk me through the decisions, and show me proposed changes before applying them.”</div>
+        <ol class="steps">
+          <li><strong>Set up your tools and context.</strong> The assistant asks about your work and preferences, drafts context for you to correct, and connects your tools to your private setup repository.</li>
+          <li><strong>Organize your assets.</strong> It uses the AI asset auditor to inspect what you have, then the linker for skills you choose to make available. You review any proposed cleanup.</li>
+          <li><strong>Open your Skills Explorer.</strong> It builds your local catalog, starts the Explorer, and helps you find and try a skill.</li>
+        </ol>
+        <p>You can pause and say “continue my setup” later. The assistant records progress, checks what is already complete, and picks up the next step. If you already have a working setup, ask for just the part you need.</p>
+        <p><a href="skills/agent-setup/SKILL.md" data-local-href="../skills/agent-setup/SKILL.md">Read the setup skill</a>. No separate skill installation is needed to begin.</p>
+      </div>
+    </section>
     <section>
       <div class="wrap">
         <p class="section-label">The problem</p>
@@ -78,12 +94,13 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
 
     <section>
       <div class="wrap">
-        <p class="section-label">Choose a guide</p>
+        <p class="section-label">Explore the details</p>
         <h2>Choose what to work on</h2>
+        <p>These guides explain each part of the workflow. For help doing it, <a href="#start-here">start with agent-setup</a>.</p>
         <div class="card-grid">
           <article class="card"><h3><a href="agentic-setup.html">Agentic setup</a></h3><p>Keep instructions, configuration, and personal context in a private repo, then connect it to your tools.</p></article>
           <article class="card"><h3><a href="asset-organization.html">Asset organization</a></h3><p>Organize repositories, skills, and MCP code. Resolve naming conflicts and keep custom versions separate.</p></article>
-          <article class="card"><h3><a href="tool-compatibility.html">Compatibility matrix</a></h3><p>Map each asset type to Codex CLI, Cursor, Claude Code, and the ChatGPT desktop app across local, project, and cloud runtimes.</p></article>
+          <article class="card"><h3><a href="skills-explorer-guide.html">Skills explorer</a></h3><p>Browse your skill catalog, find a skill for the task at hand, and trace it to its source repository.</p></article>
         </div>
       </div>
     </section>
@@ -102,22 +119,16 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
       </div>
     </section>
 
-    <section>
-      <div class="wrap">
-        <p class="section-label">Getting started</p>
-        <h2>Start with the asset and tool you want to change</h2>
-        <p>For one skill, check its source, how the tool finds it, and whether another copy is already available. Use a broader audit when consolidating folders or changing several tools.</p>
-        <ol class="steps">
-          <li>Inventory the relevant skill roots, installed packages, instructions, MCP configurations, and runtime targets.</li>
-          <li>Identify each asset’s owner and update method, including intentional installed copies or symlink views.</li>
-          <li>Use the <a href="tool-compatibility.html">compatibility guide</a> when the tool’s path, scope, or runtime is unclear.</li>
-          <li>Use the <a href="https://github.com/starryeyez024/local-ai-asset-organization/tree/main/skills/ai-asset-auditor">ai-asset-auditor</a> to inspect your setup and propose a migration plan.</li>
-          <li>Make filesystem changes only after reviewing and confirming the plan.</li>
-        </ol>
-      </div>
-    </section>
+
   </main>
 
   <footer><div class="wrap">A general methodology for organizing AI agent assets across multiple tools and runtimes.</div></footer>
+  <script>
+    if (location.pathname.includes('/pages/')) {
+      document.querySelectorAll('a[data-local-href]').forEach(link => {
+        link.href = link.dataset.localHref;
+      });
+    }
+  </script>
 </body>
 </html>
