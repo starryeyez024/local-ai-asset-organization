@@ -36,4 +36,11 @@ The generator reads `directories.symlinks_dir` from `~/.config/agent-tools/agent
 
 The page tries the local audit file first. If only `skills.json` is present, it shows Browse Skills and hides Audit Skills. If neither file is available, it loads `sample-skills.json` when present. Guided setup does not copy the sample into personal installations; a missing personal catalog still prompts the user to prepare it. The source-file action works only through the local preview server. Catalog data is a snapshot; run `make regen` after changing the source skills or generator rules.
 
+Skill type is read only from `metadata.skill-type` in the `SKILL.md` frontmatter. `atomic` identifies a small, focused skill intended for reuse by other skills; `workflow` identifies a skill that coordinates a broader sequence of work. Skills with missing or unsupported values appear as **Unclassified**. Names, descriptions, and skill dependencies do not determine the type.
+
+```yaml
+metadata:
+  skill-type: atomic
+```
+
 Requires Python 3.11+ and Make for the shortcuts above; the setup skill can run the Python helper directly without Make. No Python packages are required. Both generated catalogs are ignored by Git, and the generator defaults to the personal output directory. GitLab Pages publishes the guides, skills, and demo app. Its explicit file list includes only `index.html`, `about.html`, and `sample-skills.json` from this directory; generated personal catalogs are excluded.

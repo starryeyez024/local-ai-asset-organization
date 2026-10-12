@@ -633,6 +633,11 @@ def process_skill(module: str, skill_path: Path) -> dict | None:
     persona = metadata.get("persona", "") if isinstance(metadata, dict) else ""
     owning_agent = metadata.get("owning_agent", "") if isinstance(metadata, dict) else ""
     skill_type = metadata.get("skill-type", "") if isinstance(metadata, dict) else ""
+    # Atomic and workflow are author-declared types, not name-based guesses.
+    # Leave missing or unsupported values unclassified in the catalog.
+    skill_type = skill_type.strip().lower() if isinstance(skill_type, str) else ""
+    if skill_type not in ("atomic", "workflow"):
+        skill_type = ""
     agents_field = fm.get("agents", [])
     if isinstance(agents_field, str):
         agents_field = [agents_field]
@@ -654,7 +659,7 @@ def process_skill(module: str, skill_path: Path) -> dict | None:
         "status": status,
         "persona": persona,
         "owningAgent": owning_agent or (agents_field[0] if agents_field else ""),
-        "skillType": skill_type or ("workflow" if name.startswith("workflow-") else "atomic"),
+        "skillType": skill_type,
         "trigger": trigger,
         "inputs": inputs,
         "requiredSkills": required_skills,
@@ -663,7 +668,7 @@ def process_skill(module: str, skill_path: Path) -> dict | None:
             "tool": tool_tags,
             "role": [role],
             "task": task_tags,
-            "type": [skill_type or ("workflow" if name.startswith("workflow-") else "atomic")],
+            "type": [skill_type] if skill_type else [],
             "phase": [phase_tag],
             "stage": stage_tags,
             "repository": [repository["sourceLabel"]],

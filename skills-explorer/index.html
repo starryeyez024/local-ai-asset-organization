@@ -370,7 +370,8 @@
       flex-shrink: 0;
     }
     .skill-type-badge.workflow { background: #f4e6ff; color: #6753ac; }
-    .skill-type-badge.atomic { background: var(--rh-gray-100); color: var(--rh-gray-500); }
+    .skill-type-badge.atomic,
+    .skill-type-badge.unclassified { background: var(--rh-gray-100); color: var(--rh-gray-500); }
 
     .how-to-use {
       margin-top: 12px;
@@ -1024,7 +1025,8 @@
         ...skill.tags.task.map(t => ({ group: "task", value: t })),
       ];
 
-      const isWorkflow = skill.skillType === "workflow";
+      const skillType = ["atomic", "workflow"].includes(skill.skillType)
+        ? skill.skillType : UNCLASSIFIED_VALUE;
       const requiredSkills = skill.requiredSkills || [];
       const skillFilePath = getSkillFilePath(skill);
 
@@ -1038,7 +1040,7 @@
         </summary>
         <div class="skill-details">
           <div class="skill-tags">
-            <span class="skill-type-badge ${isWorkflow ? "workflow" : "atomic"}">${isWorkflow ? "Workflow" : "Atomic"}</span>
+            <span class="skill-type-badge ${skillType}">${escapeHtml(formatLabel(skillType, "type"))}</span>
             ${allTags.map(t =>
               `<span class="tag ${t.group}" data-group="${t.group}" data-value="${escapeAttr(t.value)}">${escapeHtml(formatLabel(t.value, t.group))}</span>`
             ).join("")}
@@ -1438,7 +1440,7 @@
   function formatLabel(slug, group) {
     if (group === "status" && STATUS_LABELS[slug]) return STATUS_LABELS[slug];
     if (group === "repository") return slug;
-    if (slug === UNCLASSIFIED_VALUE) return "Other";
+    if (slug === UNCLASSIFIED_VALUE) return group === "type" ? "Unclassified" : "Other";
     if (group === "phase" && PHASE_LABELS[slug]) return PHASE_LABELS[slug];
     if (group === "stage" && STAGE_LABELS[slug]) return STAGE_LABELS[slug];
     return slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());

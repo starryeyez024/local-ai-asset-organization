@@ -75,6 +75,44 @@ class SetupWorkflow(unittest.TestCase):
             self.config.unlink()
             self.assertEqual(linker.SkillLinker().config_path, legacy)
 
+    def test_explorer_skill_types_require_explicit_metadata(self):
+        cases = [
+            ("focused", "metadata:\n  skill-type: atomic\n", "atomic"),
+            ("coordinator", 'metadata:\n  skill-type: "workflow"\n', "workflow"),
+            ("workflow-focused", "metadata:\n  skill-type: 'atomic'\n", "atomic"),
+            ("workflow-undeclared", "", ""),
+            ("unsupported", "metadata:\n  skill-type: utility\n", ""),
+            ("empty-type", "metadata:\n  skill-type:\n", ""),
+            ("unrelated-metadata", "metadata:\n  persona: engineer\n", ""),
+            ("top-level-type", "skill-type: atomic\n", ""),
+            ("non-mapping-metadata", "metadata: atomic\n", ""),
+        ]
+        originals = {}
+        for name, metadata, _ in cases:
+            directory = self.hub / name
+            directory.mkdir(parents=True)
+            skill_file = directory / "SKILL.md"
+            skill_file.write_text(
+                f"---\nname: {name}\ndescription: A multi-step workflow.\n{metadata}---\n"
+                "\n# Example\nmetadata:\n  skill-type: atomic\n"
+                "\n## Required skills\n\n| Order | Skill |\n|---|---|\n| 1 | Focused (`focused`) |\n"
+            )
+            originals[skill_file] = skill_file.read_bytes()
+        output = self.root / "typed explorer"
+        self.prepare_explorer(output)
+        for filename in ("skills.json", "skills-local.json"):
+            catalog = json.loads((output / filename).read_text())
+            self.assertEqual(catalog["filterOptions"]["type"], ["atomic", "workflow"])
+            skills = {skill["id"]: skill for skill in catalog["skills"]}
+            self.assertEqual(len(skills), len(cases))
+            for name, _, expected_type in cases:
+                with self.subTest(catalog=filename, skill=name):
+                    self.assertEqual(skills[name]["skillType"], expected_type)
+                    self.assertEqual(skills[name]["tags"]["type"],
+                                     [expected_type] if expected_type else [])
+        for skill_file, original in originals.items():
+            self.assertEqual(skill_file.read_bytes(), original)
+
     def test_explicit_existing_single_skill_and_native_target(self):
         source = self.root / "existing checkout/humanizer"
         self.skill(source, "humanizer")
