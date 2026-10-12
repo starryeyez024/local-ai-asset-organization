@@ -957,7 +957,7 @@
           <label class="filter-option"><input type="checkbox" id="show-scripts" ${showScripts ? "checked" : ""}> Scripts <span class="count">${SCRIPTS.length}</span></label>
         </div>
       </div>
-      <div class="filter-group automation-filter${collapsedGroups.has("automation") ? " collapsed" : ""}" role="group" aria-label="Automation">
+      <div class="filter-group automation-filter${collapsedGroups.has("automation") ? " collapsed" : ""}" role="group" aria-label="Automation" ${showScripts ? "" : "hidden"}>
         <div class="filter-group-header">
           <button class="filter-group-toggle" type="button" aria-expanded="${!collapsedGroups.has("automation")}">
             <span class="arrow" aria-hidden="true">▾</span><span>Automation</span>
@@ -1082,7 +1082,7 @@
     let visibleStubs = 0;
 
     for (const skill of DATA.skills) {
-      const matchesFilters = showSkills && AUTOMATION_OPTIONS.every(option => automationFilters.has(option.value)) && matchesActiveFilters(skill);
+      const matchesFilters = showSkills && matchesActiveFilters(skill);
       const matchesSearch = matchesSearchQuery(skill);
       const isStub = skill.status === "stub";
       const visible = matchesFilters && matchesSearch;
