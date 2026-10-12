@@ -1,0 +1,40 @@
+{
+  "catalogType": "demo",
+  "scripts": [
+    {
+      "id": "example-automation/morning-report",
+      "name": "morning-report",
+      "description": "Prepare a fictional morning summary.",
+      "aliases": ["daily-summary"],
+      "source": "example-automation",
+      "file": "",
+      "workingDirectory": "",
+      "runtime": "python",
+      "platforms": ["macos"],
+      "status": "active",
+      "tags": {"stage": ["produce"], "tool": [], "task": ["reporting"]},
+      "jobs": [
+        {
+          "kind": "launchd",
+          "label": "com.example.morning-report",
+          "schedule": "Daily 08:00",
+          "definition": "Example job definition"
+        }
+      ]
+    },
+    {
+      "id": "example-automation/data-check",
+      "name": "data-check",
+      "description": "Check a fictional data file on request.",
+      "aliases": [],
+      "source": "example-automation",
+      "file": "",
+      "workingDirectory": "",
+      "runtime": "bash",
+      "platforms": ["macos", "linux"],
+      "status": "active",
+      "tags": {"stage": ["produce"], "tool": ["analytics"], "task": ["validation"]},
+      "jobs": []
+    }
+  ]
+}

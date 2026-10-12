@@ -39,6 +39,11 @@ class SkillsExplorerHandler(SimpleHTTPRequestHandler):
             item["truePath"] for item in inventory
             if item.get("hasSkillMd") and item.get("truePath", "").endswith("SKILL.md")
         )
+        try:
+            script_inventory = json.loads((EXPLORER_DIR / "scripts-local.json").read_text()).get("scripts", [])
+        except (OSError, ValueError):
+            script_inventory = []
+        allowed.update(item["file"] for item in script_inventory if item.get("file"))
         if not path.is_absolute() or str(path) not in allowed or not path.exists():
             self.send_json({"ok": False, "error": "File not found"}, 404)
             return

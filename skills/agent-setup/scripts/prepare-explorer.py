@@ -15,7 +15,7 @@ from asset_config import default_config_path
 MARKER = ".agent-setup-explorer"
 MARKER_CONTENT = "AI Assets Explorer local output v1\n"
 VIEWER_FILES = ("index.html", "about.html", "serve.py")
-GENERATED_FILES = ("skills.json", "skills-local.json")
+GENERATED_FILES = ("skills.json", "skills-local.json", "scripts-local.json")
 
 
 def prepare(config, output):
@@ -43,6 +43,10 @@ def prepare(config, output):
         staging = Path(temporary)
         subprocess.run([
             sys.executable, "-B", str(REPO / "skills-explorer/generate-skills-json.py"),
+            "--config", str(config), "--output-dir", str(staging),
+        ], check=True)
+        subprocess.run([
+            sys.executable, "-B", str(REPO / "skills-explorer/generate-scripts-json.py"),
             "--config", str(config), "--output-dir", str(staging),
         ], check=True)
         for name in VIEWER_FILES:

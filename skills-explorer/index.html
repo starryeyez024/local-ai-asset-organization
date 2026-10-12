@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Assets Explorer</title>
+  <title>AI Asset Explorer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
@@ -222,8 +222,10 @@
 
     .results-header {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
+      gap: 8px 16px;
       margin-bottom: 16px;
       font-size: 14px;
       color: var(--rh-gray-500);
@@ -700,6 +702,9 @@
     .badge-curated { background: var(--tag-role-bg); color: var(--tag-role); }
     .badge-orphaned { background: var(--rh-gray-100); color: var(--rh-gray-500); }
     .badge-realdir { background: var(--rh-gray-100); color: var(--rh-gray-500); }
+    .filter-heading { padding: 0 16px 6px; font-size: 14px; font-weight: 600; color: var(--rh-gray-700); }
+    .script-job { margin: 8px 0; padding: 8px 12px; border-left: 3px solid var(--tag-role); background: var(--tag-role-bg); }
+    .script-job code, .script-source code { overflow-wrap: anywhere; }
 
     @media (max-width: 600px) {
       .layout { flex-direction: column; }
@@ -730,9 +735,9 @@
 <body>
 
 <header>
-  <h1>AI Assets Explorer</h1>
+  <h1>AI Asset Explorer</h1>
   <div class="view-tabs" id="view-tabs">
-  <button class="view-tab active" data-view="browse">Browse Skills</button>
+  <button class="view-tab active" data-view="browse">Browse Assets</button>
   <button class="view-tab" data-view="maintain" id="audit-tab">Audit Skills</button>
   <a class="view-tab view-tab-link" href="about.html">About</a>
   </div>
@@ -741,7 +746,7 @@
 
 <section id="catalog-notice" hidden role="status" style="margin:24px;max-width:720px;">
   <h2>Prepare your local catalog</h2>
-  <p>The catalog could not be loaded. Ask your assistant to use the agent-setup skill to prepare or refresh your Skills Explorer, then open the local server address it provides.</p>
+  <p>The catalog could not be loaded. Ask your assistant to prepare or refresh your AI Asset Explorer, then open the local server address it provides.</p>
   <p><a href="about.html">How local setup works</a></p>
 </section>
 
@@ -755,7 +760,7 @@
       <div class="results-header">
         <span id="results-count" class="results-count"></span>
         <label class="toggle-expand">
-          <input type="checkbox" id="expand-skills"> Expand/Collapse Skills
+          <input type="checkbox" id="expand-skills"> Expand/Collapse
         </label>
       </div>
       <div id="skills-list"></div>
@@ -791,20 +796,39 @@
 <script>
 (function () {
   let DATA = null;
+  let SCRIPTS = [];
+  let SCRIPT_SCAN_WARNINGS = [];
+  let showSkills = true;
+  let showScripts = true;
+  const automationFilters = new Set(["automated", "manual"]);
   const activeFilters = { type: new Set(), status: new Set(), phase: new Set(), stage: new Set(), tool: new Set(), role: new Set(), task: new Set(), repository: new Set() };
   const collapsedGroups = new Set();
   let searchQuery = "";
   let expandAllSkills = false;
 
-  const GROUP_LABELS = { type: "Skill Type", status: "Status", phase: "Agile Phase", stage: "Work Stage", tool: "Tool", role: "Role", task: "Task Type", repository: "Source repository" };
+  const GROUP_LABELS = { type: "Skill Type", status: "Skill Maturity", phase: "Agile Phase", stage: "Work Stage", tool: "Tool", role: "Role", task: "Task Type", repository: "Source repository" };
   const STATUS_OPTIONS = ["full", "stub"];
   const UNCLASSIFIED_VALUE = "unclassified";
+  const SHARED_SCRIPT_GROUPS = new Set(["stage", "tool", "task"]);
+  const NEW_TASK_OPTIONS = new Set(["classification", "maintenance", "synchronization"]);
+  const AUTOMATION_OPTIONS = [
+    { value: "automated", label: "Automated", hint: "Has a directly matched cron or launchd job definition" },
+    { value: "manual", label: "Manual", hint: "No directly matched cron or launchd job definition was found" },
+  ];
 
   function getFilterOptions(group) {
     if (group === "status") return STATUS_OPTIONS;
-    const options = DATA.filterOptions[group] || [];
-    const hasUnclassifiedSkills = DATA.skills.some(skill => !(skill.tags[group] || []).length);
-    return hasUnclassifiedSkills ? [...options, UNCLASSIFIED_VALUE] : options;
+    const scriptValues = SHARED_SCRIPT_GROUPS.has(group)
+      ? SCRIPTS.flatMap(script => (script.tags || {})[group] || []) : [];
+    const options = [...new Set([...(DATA.filterOptions[group] || []), ...scriptValues])].sort();
+    const hasUnclassified = DATA.skills.some(skill => !(skill.tags[group] || []).length) ||
+      (SHARED_SCRIPT_GROUPS.has(group) && SCRIPTS.some(script => !((script.tags || {})[group] || []).length));
+    return hasUnclassified ? [...options, UNCLASSIFIED_VALUE] : options;
+  }
+
+  function scriptMatchesAutomation(script) {
+    const hasJob = (script.jobs || []).length > 0;
+    return hasJob ? automationFilters.has("automated") : automationFilters.has("manual");
   }
 
   const PHASE_LABELS = {
@@ -873,7 +897,14 @@
     if (DATA.catalogType === "demo") {
       delete DATA.inventory;
       delete DATA.inventoryStats;
-      document.querySelector("header h1").textContent = "AI Assets Explorer — Demo";
+      document.querySelector("header h1").textContent = "AI Asset Explorer — Demo";
+    }
+    const scriptFile = DATA.catalogType === "demo" ? "sample-scripts.json" : "scripts-local.json";
+    const scriptResponse = await fetch(`${scriptFile}?_=${Date.now()}`, { cache: "no-store" });
+    if (scriptResponse.ok) {
+      const scriptData = await scriptResponse.json();
+      SCRIPTS = Array.isArray(scriptData.scripts) ? scriptData.scripts : [];
+      SCRIPT_SCAN_WARNINGS = Array.isArray(scriptData.scanWarnings) ? scriptData.scanWarnings : [];
     }
     document.getElementById("audit-tab").hidden = !Array.isArray(DATA.inventory);
     // Computed once, over the full inventory, regardless of filters -- see
@@ -905,20 +936,57 @@
     const sidebar = document.getElementById("sidebar");
     sidebar.innerHTML = "";
     const allSelected = areAllFiltersSelected();
-    const someSelected = Object.values(activeFilters).some(values => values.size > 0);
+    const someSelected = showSkills || showScripts || automationFilters.size > 0 || Object.values(activeFilters).some(values => values.size > 0);
     sidebar.innerHTML = `
       <div class="sidebar-search">
         <input type="text" id="search-box" placeholder="search name or description">
       </div>
+      <h2 class="filter-heading">Filters</h2>
       <label class="filter-all">
         <input type="checkbox" id="filter-all" ${allSelected ? "checked" : ""}>
         <span>Check all / uncheck all</span>
       </label>
+      <div class="filter-group asset-kind-filter${collapsedGroups.has("assetKind") ? " collapsed" : ""}" role="group" aria-label="Asset type">
+        <div class="filter-group-header">
+          <button class="filter-group-toggle" type="button" aria-expanded="${!collapsedGroups.has("assetKind")}">
+            <span class="arrow" aria-hidden="true">▾</span><span>Asset Type</span>
+          </button>
+        </div>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" id="show-skills" ${showSkills ? "checked" : ""}> Skills <span class="count">${DATA.skillCount}</span></label>
+          <label class="filter-option"><input type="checkbox" id="show-scripts" ${showScripts ? "checked" : ""}> Scripts <span class="count">${SCRIPTS.length}</span></label>
+        </div>
+      </div>
+      <div class="filter-group automation-filter${collapsedGroups.has("automation") ? " collapsed" : ""}" role="group" aria-label="Automation">
+        <div class="filter-group-header">
+          <button class="filter-group-toggle" type="button" aria-expanded="${!collapsedGroups.has("automation")}">
+            <span class="arrow" aria-hidden="true">▾</span><span>Automation</span>
+          </button>
+        </div>
+        <div class="filter-options">
+          ${AUTOMATION_OPTIONS.map(option => `
+            <label class="filter-option" title="${option.hint}"><input type="checkbox" data-automation="${option.value}" ${automationFilters.has(option.value) ? "checked" : ""}>
+              <span>${option.label}</span><span class="count">${SCRIPTS.filter(script =>
+                Boolean((script.jobs || []).length) === (option.value === "automated")).length}</span>
+            </label>
+          `).join("")}
+        </div>
+      </div>
     `;
     sidebar.querySelector("#search-box").value = searchQuery;
     const masterCheckbox = sidebar.querySelector("#filter-all");
     masterCheckbox.indeterminate = someSelected && !allSelected;
-    for (const [group, label] of Object.entries(GROUP_LABELS)) {
+    sidebar.querySelector(".asset-kind-filter .filter-group-toggle").addEventListener("click", () => {
+      if (collapsedGroups.has("assetKind")) collapsedGroups.delete("assetKind");
+      else collapsedGroups.add("assetKind");
+      renderSidebar();
+    });
+    sidebar.querySelector(".automation-filter .filter-group-toggle").addEventListener("click", () => {
+      if (collapsedGroups.has("automation")) collapsedGroups.delete("automation");
+      else collapsedGroups.add("automation");
+      renderSidebar();
+    });
+    for (const [group, label] of Object.entries(GROUP_LABELS).filter(([group]) => showSkills || (showScripts && SHARED_SCRIPT_GROUPS.has(group)))) {
       const options = getFilterOptions(group);
       const div = document.createElement("div");
       div.className = `filter-group${collapsedGroups.has(group) ? " collapsed" : ""}`;
@@ -928,7 +996,8 @@
 
       const counts = {};
       for (const opt of options) {
-        counts[opt] = DATA.skills.filter(s => matchesFilterOption(s, group, opt)).length;
+        counts[opt] = (showSkills ? DATA.skills.filter(s => matchesFilterOption(s, group, opt)).length : 0) +
+          (showScripts && SHARED_SCRIPT_GROUPS.has(group) ? SCRIPTS.filter(s => matchesFilterOption(s, group, opt)).length : 0);
       }
 
       div.innerHTML = `
@@ -967,6 +1036,10 @@
   }
 
   function setAllFilters(checked) {
+    showSkills = checked;
+    showScripts = checked;
+    automationFilters.clear();
+    if (checked) AUTOMATION_OPTIONS.forEach(option => automationFilters.add(option.value));
     for (const [group, values] of Object.entries(activeFilters)) {
       values.clear();
       if (checked) getFilterOptions(group).forEach(value => values.add(value));
@@ -979,7 +1052,7 @@
   }
 
   function areAllFiltersSelected() {
-    return Object.entries(activeFilters).every(([group, values]) =>
+    return showSkills && showScripts && AUTOMATION_OPTIONS.every(option => automationFilters.has(option.value)) && Object.entries(activeFilters).every(([group, values]) =>
       getFilterOptions(group).every(value => values.has(value))
     );
   }
@@ -988,8 +1061,8 @@
     if (group === "status") return value === "stub"
       ? skill.status === "stub"
       : value === "full" && skill.status !== "stub";
-    if (value === UNCLASSIFIED_VALUE) return !(skill.tags[group] || []).length;
-    return (skill.tags[group] || []).includes(value);
+    if (value === UNCLASSIFIED_VALUE) return !((skill.tags || {})[group] || []).length;
+    return ((skill.tags || {})[group] || []).includes(value);
   }
 
   function getSkillFilePath(skill) {
@@ -1009,7 +1082,7 @@
     let visibleStubs = 0;
 
     for (const skill of DATA.skills) {
-      const matchesFilters = matchesActiveFilters(skill);
+      const matchesFilters = showSkills && AUTOMATION_OPTIONS.every(option => automationFilters.has(option.value)) && matchesActiveFilters(skill);
       const matchesSearch = matchesSearchQuery(skill);
       const isStub = skill.status === "stub";
       const visible = matchesFilters && matchesSearch;
@@ -1085,16 +1158,58 @@
       list.appendChild(card);
     }
 
-    const countLabel = visibleCount === DATA.skillCount
-      ? `${visibleCount} skills`
-      : `${visibleCount} of ${DATA.skillCount} skills`;
-    document.getElementById("results-count").textContent =
-      `${countLabel} · ${visibleCount - visibleStubs} active · ${visibleStubs} stubs${refreshLabel()}`;
+    let visibleScripts = 0;
+    for (const script of SCRIPTS) {
+      const q = searchQuery.toLowerCase();
+      const found = !q || [script.id, script.name, script.description, ...(script.aliases || []),
+        ...(script.jobs || []).map(job => job.label)].some(value => String(value || "").toLowerCase().includes(q));
+      if (!showScripts || !found || !scriptMatchesAutomation(script) || !matchesScriptFilters(script)) continue;
+      visibleScripts++;
+      const card = document.createElement("details");
+      card.className = "skill-card script-card";
+      const jobs = script.jobs || [];
+      card.innerHTML = `
+        <summary>
+          <span class="skill-disclosure" aria-hidden="true"></span>
+          <div class="summary-text">
+            <span class="skill-name">${escapeHtml(script.name)}${jobs.length ? ' <span class="badge badge-curated">Automated</span>' : ""}</span>
+            <span class="skill-description-preview">${escapeHtml(script.description)}</span>
+          </div>
+        </summary>
+        <div class="skill-details">
+          <div class="skill-tags"><span class="skill-type-badge">Script</span>
+            <span class="badge ${script.status === "active" ? "badge-curated" : "badge-missing"}">${escapeHtml(script.status)}</span>
+            ${["stage", "tool", "task"].flatMap(group => ((script.tags || {})[group] || []).map(value =>
+              `<span class="tag ${group}" data-group="${group}" data-value="${escapeAttr(value)}">${escapeHtml(formatLabel(value, group))}</span>`)).join("")}
+          </div>
+          <div class="meta-row script-source">
+            <span><strong>Catalog name:</strong> <code>${escapeHtml(script.id)}</code></span>
+            <span><strong>Source:</strong> <code>${escapeHtml(script.source)}</code></span>
+            <span><strong>Runtime:</strong> ${escapeHtml(script.runtime)}</span>
+            ${script.file ? `<span><strong>File:</strong> <code>${escapeHtml(script.file)}</code>
+              <button class="source-path-action" type="button" data-file-path="${escapeAttr(script.file)}"
+                title="Show source in file manager" aria-label="Show source in file manager">↗</button></span>` : ""}
+          </div>
+          <p class="source-action-status" role="status" aria-live="polite" hidden></p>
+          <div class="how-to-use">
+            <p><strong>Aliases:</strong> ${escapeHtml((script.aliases || []).join(", ") || "None")}</p>
+            <p><strong>Job definitions:</strong> ${jobs.length ? `${jobs.length} found` : "None found in the scanned local launchd and cron definitions"}</p>
+            ${jobs.map(job => `<div class="script-job"><strong>${escapeHtml(job.label)}</strong> · ${escapeHtml(job.kind)} · ${escapeHtml(job.schedule)}<br><code>${escapeHtml(job.definition)}</code></div>`).join("")}
+          </div>
+        </div>`;
+      card.open = expandAllSkills;
+      list.appendChild(card);
+    }
 
-    if (visibleCount === 0) {
+    const countLabel = `${visibleCount} of ${DATA.skillCount} skills · ${visibleScripts} of ${SCRIPTS.length} scripts`;
+    document.getElementById("results-count").textContent =
+      `${countLabel} · ${visibleStubs} skill stubs${SCRIPT_SCAN_WARNINGS.length ? " · Schedule scan incomplete" : ""}${refreshLabel()}`;
+    document.getElementById("results-count").title = SCRIPT_SCAN_WARNINGS.join("\n");
+
+    if (visibleCount + visibleScripts === 0) {
       const msg = document.createElement("div");
       msg.className = "no-results";
-      msg.textContent = "No skills match the current filters.";
+      msg.textContent = "No assets match the current filters.";
       list.appendChild(msg);
     }
 
@@ -1263,6 +1378,14 @@
     return true;
   }
 
+  function matchesScriptFilters(script) {
+    for (const group of SHARED_SCRIPT_GROUPS) {
+      const selected = activeFilters[group];
+      if (!selected.size || ![...selected].some(value => matchesFilterOption(script, group, value))) return false;
+    }
+    return true;
+  }
+
   function matchesSearchQuery(skill) {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
@@ -1306,6 +1429,25 @@
     });
 
     document.getElementById("sidebar").addEventListener("change", (e) => {
+      if (e.target.id === "show-skills") {
+        showSkills = e.target.checked;
+        renderSidebar();
+        renderSkills();
+        return;
+      }
+      if (e.target.id === "show-scripts") {
+        showScripts = e.target.checked;
+        renderSidebar();
+        renderSkills();
+        return;
+      }
+      if (e.target.dataset.automation) {
+        if (e.target.checked) automationFilters.add(e.target.dataset.automation);
+        else automationFilters.delete(e.target.dataset.automation);
+        renderSidebar();
+        renderSkills();
+        return;
+      }
       if (e.target.id === "filter-all") {
         setAllFilters(e.target.checked);
         updateHashFromFilters();
@@ -1429,13 +1571,17 @@
   }
 
   function updateHashFromFilters() {
-    const parts = [];
+    if (areAllFiltersSelected()) {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+      return;
+    }
+    const parts = ["v=2"];
     for (const [group, values] of Object.entries(activeFilters)) {
       if (values.size > 0) {
         parts.push(`${group}=${[...values].join(",")}`);
       }
     }
-    window.location.hash = parts.length ? parts.join("&") : "";
+    window.location.hash = parts.join("&");
   }
 
   function loadFiltersFromHash() {
@@ -1449,6 +1595,18 @@
             activeFilters[group].add(v);
           }
         }
+      }
+    }
+    // Older all-selected links predate the script task categories. Keep that
+    // state all-selected after a refresh without overriding newer filtered links.
+    if (!hash.split("&").includes("v=2")) {
+      const missingTasks = getFilterOptions("task").filter(value => !activeFilters.task.has(value));
+      const otherGroupsComplete = Object.entries(activeFilters).every(([group, values]) =>
+        group === "task" || getFilterOptions(group).every(value => values.has(value))
+      );
+      if (missingTasks.length && missingTasks.every(value => NEW_TASK_OPTIONS.has(value)) && otherGroupsComplete) {
+        setAllFilters(true);
+        history.replaceState(null, "", window.location.pathname + window.location.search);
       }
     }
   }

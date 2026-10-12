@@ -89,17 +89,20 @@ TOOL_KEYWORDS = {
 
 TASK_KEYWORDS = {
     "planning": [r"\bplan\b", r"\bplanning\b", r"\bagenda\b", r"\bceremony\b", r"\bpi\b", r"\broadmap\b"],
-    "analysis": [r"\banalyz\b", r"\banalysis\b", r"\baudit\b", r"\bassess\b", r"\bcompare\b", r"\breview\b", r"\bscore\b", r"\bprofile\b", r"\bheuristic\b"],
-    "generation": [r"\bgenerat\b", r"\bdraft\b", r"\bcreate\b", r"\bauthor\b", r"\bwrite\b", r"\bproduc\b"],
-    "validation": [r"\bvalidat\b", r"\bcheck\b", r"\bverif\b", r"\bcompliance\b", r"\bregression\b"],
-    "reporting": [r"\breport\b", r"\bstatus\b", r"\bsummar\b", r"\bdashboard\b", r"\bupdate\b"],
-    "discovery": [r"\bdiscover\b", r"\bresearch\b", r"\bintake\b", r"\bsignal\b", r"\bingest\b", r"\bscan\b", r"\bexplor\b"],
-    "prioritization": [r"\bprioritiz\b", r"\brank\b", r"\brice\b", r"\bwsjf\b", r"\bscore\b", r"\bweight\b"],
+    "analysis": [r"\banalyz", r"\banalysis\b", r"\baudit\b", r"\bassess", r"\bcompare\b", r"\breview\b", r"\bscore\b", r"\bprofile\b", r"\bheuristic\b"],
+    "generation": [r"\bgenerat", r"\bdraft", r"\bcreate\b", r"\bauthor", r"\bwrite", r"\bproduc"],
+    "validation": [r"\bvalidat", r"\bcheck", r"\bverif", r"\bcompliance\b", r"\bregression\b", r"\bdedupe\b", r"\bduplicate\b"],
+    "reporting": [r"\breport", r"\bstatus\b", r"\bsummar", r"\bdashboard\b", r"\bupdate\b"],
+    "discovery": [r"\bdiscover", r"\bresearch\b", r"\bintake\b", r"\bsignal\b", r"\bingest", r"\bscan", r"\bexplor"],
+    "prioritization": [r"\bprioritiz", r"\brank", r"\brice\b", r"\bwsjf\b", r"\bscore\b", r"\bweight"],
     "handoff": [r"\bhandoff\b", r"\bhand.off\b", r"\bformat.handoff\b", r"\bpublish\b", r"\brelease\b"],
-    "monitoring": [r"\bmonitor\b", r"\btrack\b", r"\bdetect\b", r"\bhealth\b", r"\bdrift\b", r"\bblocker\b"],
-    "communication": [r"\bcomms\b", r"\bcommunicat\b", r"\bstakeholder\b", r"\bannounce\b", r"\bnewsletter\b"],
+    "monitoring": [r"\bmonitor", r"\btrack", r"\bdetect", r"\bhealth\b", r"\bdrift\b", r"\bblocker\b"],
+    "communication": [r"\bcomms\b", r"\bcommunicat", r"\bstakeholder\b", r"\bannounce", r"\bnewsletter\b"],
     "risk-management": [r"\brisk\b", r"\bmitigation\b", r"\bblocker\b", r"\bfeasibility\b", r"\bgap\b"],
     "refinement": [r"\bacceptance.criteria\b", r"\brefinement\b", r"\bepic\b", r"\bstory\b", r"\bbrief\b"],
+    "maintenance": [r"\bbackup\b", r"\bcommit\b", r"\bclean", r"\bdedupe\b", r"\bmaintain"],
+    "synchronization": [r"\bsync", r"\bsynchroniz", r"\bmerge\b"],
+    "classification": [r"\btag\b", r"\btagging\b", r"\bcategoriz", r"\bclassif"],
 }
 
 # Where a skill sits in the agile/delivery lifecycle. Checked in priority order:

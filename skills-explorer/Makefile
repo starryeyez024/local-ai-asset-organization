@@ -6,7 +6,7 @@ EXPLORER_DIR ?= $(HOME)/.local/share/ai-assets-explorer
 CONFIG ?=
 
 help:
-	@echo "Skills Explorer -- available commands:"
+	@echo "AI Asset Explorer -- available commands:"
 	@echo ""
 	@echo "  make regen   Prepare or refresh your local Explorer and catalog"
 	@echo "  make serve   Serve the site locally at http://localhost:$(PORT)"

@@ -64,6 +64,16 @@ class FileRevealResponses(unittest.TestCase):
             self.assertEqual(self.reveal(self.skill_file), (200, {"ok": True}))
             launch.assert_called_once()
 
+    def test_registered_script_can_be_revealed_but_unknown_file_cannot(self):
+        script = self.root / "script with spaces.py"
+        script.write_text("print('fixture')\n")
+        (self.root / "scripts-local.json").write_text(json.dumps({"scripts": [{"file": str(script)}]}))
+        with patch.object(server.subprocess, "Popen") as launch:
+            self.assertEqual(self.reveal(script), (200, {"ok": True}))
+            self.assertEqual(self.reveal(self.root / "other.py"),
+                             (404, {"ok": False, "error": "File not found"}))
+            launch.assert_called_once()
+
     def test_missing_action_header_does_not_launch(self):
         with patch.object(server.subprocess, "Popen") as launch:
             self.assertEqual(self.reveal(self.skill_file, headers={}),

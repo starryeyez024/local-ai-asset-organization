@@ -42,7 +42,7 @@ For installer-managed packages, do not edit the cache or installed copy in place
 
 1. **Identify ownership.** Check the Git remote and local checkout before changing a team or vendor skill. A path alone is a useful clue, but it does not prove who owns the repository. If the checkout is your own personal repository, edit it normally.
 
-2. **Copy the whole skill folder** into a personal repository under `~/AI Assets/<your-git-username>/<repo-name>/skills/<skill-name>/`. Include scripts, references, and assets. Keep the original team or vendor checkout untouched. Use a distinct personal repository folder if the name would collide with an existing checkout.
+2. **Copy the whole skill folder** into a personal repository under `~/AI Assets/<your-git-username>/<repo-name>/skills/<skill-name>/`. Include bundled scripts, references, assets, templates, and relative resource paths. Keep the original team or vendor checkout untouched. Use a distinct personal repository folder if the name would collide with an existing checkout. A helper inside the bundle follows the skill's ownership and update rules; do not treat it as an unrelated standalone script.
 
 3. **Edit and verify the personal copy.** Confirm its `SKILL.md` and supporting files work together. Record where the copy came from and how you will review upstream changes.
 

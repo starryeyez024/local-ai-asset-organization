@@ -18,11 +18,17 @@
         <li>Build or update personal context — <a href="skills/agent-setup/references/personal-context.md" data-local-href="../skills/agent-setup/references/personal-context.md">context interview</a>.</li>
         <li>Audit your assets — <a href="skills/ai-asset-auditor/SKILL.md" data-local-href="../skills/ai-asset-auditor/SKILL.md">ai-asset-auditor</a>.</li>
         <li>Add skill symlinks — <a href="skills/skill-linker/SKILL.md" data-local-href="../skills/skill-linker/SKILL.md">skill-linker</a>.</li>
-        <li>View your skills — <a id="open-explorer" href="skills-explorer-guide.html">open the Explorer</a>, or ask “Open my Skills Explorer.”</li>
-        <li>Refresh your catalog — ask “Refresh my skill catalog.” <a href="skills/agent-setup/references/explorer.md" data-local-href="../skills/agent-setup/references/explorer.md">Setup and refresh instructions</a>.</li>
+        <li>View your skills and registered scripts — <a id="open-explorer" href="skills-explorer-guide.html">open the Explorer</a>, or ask “Open my AI Asset Explorer.”</li>
+        <li>Refresh your catalog — ask “Refresh my asset catalog.” <a href="skills/agent-setup/references/explorer.md" data-local-href="../skills/agent-setup/references/explorer.md">Setup and refresh instructions</a>.</li>
         <li>Customize a shared skill — <a href="skills/skill-override-safeguard/SKILL.md" data-local-href="../skills/skill-override-safeguard/SKILL.md">skill-override-safeguard</a>.</li>
         <li>Check tool support — <a href="tool-compatibility.html">compatibility chart</a>.</li>
       </ol>
+      <h2>Local script lookup</h2>
+      <p>These examples use the auditor helper in this checkout. Python 3.11 or newer is required. Inventory can run before you create a catalog; validation and lookup use your private configuration.</p>
+      <pre>python3 skills/ai-asset-auditor/scripts/script-catalog.py inventory --root example-tools=/path/to/checkout
+python3 skills/ai-asset-auditor/scripts/script-catalog.py validate
+python3 skills/ai-asset-auditor/scripts/script-catalog.py --json resolve example-tools/hello</pre>
+      <p>In native Windows PowerShell, replace <code class="inline">python3</code> with <code class="inline">py -3</code> and use a Windows path for the root. Add <code class="inline">--config PATH</code> before the operation for a custom setup file. <a href="skills/ai-asset-auditor/references/scripts.md" data-local-href="../skills/ai-asset-auditor/references/scripts.md">Catalog format and error rules</a>.</p>
     </section>
   </main>
   <footer><div class="wrap"><a href="index.html">Full guide</a></div></footer>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About — AI Assets Explorer</title>
+<title>About — AI Asset Explorer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
@@ -153,9 +153,9 @@
 <body>
 
 <header>
-  <h1>AI Assets Explorer</h1>
+  <h1>AI Asset Explorer</h1>
   <nav class="view-tabs" aria-label="Explorer navigation">
-    <a class="view-tab" href="index.html">Browse Skills</a>
+    <a class="view-tab" href="index.html">Browse Assets</a>
     <a class="view-tab" href="index.html?view=audit" id="about-audit-tab">Audit Skills</a>
     <a class="view-tab" href="about.html" aria-current="page">About</a>
   </nav>
@@ -164,19 +164,19 @@
 <main>
   <section id="demo-about" hidden>
     <h2>Set up your own Explorer</h2>
-    <p>This demo uses a fictional sample catalog. It does not scan your computer or need a skills directory. Search, filter, and open the cards to try it.</p>
-    <p>To browse your own skills, open this repository in your AI assistant and ask:</p>
-    <div class="card">Use the agent-setup skill to set up my Skills Explorer.</div>
+    <p>This demo uses fictional skill and script catalogs. It does not scan your computer. Search, filter, and open the cards to try it.</p>
+    <p>To browse your own assets, open this repository in your AI assistant and ask:</p>
+    <div class="card">Use the agent-setup skill to set up my AI Asset Explorer.</div>
     <p>The assistant checks your configuration, helps organize your skill links, and creates a working app and catalog in <code>~/.local/share/ai-assets-explorer/</code>. The recommended directory for skill links is <code>~/.agents/skills/</code>; setup checks your existing layout before making changes.</p>
     <p>If your assistant cannot find the skill, ask it to read <code>skills/agent-setup/SKILL.md</code> in the checkout.</p>
     <p>Your local Explorer includes scan details, refresh times, and an audit of your configured skills directory. Personal catalogs stay on your machine.</p>
   </section>
   <section id="local-about">
   <h2>About</h2>
-  <p>The Explorer scans your configured skills directory when you generate or refresh the catalog. It does not watch folders or update automatically. Ask your assistant to “refresh my skill catalog” to pick up changes; reloading the browser only reloads the saved catalog.</p>
+  <p>The Explorer scans your configured skills directory and reads your private script catalog when you generate or refresh it. It also reads local launchd and cron definitions for direct script references. It does not watch folders or update automatically. Ask your assistant to refresh your AI Asset Explorer after changes.</p>
   <p id="scan-directory" hidden><strong>Directory scanned:</strong> <code id="scan-directory-path"></code></p>
   <p>The scan includes skill folders in that directory and follows symlinks to their original sources. It does not independently search <code>~/.claude/skills/</code>, <code>~/.codex/skills/</code>, project folders, or marketplace caches. Setup’s asset audit can discover skills outside this catalog.</p>
-  <p><strong>Browse Skills</strong> searches and filters the skills found by the scan. <strong>Audit Skills</strong> shows local entries, broken links, duplicate names, and file age. Neither view installs, edits, or runs a skill, and the catalog does not verify which skills each AI tool has enabled.</p>
+  <p><strong>Browse Assets</strong> lets you filter Skills and Scripts and narrow scripts to those with a matched job definition. <strong>Audit Skills</strong> shows local skill entries, broken links, duplicate names, and file age. Browsing does not install, edit, or run anything.</p>
   <p>Keep marketplace installations where their installers expect them; do not link managed caches into the skills directory just to include them here.</p>
 
   <h2>Where the data comes from</h2>
@@ -184,6 +184,7 @@
   <div class="card">
     <p><strong>Browse catalog:</strong> <code>skills.json</code> contains skill names, descriptions, tags, and source labels. It is generated locally and excluded from Git.</p>
     <p><strong>Local audit:</strong> <code>skills-local.json</code> also contains absolute paths and inventory details. It is ignored by Git and must stay on the machine that generated it. Without this file, the page hides Audit Skills.</p>
+    <p><strong>Registered scripts:</strong> <code>scripts-local.json</code> contains private catalog entries, absolute script paths, and any direct launchd or cron job matches. It stays on your machine. Job matches show definitions, not loaded or successful job status.</p>
   </div>
 
   <h2>How tags work</h2>
@@ -198,8 +199,8 @@
     <li><strong>Include another skill:</strong> ask your assistant to audit your assets and use skill-linker where appropriate, then refresh the catalog. Rescanning alone does not discover skills outside the configured directory.</li>
   </ul>
   <p>Keep the original <code>local-ai-asset-organization</code> repository checkout available: it contains the generator needed for refreshes. Your assistant also needs access to the <code>agent-setup</code> skill. If it cannot find the skill, open the checkout in your assistant and ask it to read <code>skills/agent-setup/SKILL.md</code>. The installed app can display its saved catalog without the checkout.</p>
-  <p>To reopen the app, ask “Use agent-setup to open my Skills Explorer.” The assistant uses your saved setup details to open the existing server or start it again.</p>
-  <p>Guided setup keeps generated files in <code>~/.local/share/ai-assets-explorer/</code>, outside the source repository. Both personal catalog files stay local. The documentation site’s demo uses a separate fictional sample catalog.</p>
+  <p>To reopen the app, ask “Use agent-setup to open my AI Asset Explorer.” The assistant uses your saved setup details to open the existing server or start it again.</p>
+  <p>Guided setup keeps generated files in <code>~/.local/share/ai-assets-explorer/</code>, outside the source repository. All personal catalog files stay local. The documentation site’s demo uses fictional sample catalogs.</p>
   <details><summary>Commands for preparing your local Explorer</summary>
   <p>Run these in the source checkout, where the generator and Makefile live.</p>
   <div class="card">
@@ -211,7 +212,7 @@ make run
   <div class="card">
     <pre><code>make regen CONFIG=/path/to/agent-config.toml</code></pre>
   </div>
-  <p>After a source skill changes, ask your assistant to refresh the catalog. Source skills remain in their repositories; both generated JSON files stay in your local Explorer folder. The file manager action requires the local server. Catalog refreshes happen when requested, without a scheduled background rebuild.</p>
+  <p>After a source asset or job definition changes, ask your assistant to refresh the catalog. Source assets remain in their repositories; all generated JSON files stay in your local Explorer folder. The file manager action requires the local server. Catalog refreshes happen when requested, without a scheduled background rebuild.</p>
   <div class="note">Requires Python 3.11+ and Make for these commands. Guided setup needs Python 3.11+ without Make. The generator uses only Python's standard library.</div>
   </details>
   </section>
@@ -233,7 +234,7 @@ make run
     document.getElementById("local-about").hidden = demo;
     document.getElementById("about-audit-tab").hidden = demo || !Array.isArray(data.inventory);
     if (demo) {
-      document.querySelector("header h1").textContent = "AI Assets Explorer — Demo";
+      document.querySelector("header h1").textContent = "AI Asset Explorer — Demo";
     } else if (data.scannedDirectory) {
       document.getElementById("scan-directory-path").textContent = data.scannedDirectory;
       document.getElementById("scan-directory").hidden = false;

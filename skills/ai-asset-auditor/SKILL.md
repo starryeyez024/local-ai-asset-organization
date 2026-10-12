@@ -2,18 +2,38 @@
 name: ai-asset-auditor
 description: >
   Read-first audit and migration-planning procedure for scattered AI assets
-  (skills and MCP servers). Proposes a clear physical root and verifies each
+  (skills, MCP servers, and scripts). Proposes a clear physical root and verifies each
   tool-facing delivery path against its runtime. Use this
   BEFORE moving, renaming, deduplicating, or restructuring any skill folder or
-  MCP server checkout, on ANY machine. Triggers on requests like "clean up my
+  MCP server checkout or maintained script, on ANY machine. Triggers on requests like "clean up my
   skills folders," "consolidate my AI assets," "find duplicate skills," "set up
-  a flat AI asset root," or "audit my MCP servers." Runs discover-then-confirm:
+  a flat AI asset root," "find my scripts," or "audit my MCP servers." Runs discover-then-confirm:
   always presents a plan and asks clarifying questions before touching any
   file, and never executes a move, rename, delete, or symlink change without
   explicit per-plan user confirmation.
 ---
 
 # AI Asset Auditor
+
+## Scripts
+
+For script discovery, name lookup, or migration, load
+[the script procedure](references/scripts.md). Use the bundled
+`scripts/script-catalog.py` helper for read-only inventory, validation, and
+resolution. It works when this auditor is installed independently. A script
+stays with its owner: its skill bundle, application repository, maintained
+personal utility repository, or installer. Register selected shared scripts
+in a private catalog; do not create a generic global scripts folder or a
+new skill for each script.
+
+Inventory selected roots and explicit caller locations. Check actual Git
+toplevel ownership, current changes, imports/resources, location-derived data
+paths, state/log destinations, shell aliases, and scheduled jobs. Static
+findings are leads for review. Before a move, produce an exact per-script
+source/destination map, content fingerprint, invocation, affected callers,
+verification, and recoverable rollback. Apply the Phase 2 confirmation and
+Phase 3 recheck safeguards below to concrete moves and removals. Lookup and
+inventory themselves are read-only and need no per-name approval prompt.
 
 ## Why this exists
 
