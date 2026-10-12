@@ -57,7 +57,7 @@ class SkillsExplorerHandler(SimpleHTTPRequestHandler):
 
         self.send_json({"ok": True})
 
-    def send_json(self, payload, status):
+    def send_json(self, payload, status=200):
         body = json.dumps(payload).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json")

@@ -478,6 +478,12 @@
       stroke-linejoin: round;
     }
 
+    .source-action-status {
+      margin: 8px 0 0;
+      font-size: 12px;
+      color: var(--rh-gray-500);
+    }
+
     .no-results {
       text-align: center;
       padding: 60px 20px;
@@ -1058,6 +1064,7 @@
             ` : ""}</span>
             <span><strong>Name:</strong> <code>${escapeHtml(skill.id)}</code></span>
           </div>
+          <p class="source-action-status" role="status" aria-live="polite" hidden></p>
           <div class="how-to-use">
             ${requiredSkills.length ? `
               <div class="block">
@@ -1323,7 +1330,7 @@
       if (fileAction) {
         e.preventDefault();
         e.stopPropagation();
-        showInFileManager(fileAction.dataset.filePath);
+        showInFileManager(fileAction.dataset.filePath, fileAction);
         return;
       }
       const jumpBtn = e.target.closest(".step-link");
@@ -1401,14 +1408,23 @@
     });
   }
 
-  async function showInFileManager(filePath) {
+  async function showInFileManager(filePath, button) {
+    const status = button.closest(".skill-details").querySelector(".source-action-status");
+    button.disabled = true;
+    status.hidden = false;
+    status.textContent = "Opening your file manager…";
     try {
       const response = await fetch(`/__show-in-file-manager?path=${encodeURIComponent(filePath)}`, {
         headers: { "X-Explorer-Action": "reveal" }
       });
-      if (!response.ok) throw new Error("File manager endpoint unavailable");
+      const result = await response.json();
+      if (!response.ok || !result.ok) throw new Error("Could not show the source");
+      status.textContent = "";
+      status.hidden = true;
     } catch (error) {
-      alert("Open this page through the local preview server to reveal a source file.");
+      status.textContent = `Could not show the source in your file manager. You can open this file directly: ${filePath}`;
+    } finally {
+      button.disabled = false;
     }
   }
 
