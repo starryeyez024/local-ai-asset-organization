@@ -187,7 +187,8 @@
   </div>
 
   <h2>How tags work</h2>
-  <p>Tool, task, phase, and stage tags are keyword guesses based on each skill's name, description, and the start of its body. A skill can match several tool, task, or stage tags. Phase uses a priority order and defaults to “In Progress.” Role is inferred from a known AI-first module path; other sources use “Other.” Skill type comes from frontmatter when available, otherwise a name beginning with <code>workflow-</code> is treated as a workflow.</p>
+  <p>Tool, task, phase, and stage tags are keyword guesses based on each skill's name, description, and the start of its body. A skill can match several tool, task, or stage tags. Phase uses a priority order and defaults to “In Progress.” Role is inferred from a known AI-first module path; other sources use “Other.”</p>
+  <p>Skill type comes only from <code>metadata.skill-type</code> in the skill's frontmatter: <code>atomic</code> for a small, focused skill intended for reuse by other skills, or <code>workflow</code> for a skill that coordinates a broader sequence of work. Missing or unsupported values appear as “Unclassified.” Names, descriptions, and references to other skills do not determine the type.</p>
   <p>If a tag is misleading, update the keyword rules in <code>generate-skills-json.py</code> and regenerate the files. There is no tag editor in the page. A file older than 60 days is marked “Stale” in the local audit as an age cue, not proof that the skill is obsolete.</p>
 
   <h2>Update skills and refresh your catalog</h2>
