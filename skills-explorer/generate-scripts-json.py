@@ -81,7 +81,7 @@ def command_paths(arguments: list[str], working_dir: Path) -> set[Path]:
         target = None
         if Path(segment[0]).suffix.lower() in catalog.SCRIPT_SUFFIXES:
             target = segment[0]
-        elif command in interpreters:
+        elif command in interpreters or re.fullmatch(r"python\d+(?:\.\d+)*", command):
             args = [item for item in segment[1:] if not item.startswith("-")]
             if args and Path(args[0]).suffix.lower() in catalog.SCRIPT_SUFFIXES:
                 target = args[0]

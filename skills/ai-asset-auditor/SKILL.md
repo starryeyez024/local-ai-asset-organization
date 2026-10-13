@@ -333,6 +333,31 @@ cases applies after checking installer ownership — do not assume it's a violat
   alone while ownership is uncertain; record it as "origin unverified, no action"
   rather than assuming it is disposable or tool-managed.
 
+### 1.8 Offer a shell-shortcut review
+
+When moving a skill, MCP checkout, or script, offer to review the user's shell
+shortcuts as part of discovery. An alias, function, wrapper, or `PATH` entry can
+still call the old location after the asset and its tool-facing links move.
+Inspect only startup files and command mechanisms relevant to the shells the
+user actually uses:
+
+- For zsh and Bash, check existing `~/.zshrc`, `~/.zprofile`, `~/.zshenv`,
+  `~/.bashrc`, `~/.bash_profile`, and `~/.profile`, plus any files they source.
+- For PowerShell, use `$PROFILE | Select-Object *` in each relevant PowerShell
+  edition and host to locate existing current-user and all-user profiles.
+  If the user relies on Command Prompt shortcuts, also inspect relevant
+  `.cmd`/`.bat` wrappers and Command Processor `AutoRun` entries.
+- For WSL or Git Bash, inspect that environment's Bash or zsh startup files;
+  do not assume native Windows profiles control those shells.
+
+Trace compound shortcuts to their actual script or executable, including
+configuration-derived paths. Record stale targets and whether the target file
+exists. This is a read-only review; do not run sync, publish, delete, or other
+data-changing shortcuts to find out what they call. Ask whether the user wants
+shortcut updates included in the migration plan. After an approved update,
+test a fresh shell and re-sourcing an existing shell: old sessions can retain
+expanded aliases, and an old alias can conflict with a new function definition.
+
 ---
 
 ## Phase 2 — Present the plan, ask, wait for confirmation
@@ -368,6 +393,9 @@ Lay out, in plain language:
   "installer-managed, preserve delivery," or "origin unverified, no action."
 - For each managed package: its owner, updater, scope, enabled state, and any
   overlapping loose delivery route. State which runtime each proposed change affects.
+- Any shell shortcuts that still use an old asset path, with the exact profile
+  or wrapper and proposed replacement. Include shortcut edits in the plan
+  before changing a user's shell startup files.
 
 ### 2.2 Surface non-blocking best-practice advisories
 

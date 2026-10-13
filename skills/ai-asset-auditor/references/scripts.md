@@ -135,7 +135,10 @@ candidate IDs or suggestions where applicable. `resolve` never runs the target.
    private data and mutable state, callers, invocation, verification, and
    rollback location. Review the concrete map and recoverable originals
    before moving files. Preserve the behavior of compound shell commands;
-   do not register a constituent script as an equivalent alias.
+   do not register a constituent script as an equivalent alias. Offer to review
+   the user's shell shortcuts using the profile locations in the parent skill.
+   Trace aliases, functions, wrappers, and `PATH` entries to the script they
+   actually invoke; include any needed edits in the migration map.
 4. Register only selected scripts in the private catalog. Run `validate`,
    then `resolve` by ID and intended aliases from an unrelated directory.
    The optional `--output-candidates` creates derived JSON only when asked;
@@ -143,6 +146,10 @@ candidate IDs or suggestions where applicable. `resolve` never runs the target.
 5. Have the desktop agent run a harmless resolved fixture through its normal
    execution tool. Check the result in each selected app. The Python test
    suite proves the helper contract, not that an app loaded the instruction.
+   For approved shell-shortcut changes, check target existence, inspect the
+   expanded command in a new shell, and test reloading the profile in a shell
+   with the old aliases present. Do not run a data-changing shortcut merely
+   to verify its path.
 
 ### Direct commands
 

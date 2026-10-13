@@ -61,6 +61,13 @@ status = "active"
         self.assertEqual([(job["kind"], job["schedule"]) for job in script["jobs"]],
                          [("launchd", "Daily 08:05"), ("cron", "5 8 * * *")])
 
+    def test_matches_versioned_python_interpreter(self):
+        self.job("com.example.versioned-python",
+                 ["/Library/Frameworks/Python.framework/Versions/3.13/bin/python3.13",
+                  str(self.script)])
+        jobs = generator.build(self.config, self.root, self.jobs, "", [])["scripts"][0]["jobs"]
+        self.assertEqual([job["label"] for job in jobs], ["com.example.versioned-python"])
+
     def test_scripts_share_skill_stage_tool_and_task_rules(self):
         script = generator.build(self.config, self.root, self.jobs, "", [])["scripts"][0]
         text = f'{script["name"]} {script["description"]} {" ".join(script["aliases"])}'
