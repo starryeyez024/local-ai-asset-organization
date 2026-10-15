@@ -1,6 +1,6 @@
 # AI Asset Explorer
 
-A searchable catalog of valid `SKILL.md` entries and registered scripts. **Browse Assets** filters asset type and has a separate **Automation** group with **Automated** and **Manual** checkboxes. Both are checked initially; uncheck one to narrow results to the other category. Automated means a direct cron or launchd job definition was found; Manual means none was found in the scanned locations. Script cards show the matched job details. **Audit Skills** is a local inventory of skill entries, broken links, name collisions, and file age. Browsing never installs, invokes, or edits an asset.
+A searchable catalog of valid `SKILL.md` entries and registered scripts. **Browse Assets** filters asset type and has a separate **Skill automation** group with **Automated** and **Manual** checkboxes. Both are checked initially; uncheck one to narrow results to the other category. Automated means a direct cron or launchd job definition was found; Manual means none was found in the scanned locations. Script cards show the matched job details. **Audit Skills** is a local inventory of skill entries, broken links, name collisions, and file age. Browsing never installs, invokes, or edits an asset.
 
 Skill browse and audit cover the configured skills directory; scripts come from the private `script_catalog.path` in the setup configuration. The Explorer does not query marketplace registries, scan every tool's roots, or establish runtime enablement. A missing plugin skill may be installed elsewhere. Keep installer-managed files in place; do not add cache links just to include them here.
 
@@ -16,20 +16,19 @@ Ask your assistant to follow [agent-setup](../skills/agent-setup/SKILL.md). It p
 
 ```bash
 make run
-# open http://localhost:8790
+# open http://localhost:8980
 ```
 
-`make run` prepares or refreshes the app and catalogs in `~/.local/share/ai-assets-explorer/`, then starts the copied server bound to `127.0.0.1`. It uses your existing setup configuration; if none exists, start with agent-setup. You can run the steps separately:
+`make run` prepares or refreshes the app and catalogs in `~/.local/share/ai-assets-explorer/`, then starts the copied server on `127.0.0.1:8980`. The Explorer uses port 8980 only. Stop the server with Ctrl+C in the running terminal or by closing that terminal. It uses your existing setup configuration; if none exists, start with agent-setup. You can run the steps separately:
 
 ```bash
 make regen
 make serve
-PORT=8080 make serve
 make regen CONFIG=/path/to/agent-config.toml
 make run EXPLORER_DIR=/path/to/local/explorer
 ```
 
-The Makefile runs the preparation helper; the generators classify assets. The skills generator reads `directories.symlinks_dir` from `~/.config/agent-tools/agent-config.toml`, shared with the linker. It also supports the existing `~/.config/ai-tools/ai-tools.toml` when the recommended file is absent. The preparation helper requires an existing configuration so it can use the agreed skills folder. The standalone skills generator falls back to `~/.agents/skills` when called without a configuration. Use `--config /path/to/config.toml` with the generator to select a configuration, or `SKILLS_ROOT` to override the scan folder. It accepts symlinks and real skill directories and resolves each valid `SKILL.md`. The script generator uses the shared fixed keyword rules for **Work Stage**, **Tool**, and **Task Type**. Script action hints add stage matches for transfers, previews, and reviews; ambiguous scripts use Produce, as skills do. **Skill Maturity**, Skill Type, Agile Phase, and Role apply only to skills. No LLM or external API is involved in tagging. Setup writes three local files:
+The Makefile runs the preparation helper; the generators classify assets. The skills generator reads `directories.symlinks_dir` from `~/.config/agent-tools/agent-config.toml`, shared with the linker. It also supports the existing `~/.config/ai-tools/ai-tools.toml` when the recommended file is absent. The preparation helper requires an existing configuration so it can use the agreed skills folder. The standalone skills generator falls back to `~/.agents/skills` when called without a configuration. Use `--config /path/to/config.toml` with the generator to select a configuration, or `SKILLS_ROOT` to override the scan folder. It accepts symlinks and real skill directories and resolves each valid `SKILL.md`. The script generator uses the shared fixed keyword rules for **Work Stage**, **Tool**, and **Task Type**, and derives **Source** from each script file's location. **Analytics**, **Documentation**, and **Design System** are keyword-derived Task Type categories, not confirmed tool integrations. Script action hints add stage matches for transfers, previews, and reviews; ambiguous scripts use Produce, as skills do. **Skill Maturity**, Skill Type, Agile Phase, and Role apply only to skills. No LLM or external API is involved in tagging. Setup writes three local files:
 
 - `skills.json` contains the Browse Skills catalog. Descriptions and source labels can include personal or workplace information; keep this generated file local.
 - `skills-local.json` includes absolute paths and the local audit inventory. It is ignored by Git. Keep it local and do not publish it.

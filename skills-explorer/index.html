@@ -760,7 +760,7 @@
       <div class="results-header">
         <span id="results-count" class="results-count"></span>
         <label class="toggle-expand">
-          <input type="checkbox" id="expand-skills"> Expand/Collapse
+          <input type="checkbox" id="expand-skills"> Expand / Collapse All
         </label>
       </div>
       <div id="skills-list"></div>
@@ -806,11 +806,13 @@
   let searchQuery = "";
   let expandAllSkills = false;
 
-  const GROUP_LABELS = { type: "Skill Type", status: "Skill Maturity", phase: "Agile Phase", stage: "Work Stage", tool: "Tool", role: "Role", task: "Task Type", repository: "Source repository" };
+  const GROUP_LABELS = { type: "Skill Type", status: "Skill Maturity", phase: "Agile Phase", stage: "Work Stage", tool: "Tool", task: "Task Type", role: "Role", repository: "Source" };
   const STATUS_OPTIONS = ["full", "stub"];
   const UNCLASSIFIED_VALUE = "unclassified";
-  const SHARED_SCRIPT_GROUPS = new Set(["stage", "tool", "task"]);
-  const NEW_TASK_OPTIONS = new Set(["classification", "maintenance", "synchronization"]);
+  const SHARED_SCRIPT_GROUPS = new Set(["stage", "tool", "task", "repository"]);
+  const MOVED_TOOL_TO_TASK = { analytics: "analytics", dita: "documentation", "design-system": "design-system" };
+  const MOVED_TASK_OPTIONS = new Set(Object.values(MOVED_TOOL_TO_TASK));
+  const NEW_TASK_OPTIONS = new Set(["classification", "maintenance", "synchronization", ...MOVED_TASK_OPTIONS]);
   const AUTOMATION_OPTIONS = [
     { value: "automated", label: "Automated", hint: "Has a directly matched cron or launchd job definition" },
     { value: "manual", label: "Manual", hint: "No directly matched cron or launchd job definition was found" },
@@ -927,8 +929,7 @@
     const date = new Date(DATA.generatedAt || "");
     if (Number.isNaN(date.getTime())) return " · Last refreshed: unavailable";
     return " · Last refreshed " + new Intl.DateTimeFormat(undefined, {
-      year: "numeric", month: "short", day: "numeric",
-      hour: "numeric", minute: "2-digit", timeZoneName: "short"
+      month: "short", day: "numeric", hour: "numeric", minute: "2-digit"
     }).format(date);
   }
 
@@ -957,10 +958,10 @@
           <label class="filter-option"><input type="checkbox" id="show-scripts" ${showScripts ? "checked" : ""}> Scripts <span class="count">${SCRIPTS.length}</span></label>
         </div>
       </div>
-      <div class="filter-group automation-filter${collapsedGroups.has("automation") ? " collapsed" : ""}" role="group" aria-label="Automation" ${showScripts ? "" : "hidden"}>
+      <div class="filter-group automation-filter${collapsedGroups.has("automation") ? " collapsed" : ""}" role="group" aria-label="Skill automation" ${showScripts ? "" : "hidden"}>
         <div class="filter-group-header">
           <button class="filter-group-toggle" type="button" aria-expanded="${!collapsedGroups.has("automation")}">
-            <span class="arrow" aria-hidden="true">▾</span><span>Automation</span>
+            <span class="arrow" aria-hidden="true">▾</span><span>Skill automation</span>
           </button>
         </div>
         <div class="filter-options">
@@ -1079,7 +1080,6 @@
     const list = document.getElementById("skills-list");
     list.innerHTML = "";
     let visibleCount = 0;
-    let visibleStubs = 0;
 
     for (const skill of DATA.skills) {
       const matchesFilters = showSkills && matchesActiveFilters(skill);
@@ -1089,7 +1089,6 @@
 
       if (visible) {
         visibleCount++;
-        if (isStub) visibleStubs++;
       }
 
       const card = document.createElement("details");
@@ -1125,7 +1124,7 @@
             ).join("")}
           </div>
           <div class="meta-row">
-            <span><strong>Repository:</strong> <code>${escapeHtml(skill.sourceLabel || "Unclassified")}</code>${skillFilePath ? `
+            <span><strong>Source:</strong> <code>${escapeHtml(skill.sourceLabel || "Unclassified")}</code>${skillFilePath ? `
               <button class="source-path-action" type="button" data-file-path="${escapeAttr(skillFilePath)}"
                 title="Show source in file manager" aria-label="Show source in file manager">
                 <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -1179,12 +1178,13 @@
         <div class="skill-details">
           <div class="skill-tags"><span class="skill-type-badge">Script</span>
             <span class="badge ${script.status === "active" ? "badge-curated" : "badge-missing"}">${escapeHtml(script.status)}</span>
-            ${["stage", "tool", "task"].flatMap(group => ((script.tags || {})[group] || []).map(value =>
+            ${["stage", "tool", "task", "repository"].flatMap(group => ((script.tags || {})[group] || []).map(value =>
               `<span class="tag ${group}" data-group="${group}" data-value="${escapeAttr(value)}">${escapeHtml(formatLabel(value, group))}</span>`)).join("")}
           </div>
           <div class="meta-row script-source">
             <span><strong>Catalog name:</strong> <code>${escapeHtml(script.id)}</code></span>
-            <span><strong>Source:</strong> <code>${escapeHtml(script.source)}</code></span>
+            <span><strong>Source:</strong> <code>${escapeHtml(script.sourceLabel || "Unclassified")}</code></span>
+            <span><strong>Catalog source:</strong> <code>${escapeHtml(script.source)}</code></span>
             <span><strong>Runtime:</strong> ${escapeHtml(script.runtime)}</span>
             ${script.file ? `<span><strong>File:</strong> <code>${escapeHtml(script.file)}</code>
               <button class="source-path-action" type="button" data-file-path="${escapeAttr(script.file)}"
@@ -1201,9 +1201,9 @@
       list.appendChild(card);
     }
 
-    const countLabel = `${visibleCount} of ${DATA.skillCount} skills · ${visibleScripts} of ${SCRIPTS.length} scripts`;
+    const countLabel = `${visibleCount} / ${DATA.skillCount} skills · ${visibleScripts} / ${SCRIPTS.length} scripts`;
     document.getElementById("results-count").textContent =
-      `${countLabel} · ${visibleStubs} skill stubs${SCRIPT_SCAN_WARNINGS.length ? " · Schedule scan incomplete" : ""}${refreshLabel()}`;
+      `${countLabel}${SCRIPT_SCAN_WARNINGS.length ? " · Schedule scan incomplete" : ""}${refreshLabel()}`;
     document.getElementById("results-count").title = SCRIPT_SCAN_WARNINGS.join("\n");
 
     if (visibleCount + visibleScripts === 0) {
@@ -1587,13 +1587,44 @@
   function loadFiltersFromHash() {
     const hash = window.location.hash.slice(1);
     if (!hash) return;
+    const taskValuesFromHash = new Set();
+    const movedTaskValues = new Set();
+    let normalizeHash = false;
     for (const part of hash.split("&")) {
       const [group, vals] = part.split("=");
       if (activeFilters[group] && vals) {
         for (const v of vals.split(",")) {
-          if (getFilterOptions(group).includes(v)) {
+          const options = getFilterOptions(group);
+          if (group === "repository" && v === "Unclassified" && !options.includes(v) && options.includes(".agent")) {
+            activeFilters[group].add(".agent");
+            normalizeHash = true;
+          } else if (group === "task" && options.includes(v)) {
+            taskValuesFromHash.add(v);
+            activeFilters[group].add(v);
+          } else if (group === "tool" && MOVED_TOOL_TO_TASK[v]) {
+            const task = MOVED_TOOL_TO_TASK[v];
+            if (getFilterOptions("task").includes(task)) movedTaskValues.add(task);
+          } else if (options.includes(v)) {
             activeFilters[group].add(v);
           }
+        }
+      }
+    }
+    const priorTaskOptions = getFilterOptions("task").filter(value => !MOVED_TASK_OPTIONS.has(value));
+    const priorTaskWasAll = priorTaskOptions.length > 0 && priorTaskOptions.every(value => taskValuesFromHash.has(value));
+    if (movedTaskValues.size) {
+      // If the old Task Type set was unrestricted, the moved Tool selection
+      // becomes the new restriction; otherwise preserve the existing subset.
+      if (priorTaskWasAll) activeFilters.task.clear();
+      movedTaskValues.forEach(value => activeFilters.task.add(value));
+      if (activeFilters.tool.size === 0) getFilterOptions("tool").forEach(value => activeFilters.tool.add(value));
+      normalizeHash = true;
+    } else if (priorTaskWasAll) {
+      // New Task Type values should remain selected in older all-selected links.
+      for (const value of MOVED_TASK_OPTIONS) {
+        if (getFilterOptions("task").includes(value) && !activeFilters.task.has(value)) {
+          activeFilters.task.add(value);
+          normalizeHash = true;
         }
       }
     }
@@ -1609,6 +1640,7 @@
         history.replaceState(null, "", window.location.pathname + window.location.search);
       }
     }
+    if (normalizeHash) updateHashFromFilters();
   }
 
   function formatLabel(slug, group) {

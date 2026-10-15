@@ -7,12 +7,13 @@
       "description": "Prepare a fictional morning summary.",
       "aliases": ["daily-summary"],
       "source": "example-automation",
+      "sourceLabel": "example-automation",
       "file": "",
       "workingDirectory": "",
       "runtime": "python",
       "platforms": ["macos"],
       "status": "active",
-      "tags": {"stage": ["produce"], "tool": [], "task": ["reporting"]},
+      "tags": {"stage": ["produce"], "tool": [], "task": ["reporting"], "repository": ["example-automation"]},
       "jobs": [
         {
           "kind": "launchd",
@@ -28,12 +29,13 @@
       "description": "Check a fictional data file on request.",
       "aliases": [],
       "source": "example-automation",
+      "sourceLabel": "example-automation",
       "file": "",
       "workingDirectory": "",
       "runtime": "bash",
       "platforms": ["macos", "linux"],
       "status": "active",
-      "tags": {"stage": ["produce"], "tool": ["analytics"], "task": ["validation"]},
+      "tags": {"stage": ["produce"], "tool": [], "task": ["analytics", "validation"], "repository": ["example-automation"]},
       "jobs": []
     }
   ]

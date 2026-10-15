@@ -25,11 +25,12 @@ repository updates. It refuses to replace an unrecognized existing installation.
 Start the copied server in a managed terminal or process session:
 
 ```bash
-python3 ~/.local/share/ai-assets-explorer/serve.py 8790
+python3 ~/.local/share/ai-assets-explorer/serve.py
 ```
 
-If the port is occupied, check whether it is this user's existing Explorer and
-reuse it when appropriate; otherwise choose another available port. Do not stop
+The Explorer uses port 8980 only. If it is occupied, check whether it is this
+user's existing Explorer and reuse it when appropriate. If another process owns
+the port, report the conflict instead of selecting a different port. Do not stop
 an unrelated process. The server binds only to loopback and serves the generated
 Explorer directory, not the home folder or personal context. Record the process
 session, URL, and directory in setup progress. Closing its terminal stops it;

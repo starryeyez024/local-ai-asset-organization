@@ -217,13 +217,18 @@ def build(config: Path, home: Path | None = None, launch_agents: Path | None = N
             for job in jobs if file_path and Path(file_path) in job["paths"]
         ]
         tag_text = " ".join((row["name"], row["description"], *row["aliases"]))
+        repository = (skill_tags.source_repository(Path(file_path)) if file_path else
+                      {"sourceOrg": "", "sourceRepo": "", "sourceLabel": "Unclassified"})
         scripts.append({"id": row["id"], "name": row["name"], "description": row["description"],
                         "aliases": row["aliases"], "source": row["source"], "file": file_path,
+                        "sourceOrg": repository["sourceOrg"], "sourceRepo": repository["sourceRepo"],
+                        "sourceLabel": repository["sourceLabel"],
                         "workingDirectory": str(working) if working else "", "runtime": row["runtime"],
                         "platforms": row["platforms"], "status": status, "jobs": matched,
                         "tags": {"stage": script_stage_tags(tag_text),
                                  "tool": skill_tags.auto_tag_tool(tag_text),
-                                 "task": skill_tags.auto_tag_task(tag_text)}})
+                                 "task": skill_tags.auto_tag_task(tag_text),
+                                 "repository": [repository["sourceLabel"]]}})
     return {"generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "scripts": scripts, "scanWarnings": warnings}
 

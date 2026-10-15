@@ -40,6 +40,14 @@ both `~/.config/agent-tools/agent-config.toml` and the older
 `~/.config/ai-tools/ai-tools.toml` when present. Preserve unrelated configuration
 keys, instruction content, symlinks, and existing Git history.
 
+Follow the [configuration contract](../../docs/configuration-contract.md) when
+reviewing settings and their consumers. Use complete dotted TOML keys in skills;
+table headers supply their namespace. Match the user's existing schema rather
+than inventing leaf prefixes or a second field table. Identify the config file a
+consumer actually reads before treating similar names as conflicts. Keep native
+application MCP, authentication, shell-policy, and trust settings in supported
+native configuration files; the shared workflow TOML does not replace them.
+
 Before choosing directory values or creating a configuration, read
 [ai-asset-auditor](../ai-asset-auditor/SKILL.md) and perform its read-only discovery
 phase for the relevant tools. Inspect configured paths, known native skill roots,
@@ -169,6 +177,13 @@ Parse the written TOML and resolve all configured paths. Use the sibling
 select and read the intended config, without generating a catalog or adding skills.
 For a custom location, record the required `--config` argument for both commands.
 Inspect the resulting Git diff for unintended changes and sensitive content.
+
+Check required keys in the actual scripts and resolved installed skill targets,
+as well as examples and fixtures. When keys change, update these consumers
+together. Confirm overlapping context-root settings resolve to the same path;
+preserve compatibility keys until their consumers are migrated. Distinguish
+temporary shell bindings and output placeholders from TOML settings. Do not
+claim runtime verification from a successful TOML parse alone.
 
 Start a fresh session in each accessible target tool, from a representative
 project, and ask it to identify the shared instruction and configuration files

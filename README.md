@@ -39,7 +39,15 @@ symlinks_dir = "~/.agents/skills"
 
 The [agentic setup guide](pages/agentic-setup.html) explains how to keep this configuration with your private instructions and context. Existing installations using `~/.config/ai-tools/ai-tools.toml` continue to work when the new path is absent. Both commands accept `--config` to select a file explicitly. The Explorer also accepts `SKILLS_ROOT` to override its scan directory for one run.
 
+For key naming, path resolution, context aliases, and the boundary between shared
+workflow settings and native application configuration, see the
+[configuration contract](docs/configuration-contract.md). Skills should reference
+complete dotted keys: `wsjf` under `[custom.jira.fields]` is
+`custom.jira.fields.wsjf`. Keep native Codex settings in Codex configuration;
+the shared TOML does not configure the application by itself.
+
 ## Find a script by name
+
 
 Scripts remain in the repository that owns them. A helper private to a skill stays in that skill's `scripts/` folder. Register selected shared scripts in a private `script-catalog.toml`; bind each source ID to a checkout in `agent-config.toml`. The catalog is this project's convention, not a native cross-tool registry. A skills symlink hub is optional and is not a script discovery path. The AI Asset Explorer shows registered scripts beside skills and matches direct references in local launchd and cron job definitions.
 
@@ -83,10 +91,10 @@ To prepare and run a personal Explorer directly with an existing setup configura
 ```bash
 cd skills-explorer
 make run
-# open http://localhost:8790
+# open http://localhost:8980
 ```
 
-`make run` reads the skill directory and private script catalog from the same configuration, prepares the app and catalogs in `~/.local/share/ai-assets-explorer/`, and starts its local server. Use `CONFIG=/path/to/agent-config.toml` for another configuration or `EXPLORER_DIR=/path/to/local/explorer` for another output folder. All three generated JSON files stay local and are excluded from Git. GitLab Pages publishes the guides, skills, and an Explorer demo using only fictional sample data. See the [Explorer README](skills-explorer/README.md) for individual commands.
+`make run` reads the skill directory and private script catalog from the same configuration, prepares the app and catalogs in `~/.local/share/ai-assets-explorer/`, and starts its local server on port 8980. Stop it with Ctrl+C in the running terminal or by closing that terminal. Use `CONFIG=/path/to/agent-config.toml` for another configuration or `EXPLORER_DIR=/path/to/local/explorer` for another output folder. All three generated JSON files stay local and are excluded from Git. GitLab Pages publishes the guides, skills, and an Explorer demo using only fictional sample data. See the [Explorer README](skills-explorer/README.md) for individual commands.
 
 The Explorer scans one directory, not plugin registries or every tool's skills roots. It does not establish which skills are enabled or running. Do not add links into managed plugin caches just to include them in the catalog.
 
