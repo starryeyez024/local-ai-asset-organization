@@ -1,7 +1,7 @@
 ---
 name: agent-setup
 description: >
-  Guide a person through personal AI setup from start to finish: build context through an interview, connect instructions and configuration, organize assets with the auditor and linker, and launch their local Skills Explorer. Use to start or resume onboarding, or complete one of these setup stages.
+  Guide a person through personal AI setup from start to finish: build context through an interview, connect instructions and configuration, organize skills and scripts with the auditor and linker, and launch their local AI Asset Explorer. Use to start or resume onboarding, or complete one of these setup stages.
 ---
 
 # Agent Setup
@@ -40,6 +40,14 @@ both `~/.config/agent-tools/agent-config.toml` and the older
 `~/.config/ai-tools/ai-tools.toml` when present. Preserve unrelated configuration
 keys, instruction content, symlinks, and existing Git history.
 
+Follow the [configuration contract](../../docs/configuration-contract.md) when
+reviewing settings and their consumers. Use complete dotted TOML keys in skills;
+table headers supply their namespace. Match the user's existing schema rather
+than inventing leaf prefixes or a second field table. Identify the config file a
+consumer actually reads before treating similar names as conflicts. Keep native
+application MCP, authentication, shell-policy, and trust settings in supported
+native configuration files; the shared workflow TOML does not replace them.
+
 Before choosing directory values or creating a configuration, read
 [ai-asset-auditor](../ai-asset-auditor/SKILL.md) and perform its read-only discovery
 phase for the relevant tools. Inspect configured paths, known native skill roots,
@@ -59,6 +67,17 @@ it is not a reason to move an established setup. Show which maintained sources
 will be represented by selected links in the Explorer's configured folder and
 which managed packages stay outside that catalog. Discovery does not authorize
 creating links, moving files, or cleaning up duplicates.
+
+For standalone scripts, load the auditor's
+[script procedure](../ai-asset-auditor/references/scripts.md). Inventory only
+selected source roots and known caller locations. A new script-only user does
+not need `install_dir`, `symlinks_dir`, or a skills hub: configure
+`[script_catalog]` and its source bindings in the private TOML, then maintain
+`script-catalog.toml` beside it. Keep bundled helpers inside their skill.
+Use the helper at `../ai-asset-auditor/scripts/script-catalog.py` only when
+that sibling package is actually present; if this setup skill is installed
+alone, obtain the auditor package or use its documented procedure. Do not
+claim that a standalone setup installation contains sibling files.
 
 Use `~/.config/agent-tools/` for a new setup unless the user selects another path.
 For an established setup, identify the scripts and tool settings that depend on
@@ -140,6 +159,17 @@ available. If the interface is inaccessible, give the user only the specific
 remaining action and prepared text. Hosted tools require selected context through
 their own file or project mechanisms; a laptop path is not a connection.
 
+For script-name lookup, add a short rule to the shared instructions: "When a
+user or skill asks to run a registered script by name, use the resolver named
+in the configured script catalog settings. Run the unique result with its
+recorded interpreter, separate arguments, and working directory. Show
+qualified candidates on ambiguity. Resolve an explicit skill-relative helper
+from that skill's directory." Each selected desktop app also needs a native
+bootstrap pointing to the shared instructions, the exact private config path,
+and the absolute resolver path. The bootstrap must work before a script name
+can be looked up. Preserve the app's existing instructions. Codex and ChatGPT
+Work desktop have separate instruction connections; verify them separately.
+
 ## Verify the personal setup
 
 Parse the written TOML and resolve all configured paths. Use the sibling
@@ -148,6 +178,13 @@ select and read the intended config, without generating a catalog or adding skil
 For a custom location, record the required `--config` argument for both commands.
 Inspect the resulting Git diff for unintended changes and sensitive content.
 
+Check required keys in the actual scripts and resolved installed skill targets,
+as well as examples and fixtures. When keys change, update these consumers
+together. Confirm overlapping context-root settings resolve to the same path;
+preserve compatibility keys until their consumers are migrated. Distinguish
+temporary shell bindings and output placeholders from TOML settings. Do not
+claim runtime verification from a successful TOML parse alone.
+
 Start a fresh session in each accessible target tool, from a representative
 project, and ask it to identify the shared instruction and configuration files
 and read a selected non-sensitive context file if one exists. Confirm the actual
@@ -155,6 +192,13 @@ paths against the configured values. File creation alone is not proof of runtime
 discovery. Report inaccessible or failed runtime checks as pending in the handoff;
 do not claim those tools are connected or retire their working old paths. Continue
 independent stages when possible, carrying the pending check in the progress file.
+
+For the desktop apps selected by the user, resolve and run a harmless registered
+fixture by short name, qualified ID, and from a skill instruction, starting
+outside its source checkout. Record OS, app version, entry point, result, and
+evidence for Claude Code, Cursor, Codex, and ChatGPT Work separately. A Python
+test or a file on disk does not prove an app read the instruction. Record an
+unavailable interface as Not verified and continue independent setup work.
 
 ## Organize the assets
 

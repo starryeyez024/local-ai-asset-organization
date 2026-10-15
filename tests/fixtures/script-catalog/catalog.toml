@@ -1,0 +1,79 @@
+schema_version = 1
+
+[[scripts]]
+id = "example-tools/hello"
+name = "hello"
+aliases = ["greet"]
+description = "Print a harmless greeting."
+source = "example-tools"
+entrypoint = "scripts/hello.py"
+runtime = "python"
+args = ["two words", "a&b"]
+working_dir = "."
+platforms = ["macos", "windows", "linux"]
+status = "active"
+
+[[scripts]]
+id = "example-tools/helper"
+name = "helper"
+aliases = []
+description = "Helper bundled with a fictional skill."
+source = "example-tools"
+entrypoint = "skills/greeter/scripts/helper.py"
+runtime = "python"
+args = []
+working_dir = "skills/greeter"
+platforms = ["macos", "windows", "linux"]
+status = "active"
+
+[[scripts]]
+id = "example-tools/report"
+name = "report"
+aliases = []
+description = "First colliding name."
+source = "example-tools"
+entrypoint = "scripts/report.py"
+runtime = "python"
+args = []
+working_dir = "."
+platforms = ["macos", "windows", "linux"]
+status = "active"
+
+[[scripts]]
+id = "other-tools/report"
+name = "report"
+aliases = []
+description = "Second colliding name."
+source = "other-tools"
+entrypoint = "scripts/other/report.py"
+runtime = "python"
+args = []
+working_dir = "."
+platforms = ["macos", "windows", "linux"]
+status = "active"
+
+[[scripts]]
+id = "example-tools/old"
+name = "old"
+aliases = []
+description = "Archived example."
+source = "example-tools"
+entrypoint = "archive/old.py"
+runtime = "python"
+args = []
+working_dir = "."
+platforms = ["macos", "windows", "linux"]
+status = "archived"
+
+[[scripts]]
+id = "example-tools/missing"
+name = "missing"
+aliases = []
+description = "Stale record example."
+source = "example-tools"
+entrypoint = "scripts/missing.py"
+runtime = "python"
+args = []
+working_dir = "."
+platforms = ["macos", "windows", "linux"]
+status = "active"

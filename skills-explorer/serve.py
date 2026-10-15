@@ -3,13 +3,13 @@
 import json
 import platform
 import subprocess
-import sys
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 EXPLORER_DIR = Path(__file__).resolve().parent
+PORT = 8980
 
 
 class SkillsExplorerHandler(SimpleHTTPRequestHandler):
@@ -39,6 +39,11 @@ class SkillsExplorerHandler(SimpleHTTPRequestHandler):
             item["truePath"] for item in inventory
             if item.get("hasSkillMd") and item.get("truePath", "").endswith("SKILL.md")
         )
+        try:
+            script_inventory = json.loads((EXPLORER_DIR / "scripts-local.json").read_text()).get("scripts", [])
+        except (OSError, ValueError):
+            script_inventory = []
+        allowed.update(item["file"] for item in script_inventory if item.get("file"))
         if not path.is_absolute() or str(path) not in allowed or not path.exists():
             self.send_json({"ok": False, "error": "File not found"}, 404)
             return
@@ -67,10 +72,9 @@ class SkillsExplorerHandler(SimpleHTTPRequestHandler):
 
 
 def main():
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8790
     handler = partial(SkillsExplorerHandler, directory=str(EXPLORER_DIR))
-    server = ThreadingHTTPServer(("127.0.0.1", port), handler)
-    print(f"Serving at http://localhost:{port} -- press Ctrl+C to stop")
+    server = ThreadingHTTPServer(("127.0.0.1", PORT), handler)
+    print(f"Serving at http://localhost:{PORT} -- press Ctrl+C to stop")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

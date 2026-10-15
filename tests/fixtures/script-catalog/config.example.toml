@@ -1,0 +1,6 @@
+[script_catalog]
+path = "catalog.toml"
+
+[script_catalog.sources]
+example-tools = "source"
+other-tools = "source"

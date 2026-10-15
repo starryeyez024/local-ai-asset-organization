@@ -10,6 +10,14 @@ description: >
 
 Use this skill to link repository skills without moving or editing their source files. The task is complete when the intended tool can find and use the selected skill, not just when a link exists.
 
+Link the whole skill folder, including its `scripts/`, `references/`, and
+other resources. A bundled helper referenced by a skill-relative path keeps
+that path when the skill is linked; check it resolves in the destination and
+include it in runtime verification. The linker's scope is skill delivery.
+Standalone shared scripts stay in their owning repositories and use the
+auditor's private script catalog for name lookup; do not install them through
+the skills hub merely to make them discoverable.
+
 ## Configuration
 
 Read `~/.config/agent-tools/agent-config.toml`. The linker and Explorer use the same settings:

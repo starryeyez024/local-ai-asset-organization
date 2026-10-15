@@ -2,18 +2,38 @@
 name: ai-asset-auditor
 description: >
   Read-first audit and migration-planning procedure for scattered AI assets
-  (skills and MCP servers). Proposes a clear physical root and verifies each
+  (skills, MCP servers, and scripts). Proposes a clear physical root and verifies each
   tool-facing delivery path against its runtime. Use this
   BEFORE moving, renaming, deduplicating, or restructuring any skill folder or
-  MCP server checkout, on ANY machine. Triggers on requests like "clean up my
+  MCP server checkout or maintained script, on ANY machine. Triggers on requests like "clean up my
   skills folders," "consolidate my AI assets," "find duplicate skills," "set up
-  a flat AI asset root," or "audit my MCP servers." Runs discover-then-confirm:
+  a flat AI asset root," "find my scripts," or "audit my MCP servers." Runs discover-then-confirm:
   always presents a plan and asks clarifying questions before touching any
   file, and never executes a move, rename, delete, or symlink change without
   explicit per-plan user confirmation.
 ---
 
 # AI Asset Auditor
+
+## Scripts
+
+For script discovery, name lookup, or migration, load
+[the script procedure](references/scripts.md). Use the bundled
+`scripts/script-catalog.py` helper for read-only inventory, validation, and
+resolution. It works when this auditor is installed independently. A script
+stays with its owner: its skill bundle, application repository, maintained
+personal utility repository, or installer. Register selected shared scripts
+in a private catalog; do not create a generic global scripts folder or a
+new skill for each script.
+
+Inventory selected roots and explicit caller locations. Check actual Git
+toplevel ownership, current changes, imports/resources, location-derived data
+paths, state/log destinations, shell aliases, and scheduled jobs. Static
+findings are leads for review. Before a move, produce an exact per-script
+source/destination map, content fingerprint, invocation, affected callers,
+verification, and recoverable rollback. Apply the Phase 2 confirmation and
+Phase 3 recheck safeguards below to concrete moves and removals. Lookup and
+inventory themselves are read-only and need no per-name approval prompt.
 
 ## Why this exists
 
@@ -313,6 +333,31 @@ cases applies after checking installer ownership — do not assume it's a violat
   alone while ownership is uncertain; record it as "origin unverified, no action"
   rather than assuming it is disposable or tool-managed.
 
+### 1.8 Offer a shell-shortcut review
+
+When moving a skill, MCP checkout, or script, offer to review the user's shell
+shortcuts as part of discovery. An alias, function, wrapper, or `PATH` entry can
+still call the old location after the asset and its tool-facing links move.
+Inspect only startup files and command mechanisms relevant to the shells the
+user actually uses:
+
+- For zsh and Bash, check existing `~/.zshrc`, `~/.zprofile`, `~/.zshenv`,
+  `~/.bashrc`, `~/.bash_profile`, and `~/.profile`, plus any files they source.
+- For PowerShell, use `$PROFILE | Select-Object *` in each relevant PowerShell
+  edition and host to locate existing current-user and all-user profiles.
+  If the user relies on Command Prompt shortcuts, also inspect relevant
+  `.cmd`/`.bat` wrappers and Command Processor `AutoRun` entries.
+- For WSL or Git Bash, inspect that environment's Bash or zsh startup files;
+  do not assume native Windows profiles control those shells.
+
+Trace compound shortcuts to their actual script or executable, including
+configuration-derived paths. Record stale targets and whether the target file
+exists. This is a read-only review; do not run sync, publish, delete, or other
+data-changing shortcuts to find out what they call. Ask whether the user wants
+shortcut updates included in the migration plan. After an approved update,
+test a fresh shell and re-sourcing an existing shell: old sessions can retain
+expanded aliases, and an old alias can conflict with a new function definition.
+
 ---
 
 ## Phase 2 — Present the plan, ask, wait for confirmation
@@ -348,6 +393,9 @@ Lay out, in plain language:
   "installer-managed, preserve delivery," or "origin unverified, no action."
 - For each managed package: its owner, updater, scope, enabled state, and any
   overlapping loose delivery route. State which runtime each proposed change affects.
+- Any shell shortcuts that still use an old asset path, with the exact profile
+  or wrapper and proposed replacement. Include shortcut edits in the plan
+  before changing a user's shell startup files.
 
 ### 2.2 Surface non-blocking best-practice advisories
 
