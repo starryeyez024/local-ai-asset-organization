@@ -44,6 +44,9 @@ h3 { margin: var(--heading-space-before) 0 var(--paragraph-spacing); font-size: 
 h4 { margin: var(--paragraph-spacing) 0 8px; font-size: 1.05rem; }
 p, ul, ol, table, figure, .card, .callout, pre { margin-top: var(--paragraph-spacing); margin-bottom: 0; }
 .lede { max-width: 760px; margin: 24px 0 0; color: #e7e7f0; font-size: 1.18rem; }
+.hero .demo-link { display: inline-block; padding: 12px 20px; border: 2px solid transparent; border-radius: 6px; background: #fff; color: var(--navy); font-weight: 700; text-decoration: none; }
+.hero .demo-link:hover { background: var(--soft-blue); }
+.hero .demo-link:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
 .lead-text { font-size: 1.08rem; }
 .hype {color: #c00;}
 section { padding: 48px 0; }
