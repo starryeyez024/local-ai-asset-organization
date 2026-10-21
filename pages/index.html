@@ -41,7 +41,7 @@
       <div class="wrap">
         <p class="section-label">Start here</p>
         <h2>One conversation, from setup to a working catalog</h2>
-        <p class="lead-text">Open a local copy of <a href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization">this repository</a> in an assistant that can read and change your files. Give it the request below. The <strong>agent-setup</strong> skill checks your existing configuration, skills folders, and installed packages, then asks about anything it could not find. It uses those findings to guide the whole process. You can start without choosing a folder layout, preparing context files, or knowing which skills to run.</p>
+        <p class="lead-text">Open a local copy of <a id="repository-link" href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization">this repository</a> in an assistant that can read and change your files. Give it the request below. The <strong>agent-setup</strong> skill checks your existing configuration, skills folders, and installed packages, then asks about anything it could not find. It uses those findings to guide the whole process. You can start without choosing a folder layout, preparing context files, or knowing which skills to run.</p>
         <div class="callout green"><strong>Ask your assistant:</strong> “Read <code class="inline">skills/agent-setup/SKILL.md</code> and help me set this up.”</div>
         <ol class="steps">
           <li><strong>Personal setup and context.</strong> Using what it found, the assistant recommends a setup, asks about your work and preferences, drafts context for you to correct, and connects your tools to your private setup repository.</li>
@@ -124,8 +124,15 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
 
   </main>
 
-  <footer><div class="wrap">A general methodology for organizing AI agent assets across multiple tools and runtimes. · <a href="quick-reference.html">Quick reference</a><p>Have feedback or an idea? <a href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization/-/work_items?sort=created_date&amp;state=opened&amp;first_page_size=20" target="_blank" rel="noopener noreferrer">Share it in the GitLab repo</a>.</p></div></footer>
+  <footer><div class="wrap">A general methodology for organizing AI agent assets across multiple tools and runtimes. · <a href="quick-reference.html">Quick reference</a><p>Have feedback or an idea? <a id="feedback-link" href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization/-/work_items?sort=created_date&amp;state=opened&amp;first_page_size=20" target="_blank" rel="noopener noreferrer">Share it in the GitLab repo</a>.</p></div></footer>
   <script>
+    if (location.hostname === 'starryeyez024.github.io') {
+      document.getElementById('repository-link').href =
+        'https://github.com/starryeyez024/local-ai-asset-organization';
+      const feedbackLink = document.getElementById('feedback-link');
+      feedbackLink.href = 'https://github.com/starryeyez024/local-ai-asset-organization/issues';
+      feedbackLink.textContent = 'Share it in the GitHub repo';
+    }
     if (location.pathname.includes('/pages/')) {
       document.querySelectorAll('a[data-local-href]').forEach(link => {
         link.href = link.dataset.localHref;
