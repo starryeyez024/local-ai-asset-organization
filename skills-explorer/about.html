@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — AI Asset Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rh-dark: #151515;
+    --rh-gray-900: #1a1a1a;
+    --rh-gray-700: #3c3f42;
+    --rh-gray-500: #6a6e73;
+    --rh-gray-300: #d2d2d2;
+    --rh-gray-100: #f0f0f0;
+    --rh-white: #ffffff;
+    --tag-tool: #0066cc;
+    --tag-tool-bg: #e7f1fa;
+    --tag-role: #3e8635;
+    --tag-role-bg: #e9f5e6;
+    --tag-task: #c9190b;
+    --tag-task-bg: #fce4e1;
+    --tag-type: #6753ac;
+    --tag-type-bg: #f4e6ff;
+    --tag-phase: #005f60;
+    --tag-phase-bg: #e0f3f2;
+    --tag-stage: #a35a00;
+    --tag-stage-bg: #fbead2;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    font-family: "Red Hat Text", "Helvetica Neue", Arial, sans-serif;
+    background: var(--rh-gray-100);
+    color: var(--rh-dark);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .site-footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--rh-gray-300);
+    color: var(--rh-gray-700);
+    font-size: 14px;
+    text-align: center;
+  }
+  .site-footer a { color: var(--tag-tool); text-underline-offset: 3px; }
+  header {
+    background: var(--rh-dark);
+    color: var(--rh-white);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  header h1 { color: #a4fbea; font-family: "Luckiest Guy", cursive; font-size: 23px; font-weight: 400; margin: 0; }
+  .view-tabs { display: flex; gap: 24px; margin-left: auto; }
+  .view-tab {
+    color: var(--rh-gray-300);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 0;
+  }
+  .view-tab:hover, .view-tab[aria-current="page"] {
+    color: var(--rh-white);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 5px;
+  }
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  h2 { font-size: 19px; margin-top: 40px; border-bottom: 1px solid var(--rh-gray-300); padding-bottom: 8px; }
+  h2:first-of-type { margin-top: 0; }
+  h3 { font-size: 15px; margin-top: 20px; margin-bottom: 6px; }
+  p { color: var(--rh-gray-700); }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    background: var(--rh-gray-100);
+    border: 1px solid var(--rh-gray-300);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 13px;
+  }
+  pre {
+    background: var(--rh-gray-900);
+    color: #e7f1fa;
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  pre code { background: none; border: none; padding: 0; color: inherit; }
+  .card {
+    background: var(--rh-white);
+    border: 1px solid var(--rh-gray-300);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--tag-tool-bg);
+    color: var(--tag-tool);
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .note {
+    border-left: 3px solid var(--tag-tool);
+    background: var(--tag-tool-bg);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: var(--rh-gray-700);
+    margin-top: 16px;
+  }
+  .warn {
+    border-left: 3px solid var(--tag-task);
+    background: var(--tag-task-bg);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: var(--rh-gray-700);
+    margin-top: 16px;
+  }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rh-gray-100); vertical-align: top; }
+  th { color: var(--rh-gray-500); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .pill {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .pill.tool { background: var(--tag-tool-bg); color: var(--tag-tool); }
+  .pill.role { background: var(--tag-role-bg); color: var(--tag-role); }
+  .pill.task { background: var(--tag-task-bg); color: var(--tag-task); }
+  .pill.type { background: var(--tag-type-bg); color: var(--tag-type); }
+  .pill.phase { background: var(--tag-phase-bg); color: var(--tag-phase); }
+  .pill.stage { background: var(--tag-stage-bg); color: var(--tag-stage); }
+  @media (max-width: 600px) {
+    .view-tabs { width: 100%; margin-left: 0; justify-content: space-between; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AI Asset Explorer</h1>
+  <nav class="view-tabs" aria-label="Explorer navigation">
+    <a class="view-tab" href="index.html">Browse Assets</a>
+    <a class="view-tab" href="index.html?view=audit" id="about-audit-tab">Audit Skills</a>
+    <a class="view-tab" href="about.html" aria-current="page">About</a>
+  </nav>
+</header>
+
+<main>
+  <section id="demo-about" hidden>
+    <h2>Set up your own Explorer</h2>
+    <p>This demo uses fictional skill and script catalogs. It does not scan your computer. Search, filter, and open the cards to try it.</p>
+    <p>To browse your own assets, open this repository in your AI assistant and ask:</p>
+    <div class="card">Use the agent-setup skill to set up my AI Asset Explorer.</div>
+    <p>The assistant checks your configuration, helps organize your skill links, and creates a working app and catalog in <code>~/.local/share/ai-assets-explorer/</code>. The recommended directory for skill links is <code>~/.agents/skills/</code>; setup checks your existing layout before making changes.</p>
+    <p>If your assistant cannot find the skill, ask it to read <code>skills/agent-setup/SKILL.md</code> in the checkout.</p>
+    <p>Your local Explorer includes scan details, refresh times, and an audit of your configured skills directory. Personal catalogs stay on your machine.</p>
+  </section>
+  <section id="local-about">
+  <h2>About</h2>
+  <p>The Explorer scans your configured skills directory (usually <code>~/.agents/skills/</code>), the local folder where skill directories and symlinks are collected. It reads your private script catalog when you generate or refresh it, and local launchd and cron definitions for direct script references. It does not watch folders or update automatically. Ask your assistant to refresh your AI Asset Explorer after changes.</p>
+  <p id="scan-directory" hidden><strong>Directory scanned:</strong> <code id="scan-directory-path"></code></p>
+  <p>The scan includes skill folders in that directory and follows symlinks to their targets. For a linked skill, <strong>Source</strong> identifies the repository the link points into. It does not independently search <code>~/.claude/skills/</code>, <code>~/.codex/skills/</code>, project folders, or marketplace caches. Setup’s asset audit can discover skills outside this catalog.</p>
+  <p><strong>Browse Assets</strong> lets you filter Skills and Scripts and narrow scripts to those with a matched job definition. <strong>Audit Skills</strong> shows local skill entries, broken links, duplicate names, and file age. Browsing does not install, edit, or run anything.</p>
+  <p>Keep marketplace installations where their installers expect them; do not link managed caches into the skills directory just to include them here.</p>
+
+  <h2>Where the data comes from</h2>
+  <p><code>generate-skills-json.py</code> reads the same setup configuration as the linker and scans the folder set by <code>directories.symlinks_dir</code>. Without a configuration file, it scans <code>~/.agents/skills</code>. It accepts symlinks and real directories. Set <code>SKILLS_ROOT</code> to scan another directory. It reads skill frontmatter and selected Markdown sections, then uses fixed keyword rules to assign tags. The source <code>SKILL.md</code> files remain authoritative.</p>
+  <div class="card">
+    <p><strong>Browse catalog:</strong> <code>skills.json</code> contains skill names, descriptions, tags, and source labels. It is generated locally and excluded from Git.</p>
+    <p><strong>Local audit:</strong> <code>skills-local.json</code> also contains absolute paths and inventory details. It is ignored by Git and must stay on the machine that generated it. Without this file, the page hides Audit Skills.</p>
+    <p><strong>Registered scripts:</strong> <code>scripts-local.json</code> contains private catalog entries, absolute script paths, and any direct launchd or cron job matches. It stays on your machine. Job matches show definitions, not loaded or successful job status.</p>
+  </div>
+
+  <h2>How tags work</h2>
+  <p>Tool, task, phase, and stage tags are keyword guesses based on each skill's name, description, and the start of its body. A skill can match several tool, task, or stage tags. Phase uses a priority order and defaults to “In Progress.” Role is inferred from a known AI-first module path; other sources use “Other.”</p>
+  <p>Skill type comes only from <code>metadata.skill-type</code> in the skill's frontmatter: <code>atomic</code> for a small, focused skill intended for reuse by other skills, or <code>workflow</code> for a skill that coordinates a broader sequence of work. Missing or unsupported values appear as “Unclassified.” Names, descriptions, and references to other skills do not determine the type.</p>
+  <p>If a tag is misleading, update the keyword rules in <code>generate-skills-json.py</code> and regenerate the files. There is no tag editor in the page. A file older than 60 days is marked “Stale” in the local audit as an age cue, not proof that the skill is obsolete.</p>
+
+  <h2>Update skills and refresh your catalog</h2>
+  <ul>
+    <li><strong>Update a skill:</strong> ask your assistant to edit its source files or get updates from its repository. For marketplace skills, use the marketplace’s installer or update command. The Explorer does not update skill files.</li>
+    <li><strong>Rescan your skills:</strong> ask “Use agent-setup to refresh my skill catalog.” The assistant regenerates the catalog from your configured skills directory. Reload the Explorer to see the changes and the new refresh time.</li>
+    <li><strong>Include another skill:</strong> ask your assistant to audit your assets and use skill-linker where appropriate, then refresh the catalog. Rescanning alone does not discover skills outside the configured directory.</li>
+  </ul>
+  <p>Keep the original <code>local-ai-asset-organization</code> repository checkout available: it contains the generator needed for refreshes. Your assistant also needs access to the <code>agent-setup</code> skill. If it cannot find the skill, open the checkout in your assistant and ask it to read <code>skills/agent-setup/SKILL.md</code>. The installed app can display its saved catalog without the checkout.</p>
+  <p>To reopen the app, ask “Use agent-setup to open my AI Asset Explorer.” The assistant uses your saved setup details to open the existing server or start it again.</p>
+  <p>Guided setup keeps generated files in <code>~/.local/share/ai-assets-explorer/</code>, outside the source repository. All personal catalog files stay local. The documentation site’s demo uses fictional sample catalogs.</p>
+  <details><summary>Commands for preparing your local Explorer</summary>
+  <p>Run these in the source checkout, where the generator and Makefile live.</p>
+  <div class="card">
+    <pre><code>cd /path/to/local-ai-asset-organization/skills-explorer
+make run
+# open http://localhost:8980</code></pre>
+<p><code>make run</code> prepares the app and data in your personal Explorer folder and starts its local server on port 8980. Stop it with Ctrl+C in the running terminal or by closing that terminal. Run <code>make regen</code> alone to update the data or <code>make serve</code> to preview an existing snapshot. The Explorer uses port 8980 only.</p>
+  </div>
+  <div class="card">
+    <pre><code>make regen CONFIG=/path/to/agent-config.toml</code></pre>
+  </div>
+  <p>After a source asset or job definition changes, ask your assistant to refresh the catalog. Source assets remain in their repositories; all generated JSON files stay in your local Explorer folder. The file manager action requires the local server. Catalog refreshes happen when requested, without a scheduled background rebuild.</p>
+  <div class="note">Requires Python 3.11+ and Make for these commands. Guided setup needs Python 3.11+ without Make. The generator uses only Python's standard library.</div>
+  </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  Have feedback or an idea? <a href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization/-/work_items?sort=created_date&amp;state=opened&amp;first_page_size=20" target="_blank" rel="noopener noreferrer">Share it in the GitLab repo</a>.
+</footer>
+
+<script>
+  (async () => {
+    let data;
+    for (const filename of ["skills-local.json", "skills.json", "sample-skills.json"]) {
+      const response = await fetch(filename, { cache: "no-store" });
+      if (response.ok) {
+        data = await response.json();
+        break;
+      }
+    }
+    if (!data) throw new Error("Catalog unavailable");
+    const demo = data.catalogType === "demo";
+    document.getElementById("demo-about").hidden = !demo;
+    document.getElementById("local-about").hidden = demo;
+    document.getElementById("about-audit-tab").hidden = demo || !Array.isArray(data.inventory);
+    if (demo) {
+      document.querySelector("header h1").textContent = "AI Asset Explorer — Demo";
+    } else if (data.scannedDirectory) {
+      document.getElementById("scan-directory-path").textContent = data.scannedDirectory;
+      document.getElementById("scan-directory").hidden = false;
+    }
+  })().catch(() => { document.getElementById("about-audit-tab").hidden = true; });
+</script>
+
+</body>
+</html>

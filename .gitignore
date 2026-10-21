@@ -1,1 +1,7 @@
 .DS_Store
+skills-explorer/skills.json
+skills-explorer/skills-local.json
+skills-explorer/scripts-local.json
+
+__pycache__/
+*.pyc

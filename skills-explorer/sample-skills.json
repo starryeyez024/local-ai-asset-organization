@@ -1,0 +1,152 @@
+{
+  "catalogType": "demo",
+  "skillCount": 3,
+  "activeCount": 3,
+  "stubCount": 0,
+  "filterOptions": {
+    "type": [
+      "atomic"
+    ],
+    "phase": [
+      "planning",
+      "in-progress"
+    ],
+    "stage": [
+      "gather",
+      "produce"
+    ],
+    "tool": [],
+    "role": [
+      "other"
+    ],
+    "task": [
+      "analysis",
+      "generation",
+      "planning",
+      "reporting"
+    ],
+    "repository": [
+      "Unclassified"
+    ]
+  },
+  "skills": [
+    {
+      "id": "draft-status-update",
+      "displayName": "Draft Status Update",
+      "description": "Draft a concise project status update from supplied facts.",
+      "module": "other",
+      "moduleDisplay": "Other",
+      "status": "active",
+      "persona": "",
+      "owningAgent": "",
+      "skillType": "atomic",
+      "trigger": "",
+      "inputs": [],
+      "requiredSkills": [],
+      "sourceOrg": "",
+      "sourceRepo": "",
+      "sourceLabel": "Unclassified",
+      "tags": {
+        "tool": [],
+        "role": [
+          "other"
+        ],
+        "task": [
+          "generation",
+          "reporting"
+        ],
+        "type": [
+          "atomic"
+        ],
+        "phase": [
+          "in-progress"
+        ],
+        "stage": [
+          "gather",
+          "produce"
+        ],
+        "repository": [
+          "Unclassified"
+        ]
+      }
+    },
+    {
+      "id": "review-project-plan",
+      "displayName": "Review Project Plan",
+      "description": "Review a project plan for unclear scope, risks, and missing decisions.",
+      "module": "other",
+      "moduleDisplay": "Other",
+      "status": "active",
+      "persona": "",
+      "owningAgent": "",
+      "skillType": "atomic",
+      "trigger": "",
+      "inputs": [],
+      "requiredSkills": [],
+      "sourceOrg": "",
+      "sourceRepo": "",
+      "sourceLabel": "Unclassified",
+      "tags": {
+        "tool": [],
+        "role": [
+          "other"
+        ],
+        "task": [
+          "analysis",
+          "planning"
+        ],
+        "type": [
+          "atomic"
+        ],
+        "phase": [
+          "planning"
+        ],
+        "stage": [
+          "gather",
+          "produce"
+        ],
+        "repository": [
+          "Unclassified"
+        ]
+      }
+    },
+    {
+      "id": "summarize-meeting",
+      "displayName": "Summarize Meeting",
+      "description": "Turn meeting notes into decisions and follow-up actions.",
+      "module": "other",
+      "moduleDisplay": "Other",
+      "status": "active",
+      "persona": "",
+      "owningAgent": "",
+      "skillType": "atomic",
+      "trigger": "",
+      "inputs": [],
+      "requiredSkills": [],
+      "sourceOrg": "",
+      "sourceRepo": "",
+      "sourceLabel": "Unclassified",
+      "tags": {
+        "tool": [],
+        "role": [
+          "other"
+        ],
+        "task": [
+          "reporting"
+        ],
+        "type": [
+          "atomic"
+        ],
+        "phase": [
+          "in-progress"
+        ],
+        "stage": [
+          "gather"
+        ],
+        "repository": [
+          "Unclassified"
+        ]
+      }
+    }
+  ]
+}

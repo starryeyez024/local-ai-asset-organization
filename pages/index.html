@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Local AI Asset Organization</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="https://static.redhat.com/libs/redhat/redhat-font/latest/webfonts/red-hat-font.min.css">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="wrap site-nav-inner">
+      <span class="site-brand">AI Asset Organization</span>
+      <div class="site-links">
+        <a href="index.html" aria-current="page">Overview</a>
+        <a href="agentic-setup.html">Agentic setup</a>
+        <a href="asset-organization.html">Asset organization</a>
+        <a href="tool-compatibility.html">Compatibility</a>
+        <a href="skills-explorer-guide.html">AI Asset Explorer</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">A guide to organizing local AI tools</p>
+        <h1>Know where your AI assets live.<br>Choose how each tool uses them.</h1>
+        <p class="lede">Keep track of your skills, instructions, context, MCP servers, and configuration across Cursor, Claude Code, Codex, ChatGPT Work, and hosted runtimes.</p>
+      </div>
+      <div class="hero-image">
+        <img src="images/ai-assets-sot.jpeg" alt="Diagram of skill repositories in one physical root with tool-facing symlink views.">
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section id="start-here" class="band">
+      <div class="wrap">
+        <p class="section-label">Start here</p>
+        <h2>One conversation, from setup to a working catalog</h2>
+        <p class="lead-text">Open a local copy of <a href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization">this repository</a> in an assistant that can read and change your files. Give it the request below. The <strong>agent-setup</strong> skill checks your existing configuration, skills folders, and installed packages, then asks about anything it could not find. It uses those findings to guide the whole process. You can start without choosing a folder layout, preparing context files, or knowing which skills to run.</p>
+        <div class="callout green"><strong>Ask your assistant:</strong> “Read <code class="inline">skills/agent-setup/SKILL.md</code> and help me set this up.”</div>
+        <ol class="steps">
+          <li><strong>Personal setup and context.</strong> Using what it found, the assistant recommends a setup, asks about your work and preferences, drafts context for you to correct, and connects your tools to your private setup repository.</li>
+          <li><strong>Asset organization.</strong> It uses the AI asset auditor to inspect what you have and recommend any cleanup. After you review the plan, it applies approved changes and uses the linker where needed.</li>
+          <li><strong>Your AI Asset Explorer.</strong> It builds your local catalog, starts the Explorer, and helps you find skills, registered scripts, and their matched job definitions.</li>
+        </ol>
+        <p>The assistant recommends a plan based on what it finds and explains choices when they arise. It asks for your input when preferences, conflicting files, or a proposed change need your judgment.</p>
+        <p>You can pause and say “continue my setup” later. The assistant records progress, checks what is already complete, and picks up the next step. If you already have a working setup, ask for just the part you need.</p>
+        <p><a href="skills/agent-setup/SKILL.md" data-local-href="../skills/agent-setup/SKILL.md">Read the setup skill</a>. No separate skill installation is needed to begin.</p>
+      </div>
+    </section>
+    <section>
+      <div class="wrap">
+        <p class="section-label">The problem</p>
+        <h2>The same asset ends up in several places</h2>
+        <p class="lead-text">When you use several AI tools or install assets through <a href="https://docs.getlola.dev/">Lola</a>, <a href="https://docs.npmjs.com/cli/v11/commands/npx/">NPX</a>, <a href="https://git-scm.com/docs">Git</a>, or <a href="https://code.claude.com/docs/en/plugin-marketplaces">plugin marketplaces</a>, your skills and MCP servers can end up in different folders. Each tool may find a different set of files.</p>
+        <ul class="steps">
+          <li>The same skill may appear in a tracked repository, an installed copy, and a symlink elsewhere. It can be hard to tell which version to edit or update.</li>
+          <li>Local changes to an installed skill can disappear when its vendor or package manager updates it.</li>
+          <li>A local path or symlink does not automatically travel with a project or become available to a hosted agent.</li>
+        </ul>
+        <h3>How the skills organize them</h3>
+        <div class="card-grid">
+          <article class="card"><h4>Keep track of the source</h4><p>The assistant keeps maintained skills and code in tracked repositories, leaves installed packages with their package managers, and keeps personal setup files private.</p></article>
+          <article class="card"><h4>Check what each tool supports</h4><p>The assistant checks which method the tool supports: a symlink, committed file, generated copy, native configuration, or platform-managed package.</p></article>
+          <article class="card"><h4>Record copies you need to keep</h4><p>Some tools need their own copy. The assistant records why each copy exists and which source it comes from.</p></article>
+        </div>
+    <br/>
+         <p class="lead-text">The recommended layout groups repositories you maintain under one folder. Marketplace caches and generated installs stay where their installers expect them. Your private setup repo lives separately under <code class="inline">~/.config/agent-tools/</code>. The linker uses symlinks where the tool supports them; other tools may need a different way to read the same content.</p>
+         <br/>
+        <div class="diagram">
+          <p class="diagram-title">Repository folders and links for your tools</p>
+          <h3><code class="inline">~/AI Assets/</code>: maintained repository sources</h3>
+          <pre><span class="tree">data-org/</span>
+<span class="tree-mark">└── </span><span class="tree">repo-one/</span>
+<span class="tree-mark">    └── </span><span class="tree">skills/</span>
+<span class="tree-mark">        └── </span><span class="tree">concaten-gator/</span>
+<span class="tree-mark">            └── </span><span class="tree-file">SKILL.md</span>
+<span class="tree green">your-username/</span>
+<span class="tree-mark">└── </span><span class="tree green">repo-three/</span>
+<span class="tree-mark">    └── </span><span class="tree green">skills/</span>
+<span class="tree-mark">        └── </span><span class="tree green">build-automation/</span>
+<span class="tree-mark">            └── </span><span class="tree-file">SKILL.md</span></pre>
+          <div class="root-compare-arrow-vert" aria-hidden="true"><span class="glyph">↓</span> </div>
+          <h3><code class="inline">~/.agents/skills/</code>: an example hub for links to selected skills</h3>
+          <pre>concaten-gator            <span class="tree-mark">→</span> <span class="tree">~/AI Assets/data-org/repo-one/skills/concaten-gator/</span>
+build-automation          <span class="tree-mark">→</span> <span class="tree green">~/AI Assets/your-username/repo-three/skills/build-automation/</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <p class="section-label">Explore the details</p>
+        <h2>Choose what to work on</h2>
+        <p>These guides explain what the assistant does and why, with examples you can refer to when reviewing its plan. You can <a href="#start-here">start with agent-setup</a> and read the details as they become useful.</p>
+        <div class="card-grid">
+          <article class="card"><h3><a href="agentic-setup.html">Agentic setup</a></h3><p>Keep instructions, configuration, and personal context in a private repo, then connect it to your tools.</p></article>
+          <article class="card"><h3><a href="asset-organization.html">Asset organization</a></h3><p>Organize repositories, skills, and MCP code. Resolve naming conflicts and keep custom versions separate.</p></article>
+          <article class="card"><h3><a href="skills-explorer-guide.html">AI Asset Explorer</a></h3><p>Browse skills and registered scripts, filter by asset type, and inspect direct schedule matches.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap">
+        <p class="section-label">Five principles</p>
+        <h2>Principles behind the setup</h2>
+        <p>The skills use these principles when preparing and checking your setup.</p>
+        <ol class="steps">
+          <li>Keep instructions, configuration, and context in separate files.</li>
+          <li>Record who maintains each asset and how to update it.</li>
+          <li>Use the delivery method your tool supports: a symlink, committed file, generated copy, native config, or platform package.</li>
+          <li>Customize a vendor or team asset by copying it, editing your copy, and pointing the intended tool to it. Keep the original intact.</li>
+          <li>Before automating, check how the tool finds assets, resolves conflicts, and handles installs in each runtime.</li>
+        </ol>
+      </div>
+    </section>
+
+
+  </main>
+
+  <footer><div class="wrap">A general methodology for organizing AI agent assets across multiple tools and runtimes. · <a href="quick-reference.html">Quick reference</a><p>Have feedback or an idea? <a href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization/-/work_items?sort=created_date&amp;state=opened&amp;first_page_size=20" target="_blank" rel="noopener noreferrer">Share it in the GitLab repo</a>.</p></div></footer>
+  <script>
+    if (location.pathname.includes('/pages/')) {
+      document.querySelectorAll('a[data-local-href]').forEach(link => {
+        link.href = link.dataset.localHref;
+      });
+    }
+  </script>
+</body>
+</html>

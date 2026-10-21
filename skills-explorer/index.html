@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Asset Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+<style>
+    [hidden] { display: none !important; }
+    :root {
+      --rh-red: #ee0000;
+      --rh-dark: #151515;
+      --rh-gray-900: #1a1a1a;
+      --rh-gray-700: #3c3f42;
+      --rh-gray-500: #6a6e73;
+      --rh-gray-300: #d2d2d2;
+      --rh-gray-100: #f0f0f0;
+      --rh-white: #ffffff;
+      --tag-tool: #0066cc;
+      --tag-role: #3e8635;
+      --tag-task: #c9190b;
+      --tag-type: #6753ac;
+      --tag-phase: #005f60;
+      --tag-stage: #a35a00;
+      --tag-tool-bg: #e7f1fa;
+      --tag-role-bg: #e9f5e6;
+      --tag-task-bg: #fce4e1;
+      --tag-type-bg: #f4e6ff;
+      --tag-phase-bg: #e0f3f2;
+      --tag-stage-bg: #fbead2;
+      --sidebar-width: 280px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Red Hat Text", "Helvetica Neue", Arial, sans-serif;
+      background: var(--rh-gray-100);
+      color: var(--rh-dark);
+      line-height: 1.5;
+    }
+
+    .site-footer {
+      padding: 20px 24px;
+      border-top: 1px solid var(--rh-gray-300);
+      color: var(--rh-gray-700);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .site-footer a { color: var(--tag-tool); text-underline-offset: 3px; }
+
+    header {
+      background: var(--rh-dark);
+      color: var(--rh-white);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    header h1 { color: #a4fbea; font-family: "Luckiest Guy", cursive;
+      font-size: 23px;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    #search-box {
+      margin: 0;
+      padding: 8px 12px;
+      border: 1px solid var(--rh-gray-500);
+      border-radius: 4px;
+      background: var(--rh-white);
+      color: var(--rh-dark);
+      font-size: 14px;
+      font-family: "Red Hat Text", "Helvetica Neue", Arial, sans-serif;
+      width: 100%;
+    }
+
+    #search-box::placeholder { color: var(--rh-gray-500); }
+    #search-box:focus { outline: 2px solid var(--tag-tool); border-color: var(--tag-tool); }
+
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 64px);
+    }
+
+    .sidebar {
+      width: var(--sidebar-width);
+      min-width: var(--sidebar-width);
+      background: var(--rh-white);
+      border-right: 1px solid var(--rh-gray-300);
+      padding: 16px 0;
+      overflow-y: auto;
+      position: sticky;
+      top: 0;
+      height: calc(100vh - 64px);
+    }
+
+    .sidebar-search {
+      padding: 0 16px 12px;
+    }
+
+    .mobile-filter-shell { display: contents; }
+    .mobile-filter-toggle { display: none; }
+
+    .filter-group {
+      border-bottom: 1px solid var(--rh-gray-100);
+      padding: 0 16px;
+    }
+
+    .filter-all {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 16px 10px;
+      font-size: 12px;
+      color: var(--rh-gray-700);
+      cursor: pointer;
+    }
+
+    .filter-all input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--rh-dark);
+    }
+
+    .filter-group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0;
+      user-select: none;
+    }
+
+    .filter-group-toggle,
+    .filter-group-select {
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+
+    .filter-group-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 0 7px;
+      color: var(--rh-gray-700);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .filter-group-toggle:hover,
+    .filter-group-select:hover {
+      color: var(--tag-tool);
+      text-decoration: none;
+    }
+
+    .filter-group-toggle .arrow {
+      display: inline-block;
+      font-size: 12px;
+      transition: transform 0.15s;
+    }
+
+    .filter-group.collapsed .filter-group-toggle .arrow { transform: rotate(-90deg); }
+    .filter-group.collapsed .filter-options { display: none; }
+
+    .filter-group-select {
+      padding: 10px 0 7px 8px;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--rh-gray-500);
+    }
+
+    .filter-group[data-selected="all"] .filter-group-select::after { content: "Clear all"; }
+    .filter-group[data-selected="none"] .filter-group-select::after,
+    .filter-group[data-selected="some"] .filter-group-select::after { content: "Select all"; }
+
+    .filter-options {
+      padding-bottom: 9px;
+    }
+
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 0;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--rh-gray-700);
+    }
+
+    .filter-option:hover { color: var(--rh-dark); }
+
+    .filter-option input[type="checkbox"] {
+      accent-color: var(--tag-tool);
+      width: 13px;
+      height: 13px;
+    }
+
+    .filter-option .count {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--rh-gray-500);
+      background: var(--rh-gray-100);
+      padding: 0 6px;
+      border-radius: 8px;
+    }
+
+    .filter-group[data-group="tool"] input { accent-color: var(--tag-tool); }
+    .filter-group[data-group="role"] input { accent-color: var(--tag-role); }
+    .filter-group[data-group="task"] input { accent-color: var(--tag-task); }
+    .filter-group[data-group="type"] input { accent-color: var(--tag-type); }
+    .filter-group[data-group="phase"] input { accent-color: var(--tag-phase); }
+    .filter-group[data-group="stage"] input { accent-color: var(--tag-stage); }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 20px 24px;
+      max-width: 900px;
+    }
+
+    .results-count { color: #211d1d; font-size: .8rem; }
+
+    .results-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px 16px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: var(--rh-gray-500);
+    }
+
+    .toggle-expand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--rh-gray-500);
+      cursor: pointer;
+    }
+
+    .toggle-expand input { accent-color: var(--rh-gray-500); }
+
+    .skill-card {
+      width: 100%;
+      min-width: 0;
+      background: var(--rh-white);
+      border: 1px solid var(--rh-gray-300);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+
+    .skill-card.stub { opacity: 0.5; }
+    .skill-card.hidden { display: none; }
+
+    .skill-card summary {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      list-style: none;
+    }
+
+    .summary-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .skill-description-preview {
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--rh-gray-500);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .skill-card summary::-webkit-details-marker { display: none; }
+
+    .skill-disclosure {
+      position: relative;
+      display: inline-block;
+      flex: 0 0 18px;
+      width: 18px;
+      height: 21px;
+      margin-top: 0;
+    }
+
+    .skill-disclosure::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 2px;
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 7px solid var(--rh-gray-500);
+      transform-origin: 3.5px 5px;
+      transition: transform 0.15s;
+    }
+
+    .skill-card[open] .skill-disclosure::before { transform: rotate(90deg); }
+
+    .skill-name {
+      font-weight: 600;
+      color: var(--rh-dark);
+      flex-shrink: 0;
+    }
+
+    .skill-tags {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin: 8px 0 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.1s;
+    }
+
+    .tag:hover { opacity: 0.8; }
+
+    .tag.tool { background: var(--tag-tool-bg); color: var(--tag-tool); }
+    .tag.role { background: var(--tag-role-bg); color: var(--tag-role); }
+    .tag.task { background: var(--tag-task-bg); color: var(--tag-task); }
+    .tag.phase { background: var(--tag-phase-bg); color: var(--tag-phase); }
+    .tag.stage { background: var(--tag-stage-bg); color: var(--tag-stage); }
+    .tag.repository { background: var(--rh-gray-100); color: var(--rh-gray-700); }
+
+    .skill-details {
+      padding: 0 16px 16px 32px;
+      font-size: 13px;
+      color: var(--rh-gray-700);
+      line-height: 1.6;
+    }
+
+    .skill-details .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--rh-gray-500);
+    }
+
+    .skill-details .meta-row span { min-width: 0; overflow-wrap: anywhere; }
+    .skill-details .meta-row strong { color: var(--rh-gray-700); }
+
+    .skill-type-badge {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      flex-shrink: 0;
+    }
+    .skill-type-badge.workflow { background: #f4e6ff; color: #6753ac; }
+    .skill-type-badge.atomic,
+    .skill-type-badge.unclassified { background: var(--rh-gray-100); color: var(--rh-gray-500); }
+
+    .how-to-use {
+      margin-top: 12px;
+      padding-top: 12px;
+    }
+
+    .how-to-use h4 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--rh-gray-500);
+      margin-bottom: 6px;
+    }
+
+    .how-to-use .block { margin-bottom: 10px; }
+    .how-to-use .block:last-child { margin-bottom: 0; }
+
+    .inputs-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .inputs-list li {
+      background: #fafafa;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      border: 1px solid var(--rh-gray-300);
+      color: var(--rh-gray-500);
+    }
+
+    .inputs-list li.required { border: 1px solid var(--rh-dark); color: var(--rh-dark); background: #fafafa; }
+
+    .required-skills-chain {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .required-skills-chain .step {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+    }
+
+    .required-skills-chain .step-link {
+      background: var(--tag-tool-bg);
+      color: var(--tag-tool);
+      border: none;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .required-skills-chain .step-link:hover { text-decoration: underline; }
+
+    .required-skills-chain .arrow-sep { color: var(--rh-gray-300); }
+
+    .source-path {
+      font-size: 11px;
+      color: var(--rh-gray-500);
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    }
+
+    .source-path-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .source-path-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      border: 0;
+      background: none;
+      color: var(--rh-gray-500);
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    .source-path-action:hover,
+    .source-path-action:focus-visible {
+      color: var(--tag-tool);
+      background: var(--tag-tool-bg);
+      outline: none;
+    }
+
+    .source-path-action svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .source-action-status {
+      margin: 8px 0 0;
+      font-size: 12px;
+      color: var(--rh-gray-500);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--rh-gray-500);
+      font-size: 15px;
+    }
+
+    /* -- View tabs (Browse / Maintain) -- */
+    .view-tabs {
+      display: flex;
+      gap: 24px;
+      margin-left: auto;
+    }
+
+    .view-tab {
+      background: none;
+      border: none;
+      color: var(--rh-gray-300);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: "Red Hat Text", "Helvetica Neue", Arial, sans-serif;
+      padding: 8px 0;
+      cursor: pointer;
+    }
+
+    .view-tab:hover,
+    .view-tab.active {
+      color: var(--rh-white);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 5px;
+    }
+
+    .view-tab-link {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    /* Toggled via classList (not inline styles) so JS can reliably show/hide
+       these containers -- setting el.style.display = "" only clears an inline
+       override, it does NOT remove a stylesheet rule like this one, so the
+       show/hide logic must add/remove this class instead. */
+    .view-hidden { display: none; }
+
+    /* -- Maintain toolbar -- */
+    .maintain-toolbar {
+      background: var(--rh-white);
+      border-bottom: 1px solid var(--rh-gray-300);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .maintain-toolbar input[type="text"] {
+      padding: 7px 12px;
+      border: 1px solid var(--rh-gray-300);
+      border-radius: 4px;
+      font-size: 13px;
+      width: 280px;
+    }
+
+    .maintain-toolbar label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--rh-gray-700);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .maintain-toolbar #maintain-results-count {
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--rh-gray-500);
+    }
+
+    .maintain-stats {
+      display: flex;
+      gap: 20px;
+      padding: 14px 24px;
+      background: var(--rh-white);
+      border-bottom: 1px solid var(--rh-gray-300);
+      flex-wrap: wrap;
+    }
+
+    .maintain-stat {
+      font-size: 13px;
+      color: var(--rh-gray-500);
+    }
+
+    .maintain-stat strong {
+      display: block;
+      font-size: 20px;
+      color: var(--rh-dark);
+      font-weight: 600;
+    }
+
+    .maintain-stat.stat-broken strong,
+    .maintain-stat.stat-stale strong { color: var(--tag-task); }
+
+    .maintain-stat.stat-duplicates strong { color: var(--tag-stage); }
+
+    .maintain-table-wrap {
+      padding: 16px 24px 40px;
+      /* No overflow-x here on purpose: setting overflow-x to anything but
+         "visible" forces the browser to also compute overflow-y as "auto"
+         (per spec), which makes this div its own "scroll container" -- even
+         though it never actually scrolls internally (content just flows in
+         the page). That accidental scroll container was exactly why the
+         sticky <th> below wasn't sticking to the real, page-level scroll:
+         it was anchored to this div's (non-scrolling) scrollport instead of
+         the viewport. table-layout: fixed + word-break on the path column
+         already keep row content from overflowing horizontally, so this
+         isn't needed for that either. */
+    }
+
+    .maintain-path-caption {
+      font-size: 12px;
+      color: var(--rh-gray-500);
+      margin-bottom: 8px;
+    }
+    .mobile-table-hint { display: none; }
+
+    .maintain-path-caption code {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      background: var(--rh-gray-100);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    #maintain-table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: var(--rh-white);
+    }
+
+    #maintain-table th {
+      text-align: left;
+      padding: 10px 12px;
+      background: var(--rh-gray-900);
+      color: var(--rh-white);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    #maintain-table th[data-sort] {
+      cursor: pointer;
+      user-select: none;
+    }
+    #maintain-table th[data-sort]:hover {
+      background: var(--rh-gray-700);
+    }
+    #maintain-table th .sort-arrow {
+      font-size: 10px;
+      letter-spacing: 0;
+    }
+
+    #maintain-table th:nth-child(1), #maintain-table td:nth-child(1) { width: 16%; }
+    #maintain-table th:nth-child(2), #maintain-table td:nth-child(2) { width: 50%; }
+    #maintain-table th:nth-child(3), #maintain-table td:nth-child(3) { width: 18%; }
+    #maintain-table th:nth-child(4), #maintain-table td:nth-child(4) { width: 160px; }
+
+    #maintain-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--rh-gray-100);
+      vertical-align: top;
+    }
+
+    #maintain-table tr:hover td { background: #fafafa; }
+
+    .maintain-name { font-weight: 600; color: var(--rh-dark); }
+
+    .maintain-path {
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--rh-gray-700);
+      overflow-wrap: break-word;
+      word-break: break-word;
+      user-select: all;
+    }
+
+    .maintain-date { white-space: nowrap; font-weight: 400; }
+    .maintain-date.stale { color: var(--tag-task); }
+    .maintain-date.unknown { color: var(--rh-gray-500); font-style: italic; }
+
+    .maintain-days-ago { font-size: 11px; color: var(--rh-gray-500); margin-top: 2px; }
+    .maintain-days-ago.stale { color: var(--tag-task); }
+
+    .badge {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      margin: 0 4px 4px 0;
+      white-space: nowrap;
+    }
+
+    .badge-broken { background: #fce4e1; color: var(--tag-task); }
+    .badge-stale { background: #fce4e1; color: var(--tag-task); }
+    .badge-duplicate { background: var(--tag-stage-bg); color: var(--tag-stage); cursor: help; }
+    .badge-missing { background: var(--rh-gray-100); color: var(--rh-gray-500); }
+    .badge-curated { background: var(--tag-role-bg); color: var(--tag-role); }
+    .badge-orphaned { background: var(--rh-gray-100); color: var(--rh-gray-500); }
+    .badge-realdir { background: var(--rh-gray-100); color: var(--rh-gray-500); }
+    .filter-heading { padding: 0 16px 6px; font-size: 14px; font-weight: 600; color: var(--rh-gray-700); }
+    .script-job { margin: 8px 0; padding: 8px 12px; border-left: 3px solid var(--tag-role); background: var(--tag-role-bg); }
+    .script-job code, .script-source code { overflow-wrap: anywhere; }
+
+    @media (max-width: 600px) {
+      .layout { flex-direction: column; }
+      .mobile-filter-shell { display: block; background: var(--rh-white); border-bottom: 1px solid var(--rh-gray-300); }
+      .mobile-filter-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 14px 16px; border: 0; background: var(--rh-white); color: var(--rh-gray-700); font-family: inherit; font-size: 14px; font-weight: 600; line-height: 1.2; text-align: left; cursor: pointer; }
+      .mobile-filter-toggle:hover, .mobile-filter-toggle:focus-visible { color: var(--tag-tool); }
+      .mobile-filter-toggle .mobile-filter-arrow { transition: transform .15s; }
+      .mobile-filter-shell.collapsed .mobile-filter-arrow { transform: rotate(-90deg); }
+      .mobile-filter-shell.collapsed .sidebar { display: none; }
+      .sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--rh-gray-300);
+      }
+      .view-tabs { width: 100%; margin-left: 0; justify-content: space-between; gap: 12px; }
+      .main { max-width: 100%; }
+    }
+    @media (max-width: 800px) {
+      .maintain-table-wrap { overflow-x: auto; }
+      #maintain-table { min-width: 760px; }
+      .mobile-table-hint { display: inline; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>AI Asset Explorer</h1>
+  <div class="view-tabs" id="view-tabs">
+  <button class="view-tab active" data-view="browse">Browse Assets</button>
+  <button class="view-tab" data-view="maintain" id="audit-tab">Audit Skills</button>
+  <a class="view-tab view-tab-link" href="about.html">About</a>
+  </div>
+</header>
+
+
+<section id="catalog-notice" hidden role="status" style="margin:24px;max-width:720px;">
+  <h2>Prepare your local catalog</h2>
+  <p>The catalog could not be loaded. Ask your assistant to prepare or refresh your AI Asset Explorer, then open the local server address it provides.</p>
+  <p><a href="about.html">How local setup works</a></p>
+</section>
+
+<div id="browse-view">
+  <div class="layout">
+    <div class="mobile-filter-shell">
+      <button class="mobile-filter-toggle" id="mobile-filter-toggle" type="button" aria-expanded="true" aria-controls="sidebar">Filters <span class="mobile-filter-arrow" aria-hidden="true">▾</span></button>
+      <aside class="sidebar" id="sidebar"></aside>
+    </div>
+    <main class="main">
+      <div class="results-header">
+        <span id="results-count" class="results-count"></span>
+        <label class="toggle-expand">
+          <input type="checkbox" id="expand-skills"> Expand / Collapse All
+        </label>
+      </div>
+      <div id="skills-list"></div>
+    </main>
+  </div>
+</div>
+
+<div id="maintain-view" class="view-hidden">
+  <div class="maintain-stats" id="maintain-stats"></div>
+  <div class="maintain-toolbar">
+    <input type="text" id="maintain-search" placeholder="Search by name or path...">
+    <label><input type="checkbox" id="filter-broken"> Broken only</label>
+    <label><input type="checkbox" id="filter-duplicates"> Duplicates only</label>
+    <label><input type="checkbox" id="filter-stale"> Stale only (&gt;60 days)</label>
+    <span id="maintain-results-count"></span>
+  </div>
+  <div class="maintain-table-wrap">
+    <div class="maintain-path-caption"><span id="maintain-path-caption"></span><span class="mobile-table-hint"> · Swipe to see all columns</span></div>
+    <table id="maintain-table">
+      <thead>
+        <tr>
+          <th data-sort="name">Name<span class="sort-arrow"></span></th>
+          <th data-sort="truePath">True Path<span class="sort-arrow"></span></th>
+          <th data-sort="lastModified">Last Modified<span class="sort-arrow"></span></th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="maintain-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<footer class="site-footer">
+  Have feedback or an idea? <a href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization/-/work_items?sort=created_date&amp;state=opened&amp;first_page_size=20" target="_blank" rel="noopener noreferrer">Share it in the GitLab repo</a>.
+</footer>
+
+<script>
+(function () {
+  let DATA = null;
+  let SCRIPTS = [];
+  let SCRIPT_SCAN_WARNINGS = [];
+  let showSkills = true;
+  let showScripts = true;
+  const automationFilters = new Set(["automated", "manual"]);
+  const activeFilters = { type: new Set(), status: new Set(), phase: new Set(), stage: new Set(), tool: new Set(), role: new Set(), task: new Set(), repository: new Set() };
+  const collapsedGroups = new Set();
+  let searchQuery = "";
+  let expandAllSkills = false;
+
+  const GROUP_LABELS = { type: "Skill Type", status: "Skill Maturity", phase: "Agile Phase", stage: "Work Stage", tool: "Tool", task: "Task Type", role: "Role", repository: "Source" };
+  const STATUS_OPTIONS = ["full", "stub"];
+  const UNCLASSIFIED_VALUE = "unclassified";
+  const SHARED_SCRIPT_GROUPS = new Set(["stage", "tool", "task", "repository"]);
+  const MOVED_TOOL_TO_TASK = { analytics: "analytics", dita: "documentation", "design-system": "design-system" };
+  const MOVED_TASK_OPTIONS = new Set(Object.values(MOVED_TOOL_TO_TASK));
+  const NEW_TASK_OPTIONS = new Set(["classification", "maintenance", "synchronization", ...MOVED_TASK_OPTIONS]);
+  const AUTOMATION_OPTIONS = [
+    { value: "automated", label: "Automated", hint: "Has a directly matched cron or launchd job definition" },
+    { value: "manual", label: "Manual", hint: "No directly matched cron or launchd job definition was found" },
+  ];
+
+  function getFilterOptions(group) {
+    if (group === "status") return STATUS_OPTIONS;
+    const scriptValues = SHARED_SCRIPT_GROUPS.has(group)
+      ? SCRIPTS.flatMap(script => (script.tags || {})[group] || []) : [];
+    const options = [...new Set([...(DATA.filterOptions[group] || []), ...scriptValues])].sort();
+    const hasUnclassified = DATA.skills.some(skill => !(skill.tags[group] || []).length) ||
+      (SHARED_SCRIPT_GROUPS.has(group) && SCRIPTS.some(script => !((script.tags || {})[group] || []).length));
+    return hasUnclassified ? [...options, UNCLASSIFIED_VALUE] : options;
+  }
+
+  function scriptMatchesAutomation(script) {
+    const hasJob = (script.jobs || []).length > 0;
+    return hasJob ? automationFilters.has("automated") : automationFilters.has("manual");
+  }
+
+  const PHASE_LABELS = {
+    "planning": "Planning (future-looking)",
+    "in-progress": "In Progress (current status)",
+    "retrospective": "Retrospective (looking back)",
+  };
+
+  const STAGE_LABELS = {
+    "gather": "Gather (context-gathering)",
+    "produce": "Produce (the actual work)",
+    "reflect": "Reflect (retrospective insight)",
+  };
+
+  const STATUS_LABELS = {
+    "full": "Full skill",
+    "stub": "Stub",
+  };
+
+  let currentView = "browse";
+  const maintainFilters = { search: "", broken: false, duplicates: false, stale: false };
+  // Sort state for the Maintain Skills table. column is one of
+  // "name" | "truePath" | "lastModified" | null (unsorted/insertion order).
+  const maintainSort = { column: null, direction: "asc" };
+  let homePathPrefix = "";
+
+  // Home-directory prefix stripped from every True Path shown in the Maintain
+  // view. This is intentionally STATIC: computed ONCE from the full inventory
+  // (not re-derived from whatever rows happen to be currently filtered/
+  // visible), and it never changes as the user searches or toggles filters.
+  // Entries in this dataset are a mix of paths rooted under both
+  // "/Users/<home>/AI Assets/..." (symlinked farm entries) and
+  // "/Users/<home>/.agents/skills/..." (real, non-symlinked directories),
+  // which share no deeper common ancestor than the home directory itself --
+  // so dynamically extending the stripped prefix based on a filtered subset
+  // doesn't generalize sensibly. The home directory is detected from the
+  // OS-style "/Users/<user>/" (macOS) or "/home/<user>/" (Linux) prefix on
+  // any real path, rather than hardcoding a username.
+  function computeHomePrefix(inventory) {
+    for (const e of inventory) {
+      const m = (e.truePath || "").match(/^(\/Users\/[^/]+\/|\/home\/[^/]+\/)/);
+      if (m) return m[1];
+    }
+    return "";
+  }
+
+  function displayPath(truePath) {
+    const path = truePath || "";
+    return homePathPrefix && path.startsWith(homePathPrefix)
+      ? path.slice(homePathPrefix.length)
+      : path;
+  }
+
+  async function init() {
+    // cache: "no-store" + a cache-busting query param, because python's
+    // http.server sends no Cache-Control header, so browsers can silently
+    // serve a stale skills.json from disk cache even on a normal reload.
+    for (const filename of ["skills-local.json", "skills.json", "sample-skills.json"]) {
+      const response = await fetch(`${filename}?_=${Date.now()}`, { cache: "no-store" });
+      if (response.ok) {
+        DATA = await response.json();
+        break;
+      }
+    }
+    if (!DATA) throw new Error("Could not load the skills catalog");
+    if (DATA.catalogType === "demo") {
+      delete DATA.inventory;
+      delete DATA.inventoryStats;
+      document.querySelector("header h1").textContent = "AI Asset Explorer — Demo";
+    }
+    const scriptFile = DATA.catalogType === "demo" ? "sample-scripts.json" : "scripts-local.json";
+    const scriptResponse = await fetch(`${scriptFile}?_=${Date.now()}`, { cache: "no-store" });
+    if (scriptResponse.ok) {
+      const scriptData = await scriptResponse.json();
+      SCRIPTS = Array.isArray(scriptData.scripts) ? scriptData.scripts : [];
+      SCRIPT_SCAN_WARNINGS = Array.isArray(scriptData.scanWarnings) ? scriptData.scanWarnings : [];
+    }
+    document.getElementById("audit-tab").hidden = !Array.isArray(DATA.inventory);
+    // Computed once, over the full inventory, regardless of filters -- see
+    // computeHomePrefix() for why this is intentionally static.
+    homePathPrefix = computeHomePrefix(DATA.inventory || []);
+    loadFiltersFromHash();
+    if (!window.location.hash) setAllFilters(true);
+    renderSidebar();
+    renderSkills();
+    renderMaintainStats();
+    renderMaintain();
+    bindEvents();
+    if (new URLSearchParams(window.location.search).get("view") === "audit" && Array.isArray(DATA.inventory)) {
+      switchView("maintain");
+    }
+  }
+
+  function refreshLabel() {
+    if (DATA.catalogType === "demo") return " · Sample catalog";
+    const date = new Date(DATA.generatedAt || "");
+    if (Number.isNaN(date.getTime())) return " · Last refreshed: unavailable";
+    return " · Last refreshed " + new Intl.DateTimeFormat(undefined, {
+      month: "short", day: "numeric", hour: "numeric", minute: "2-digit"
+    }).format(date);
+  }
+
+  function renderSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.innerHTML = "";
+    const allSelected = areAllFiltersSelected();
+    const someSelected = showSkills || showScripts || automationFilters.size > 0 || Object.values(activeFilters).some(values => values.size > 0);
+    sidebar.innerHTML = `
+      <div class="sidebar-search">
+        <input type="text" id="search-box" placeholder="search name or description">
+      </div>
+      <h2 class="filter-heading">Filters</h2>
+      <label class="filter-all">
+        <input type="checkbox" id="filter-all" ${allSelected ? "checked" : ""}>
+        <span>Check all / uncheck all</span>
+      </label>
+      <div class="filter-group asset-kind-filter${collapsedGroups.has("assetKind") ? " collapsed" : ""}" role="group" aria-label="Asset type">
+        <div class="filter-group-header">
+          <button class="filter-group-toggle" type="button" aria-expanded="${!collapsedGroups.has("assetKind")}">
+            <span class="arrow" aria-hidden="true">▾</span><span>Asset Type</span>
+          </button>
+        </div>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" id="show-skills" ${showSkills ? "checked" : ""}> Skills <span class="count">${DATA.skillCount}</span></label>
+          <label class="filter-option"><input type="checkbox" id="show-scripts" ${showScripts ? "checked" : ""}> Scripts <span class="count">${SCRIPTS.length}</span></label>
+        </div>
+      </div>
+      <div class="filter-group automation-filter${collapsedGroups.has("automation") ? " collapsed" : ""}" role="group" aria-label="Skill automation" ${showScripts ? "" : "hidden"}>
+        <div class="filter-group-header">
+          <button class="filter-group-toggle" type="button" aria-expanded="${!collapsedGroups.has("automation")}">
+            <span class="arrow" aria-hidden="true">▾</span><span>Skill automation</span>
+          </button>
+        </div>
+        <div class="filter-options">
+          ${AUTOMATION_OPTIONS.map(option => `
+            <label class="filter-option" title="${option.hint}"><input type="checkbox" data-automation="${option.value}" ${automationFilters.has(option.value) ? "checked" : ""}>
+              <span>${option.label}</span><span class="count">${SCRIPTS.filter(script =>
+                Boolean((script.jobs || []).length) === (option.value === "automated")).length}</span>
+            </label>
+          `).join("")}
+        </div>
+      </div>
+    `;
+    sidebar.querySelector("#search-box").value = searchQuery;
+    const masterCheckbox = sidebar.querySelector("#filter-all");
+    masterCheckbox.indeterminate = someSelected && !allSelected;
+    sidebar.querySelector(".asset-kind-filter .filter-group-toggle").addEventListener("click", () => {
+      if (collapsedGroups.has("assetKind")) collapsedGroups.delete("assetKind");
+      else collapsedGroups.add("assetKind");
+      renderSidebar();
+    });
+    sidebar.querySelector(".automation-filter .filter-group-toggle").addEventListener("click", () => {
+      if (collapsedGroups.has("automation")) collapsedGroups.delete("automation");
+      else collapsedGroups.add("automation");
+      renderSidebar();
+    });
+    for (const [group, label] of Object.entries(GROUP_LABELS).filter(([group]) => showSkills || (showScripts && SHARED_SCRIPT_GROUPS.has(group)))) {
+      const options = getFilterOptions(group);
+      const div = document.createElement("div");
+      div.className = `filter-group${collapsedGroups.has(group) ? " collapsed" : ""}`;
+      div.dataset.group = group;
+      const groupAllSelected = options.length > 0 && options.every(opt => activeFilters[group].has(opt));
+      div.dataset.selected = groupAllSelected ? "all" : (activeFilters[group].size ? "some" : "none");
+
+      const counts = {};
+      for (const opt of options) {
+        counts[opt] = (showSkills ? DATA.skills.filter(s => matchesFilterOption(s, group, opt)).length : 0) +
+          (showScripts && SHARED_SCRIPT_GROUPS.has(group) ? SCRIPTS.filter(s => matchesFilterOption(s, group, opt)).length : 0);
+      }
+
+      div.innerHTML = `
+        <div class="filter-group-header">
+          <button class="filter-group-toggle" type="button" aria-expanded="${!collapsedGroups.has(group)}">
+            <span class="arrow" aria-hidden="true">▾</span><span>${label}</span>
+          </button>
+          <button class="filter-group-select" type="button" aria-label="${groupAllSelected ? "Clear" : "Select all"} ${label}"></button>
+        </div>
+        <div class="filter-options">
+          ${options.map(opt => `
+            <label class="filter-option">
+              <input type="checkbox" data-group="${group}" data-value="${escapeAttr(opt)}"
+                ${activeFilters[group].has(opt) ? "checked" : ""}>
+              <span>${escapeHtml(formatLabel(opt, group))}</span>
+              <span class="count">${counts[opt]}</span>
+            </label>
+          `).join("")}
+        </div>
+      `;
+      sidebar.appendChild(div);
+
+      div.querySelector(".filter-group-toggle").addEventListener("click", () => {
+        if (collapsedGroups.has(group)) collapsedGroups.delete(group);
+        else collapsedGroups.add(group);
+        renderSidebar();
+      });
+      div.querySelector(".filter-group-select").addEventListener("click", () => {
+        const selectAll = !options.every(opt => activeFilters[group].has(opt));
+        setGroupFilters(group, selectAll);
+        updateHashFromFilters();
+        renderSidebar();
+        renderSkills();
+      });
+    }
+  }
+
+  function setAllFilters(checked) {
+    showSkills = checked;
+    showScripts = checked;
+    automationFilters.clear();
+    if (checked) AUTOMATION_OPTIONS.forEach(option => automationFilters.add(option.value));
+    for (const [group, values] of Object.entries(activeFilters)) {
+      values.clear();
+      if (checked) getFilterOptions(group).forEach(value => values.add(value));
+    }
+  }
+
+  function setGroupFilters(group, checked) {
+    activeFilters[group].clear();
+    if (checked) getFilterOptions(group).forEach(value => activeFilters[group].add(value));
+  }
+
+  function areAllFiltersSelected() {
+    return showSkills && showScripts && AUTOMATION_OPTIONS.every(option => automationFilters.has(option.value)) && Object.entries(activeFilters).every(([group, values]) =>
+      getFilterOptions(group).every(value => values.has(value))
+    );
+  }
+
+  function matchesFilterOption(skill, group, value) {
+    if (group === "status") return value === "stub"
+      ? skill.status === "stub"
+      : value === "full" && skill.status !== "stub";
+    if (value === UNCLASSIFIED_VALUE) return !((skill.tags || {})[group] || []).length;
+    return ((skill.tags || {})[group] || []).includes(value);
+  }
+
+  function getSkillFilePath(skill) {
+    const entry = (DATA.inventory || []).find(item =>
+      item.skillId === skill.id && item.sourceLabel === skill.sourceLabel && item.hasSkillMd && item.truePath
+    );
+    if (!entry) return "";
+    return entry.truePath.endsWith("SKILL.md")
+      ? entry.truePath
+      : `${entry.truePath}/SKILL.md`;
+  }
+
+  function renderSkills() {
+    const list = document.getElementById("skills-list");
+    list.innerHTML = "";
+    let visibleCount = 0;
+
+    for (const skill of DATA.skills) {
+      const matchesFilters = showSkills && matchesActiveFilters(skill);
+      const matchesSearch = matchesSearchQuery(skill);
+      const isStub = skill.status === "stub";
+      const visible = matchesFilters && matchesSearch;
+
+      if (visible) {
+        visibleCount++;
+      }
+
+      const card = document.createElement("details");
+      card.className = `skill-card${isStub ? " stub" : ""}${!visible ? " hidden" : ""}`;
+      card.dataset.id = skill.id;
+
+      const allTags = [
+        ...(skill.tags.phase || []).map(t => ({ group: "phase", value: t })),
+        ...(skill.tags.stage || []).map(t => ({ group: "stage", value: t })),
+        ...skill.tags.tool.map(t => ({ group: "tool", value: t })),
+        ...skill.tags.role.map(t => ({ group: "role", value: t })),
+        ...skill.tags.task.map(t => ({ group: "task", value: t })),
+      ];
+
+      const skillType = ["atomic", "workflow"].includes(skill.skillType)
+        ? skill.skillType : UNCLASSIFIED_VALUE;
+      const requiredSkills = skill.requiredSkills || [];
+      const skillFilePath = getSkillFilePath(skill);
+
+      card.innerHTML = `
+        <summary>
+          <span class="skill-disclosure" aria-hidden="true"></span>
+          <div class="summary-text">
+            <span class="skill-name">${escapeHtml(skill.displayName)}</span>
+            <span class="skill-description-preview">${escapeHtml(skill.description)}</span>
+          </div>
+        </summary>
+        <div class="skill-details">
+          <div class="skill-tags">
+            <span class="skill-type-badge ${skillType}">${escapeHtml(formatLabel(skillType, "type"))}</span>
+            ${allTags.map(t =>
+              `<span class="tag ${t.group}" data-group="${t.group}" data-value="${escapeAttr(t.value)}">${escapeHtml(formatLabel(t.value, t.group))}</span>`
+            ).join("")}
+          </div>
+          <div class="meta-row">
+            <span><strong>Source:</strong> <code>${escapeHtml(skill.sourceLabel || "Unclassified")}</code>${skillFilePath ? `
+              <button class="source-path-action" type="button" data-file-path="${escapeAttr(skillFilePath)}"
+                title="Show source in file manager" aria-label="Show source in file manager">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M9 2h5v5"></path>
+                  <path d="M8 8l6-6"></path>
+                  <path d="M13 9v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4"></path>
+                </svg>
+              </button>
+            ` : ""}</span>
+            <span><strong>Name:</strong> <code>${escapeHtml(skill.id)}</code></span>
+          </div>
+          <p class="source-action-status" role="status" aria-live="polite" hidden></p>
+          <div class="how-to-use">
+            ${requiredSkills.length ? `
+              <div class="block">
+                <h4>Runs these skills in order</h4>
+                <div class="required-skills-chain">
+                  ${requiredSkills.map((s, i) =>
+                    `${i > 0 ? '<span class="arrow-sep">&rarr;</span>' : ""}<span class="step"><button class="step-link" data-jump="${escapeAttr(s.id)}" title="${escapeAttr(s.label)}">${escapeHtml(s.label)}</button></span>`
+                  ).join("")}
+                </div>
+              </div>
+            ` : ""}
+          </div>
+        </div>
+      `;
+
+      card.open = expandAllSkills && visible;
+
+      list.appendChild(card);
+    }
+
+    let visibleScripts = 0;
+    for (const script of SCRIPTS) {
+      const q = searchQuery.toLowerCase();
+      const found = !q || [script.id, script.name, script.description, ...(script.aliases || []),
+        ...(script.jobs || []).map(job => job.label)].some(value => String(value || "").toLowerCase().includes(q));
+      if (!showScripts || !found || !scriptMatchesAutomation(script) || !matchesScriptFilters(script)) continue;
+      visibleScripts++;
+      const card = document.createElement("details");
+      card.className = "skill-card script-card";
+      const jobs = script.jobs || [];
+      card.innerHTML = `
+        <summary>
+          <span class="skill-disclosure" aria-hidden="true"></span>
+          <div class="summary-text">
+            <span class="skill-name">${escapeHtml(script.name)}${jobs.length ? ' <span class="badge badge-curated">Automated</span>' : ""}</span>
+            <span class="skill-description-preview">${escapeHtml(script.description)}</span>
+          </div>
+        </summary>
+        <div class="skill-details">
+          <div class="skill-tags"><span class="skill-type-badge">Script</span>
+            <span class="badge ${script.status === "active" ? "badge-curated" : "badge-missing"}">${escapeHtml(script.status)}</span>
+            ${["stage", "tool", "task", "repository"].flatMap(group => ((script.tags || {})[group] || []).map(value =>
+              `<span class="tag ${group}" data-group="${group}" data-value="${escapeAttr(value)}">${escapeHtml(formatLabel(value, group))}</span>`)).join("")}
+          </div>
+          <div class="meta-row script-source">
+            <span><strong>Catalog name:</strong> <code>${escapeHtml(script.id)}</code></span>
+            <span><strong>Source:</strong> <code>${escapeHtml(script.sourceLabel || "Unclassified")}</code></span>
+            <span><strong>Catalog source:</strong> <code>${escapeHtml(script.source)}</code></span>
+            <span><strong>Runtime:</strong> ${escapeHtml(script.runtime)}</span>
+            ${script.file ? `<span><strong>File:</strong> <code>${escapeHtml(script.file)}</code>
+              <button class="source-path-action" type="button" data-file-path="${escapeAttr(script.file)}"
+                title="Show source in file manager" aria-label="Show source in file manager">↗</button></span>` : ""}
+          </div>
+          <p class="source-action-status" role="status" aria-live="polite" hidden></p>
+          <div class="how-to-use">
+            <p><strong>Aliases:</strong> ${escapeHtml((script.aliases || []).join(", ") || "None")}</p>
+            <p><strong>Job definitions:</strong> ${jobs.length ? `${jobs.length} found` : "None found in the scanned local launchd and cron definitions"}</p>
+            ${jobs.map(job => `<div class="script-job"><strong>${escapeHtml(job.label)}</strong> · ${escapeHtml(job.kind)} · ${escapeHtml(job.schedule)}<br><code>${escapeHtml(job.definition)}</code></div>`).join("")}
+          </div>
+        </div>`;
+      card.open = expandAllSkills;
+      list.appendChild(card);
+    }
+
+    const countLabel = `${visibleCount} / ${DATA.skillCount} skills · ${visibleScripts} / ${SCRIPTS.length} scripts`;
+    document.getElementById("results-count").textContent =
+      `${countLabel}${SCRIPT_SCAN_WARNINGS.length ? " · Schedule scan incomplete" : ""}${refreshLabel()}`;
+    document.getElementById("results-count").title = SCRIPT_SCAN_WARNINGS.join("\n");
+
+    if (visibleCount + visibleScripts === 0) {
+      const msg = document.createElement("div");
+      msg.className = "no-results";
+      msg.textContent = "No assets match the current filters.";
+      list.appendChild(msg);
+    }
+
+  }
+
+  function switchView(view) {
+    currentView = view;
+    const url = new URL(window.location.href);
+    if (view === "maintain") url.searchParams.set("view", "audit");
+    else url.searchParams.delete("view");
+    window.history.replaceState(null, "", url);
+    document.getElementById("browse-view").classList.toggle("view-hidden", view !== "browse");
+    document.getElementById("maintain-view").classList.toggle("view-hidden", view !== "maintain");
+    document.getElementById("search-box").classList.toggle("view-hidden", view !== "browse");
+    document.querySelectorAll(".view-tab").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.view === view);
+    });
+    if (view === "maintain") renderMaintain();
+  }
+
+  function renderMaintainStats() {
+    const s = DATA.inventoryStats || {};
+    const stats = document.getElementById("maintain-stats");
+    const items = [
+      ["total", "Total farm entries"],
+      ["broken", "Broken symlinks", "stat-broken"],
+      ["duplicateIssues", "Duplicate issues", "stat-duplicates"],
+      ["stale", `Stale (>${s.staleThresholdDays || 60}d)`, "stat-stale"],
+      ["fresh", "Fresh"],
+      ["inCuratedView", "In Browse view"],
+      ["notInCuratedView", "Not in Browse view"],
+    ];
+    stats.innerHTML = items.map(([key, label, cls]) => `
+      <div class="maintain-stat ${cls || ""}">
+        <strong>${s[key] ?? 0}</strong>
+        <span>${label}</span>
+      </div>
+    `).join("");
+  }
+
+  // Sorts an already-filtered array of inventory rows according to
+  // maintainSort. Called fresh on every renderMaintain() so sort order is
+  // re-applied on top of whatever filters/search are currently active,
+  // rather than being computed once and going stale.
+  function sortMaintainRows(rows) {
+    const { column, direction } = maintainSort;
+    if (!column) return rows;
+    const dir = direction === "asc" ? 1 : -1;
+    return rows.slice().sort((a, b) => {
+      if (column === "name") {
+        return dir * a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+      }
+      if (column === "truePath") {
+        // Sort by the full, real truePath -- not displayPath()'s shortened
+        // version -- so ordering is stable regardless of display formatting.
+        return dir * (a.truePath || "").toLowerCase().localeCompare((b.truePath || "").toLowerCase());
+      }
+      if (column === "lastModified") {
+        const aDate = a.skillMdModified;
+        const bDate = b.skillMdModified;
+        // Entries with no date (e.g. missing SKILL.md) aren't comparable --
+        // always push them to the end, regardless of sort direction.
+        if (!aDate && !bDate) return 0;
+        if (!aDate) return 1;
+        if (!bDate) return -1;
+        // skillMdModified is an ISO "YYYY-MM-DD" string, which sorts
+        // correctly with plain string comparison -- compare it directly
+        // rather than the derived daysSinceModified integer, which rounds
+        // to whole days and can tie two different actual dates together.
+        return dir * aDate.localeCompare(bDate);
+      }
+      return 0;
+    });
+  }
+
+  // Updates the small ↑/↓ indicator next to whichever Maintain table header
+  // is currently the active sort column; clears it from the others.
+  function updateSortIndicators() {
+    document.querySelectorAll("#maintain-table th[data-sort]").forEach(th => {
+      const arrow = th.querySelector(".sort-arrow");
+      if (!arrow) return;
+      arrow.textContent = th.dataset.sort === maintainSort.column
+        ? (maintainSort.direction === "asc" ? " \u2191" : " \u2193")
+        : "";
+    });
+  }
+
+  function renderMaintain() {
+    const tbody = document.getElementById("maintain-tbody");
+    const inventory = DATA.inventory || [];
+    const q = maintainFilters.search.toLowerCase();
+
+    let rows = inventory.filter(e => {
+      if (maintainFilters.broken && !e.broken) return false;
+      if (maintainFilters.duplicates && !e.hasDuplicateIssue) return false;
+      if (maintainFilters.stale && !(e.daysSinceModified != null && e.daysSinceModified > (DATA.inventoryStats?.staleThresholdDays || 60))) return false;
+      if (q && !e.name.toLowerCase().includes(q) && !(e.truePath || "").toLowerCase().includes(q)) return false;
+      return true;
+    });
+
+    rows = sortMaintainRows(rows);
+
+    // Static caption -- always reflects the once-computed home directory
+    // prefix, never the current filters (see computeHomePrefix()).
+    const caption = document.getElementById("maintain-path-caption");
+    caption.innerHTML = homePathPrefix
+      ? `True Path shown relative to <code>${escapeHtml(homePathPrefix)}</code>`
+      : "";
+
+    updateSortIndicators();
+
+    tbody.innerHTML = rows.map(e => {
+      const staleThreshold = DATA.inventoryStats?.staleThresholdDays || 60;
+      const isStale = e.daysSinceModified != null && e.daysSinceModified > staleThreshold;
+
+      let dateCell;
+      if (!e.hasSkillMd) {
+        dateCell = `<div class="maintain-date unknown">No SKILL.md</div>`;
+      } else {
+        const daysText = e.daysSinceModified != null ? `(${e.daysSinceModified}d ago)` : "";
+        dateCell = `
+          <div class="maintain-date ${isStale ? "stale" : ""}">${escapeHtml(e.skillMdModified || "unknown")}</div>
+          ${daysText ? `<div class="maintain-days-ago ${isStale ? "stale" : ""}">${daysText}</div>` : ""}
+        `;
+      }
+
+      const badges = [];
+      if (!e.isSymlink) badges.push(`<span class="badge badge-realdir">Real dir</span>`);
+      if (e.broken) badges.push(`<span class="badge badge-broken">Broken symlink</span>`);
+      if (!e.hasSkillMd && !e.broken) badges.push(`<span class="badge badge-missing">No SKILL.md</span>`);
+      if (e.hasDuplicateIssue) {
+        const details = [
+          ...e.duplicates.redundantSymlinks.map(n => `also symlinked as: ${n}`),
+          ...e.duplicates.nameCollisions.map(n => `name collision with: ${n}`),
+        ].join("; ");
+        badges.push(`<span class="badge badge-duplicate" title="${escapeHtml(details)}">Duplicate</span>`);
+      }
+      if (isStale) badges.push(`<span class="badge badge-stale">Stale</span>`);
+      badges.push(e.inCuratedView
+        ? `<span class="badge badge-curated">In Browse view</span>`
+        : `<span class="badge badge-orphaned">Not in Browse view</span>`);
+
+      return `
+        <tr>
+          <td class="maintain-name">${escapeHtml(e.name)}</td>
+          <td class="maintain-path">${escapeHtml(displayPath(e.truePath))}</td>
+          <td>${dateCell}</td>
+          <td>${badges.join("")}</td>
+        </tr>
+      `;
+    }).join("");
+
+    document.getElementById("maintain-results-count").textContent =
+      `Showing ${rows.length} of ${inventory.length} entries${refreshLabel()}`;
+
+    if (rows.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" class="no-results">No entries match the current filters.</td></tr>`;
+    }
+  }
+
+  function matchesActiveFilters(skill) {
+    for (const [group, selected] of Object.entries(activeFilters)) {
+      if (selected.size === 0) return false;
+      if (![...selected].some(value => matchesFilterOption(skill, group, value))) return false;
+    }
+    return true;
+  }
+
+  function matchesScriptFilters(script) {
+    for (const group of SHARED_SCRIPT_GROUPS) {
+      const selected = activeFilters[group];
+      if (!selected.size || ![...selected].some(value => matchesFilterOption(script, group, value))) return false;
+    }
+    return true;
+  }
+
+  function matchesSearchQuery(skill) {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      skill.id.toLowerCase().includes(q) ||
+      skill.displayName.toLowerCase().includes(q) ||
+      skill.description.toLowerCase().includes(q) ||
+      skill.moduleDisplay.toLowerCase().includes(q) ||
+      skill.owningAgent.toLowerCase().includes(q) ||
+      (skill.trigger || "").toLowerCase().includes(q)
+    );
+  }
+
+  function jumpToSkill(id) {
+    // Clear filters/search that would hide the target skill, then scroll to and open it.
+    searchQuery = "";
+    document.getElementById("search-box").value = "";
+    setAllFilters(true);
+    updateHashFromFilters();
+    renderSidebar();
+    renderSkills();
+    const target = document.querySelector(`.skill-card[data-id="${CSS.escape(id)}"]`);
+    if (target) {
+      target.open = true;
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+      target.style.outline = "2px solid var(--tag-tool)";
+      setTimeout(() => { target.style.outline = ""; }, 1500);
+    }
+  }
+
+  function bindEvents() {
+    const mobileFilterShell = document.querySelector(".mobile-filter-shell");
+    const mobileFilterToggle = document.getElementById("mobile-filter-toggle");
+    if (window.matchMedia("(max-width: 600px)").matches) {
+      mobileFilterShell.classList.add("collapsed");
+      mobileFilterToggle.setAttribute("aria-expanded", "false");
+    }
+    mobileFilterToggle.addEventListener("click", () => {
+      const collapsed = mobileFilterShell.classList.toggle("collapsed");
+      mobileFilterToggle.setAttribute("aria-expanded", String(!collapsed));
+    });
+
+    document.getElementById("sidebar").addEventListener("change", (e) => {
+      if (e.target.id === "show-skills") {
+        showSkills = e.target.checked;
+        renderSidebar();
+        renderSkills();
+        return;
+      }
+      if (e.target.id === "show-scripts") {
+        showScripts = e.target.checked;
+        renderSidebar();
+        renderSkills();
+        return;
+      }
+      if (e.target.dataset.automation) {
+        if (e.target.checked) automationFilters.add(e.target.dataset.automation);
+        else automationFilters.delete(e.target.dataset.automation);
+        renderSidebar();
+        renderSkills();
+        return;
+      }
+      if (e.target.id === "filter-all") {
+        setAllFilters(e.target.checked);
+        updateHashFromFilters();
+        renderSidebar();
+        renderSkills();
+        return;
+      }
+      if (e.target.type !== "checkbox") return;
+      const { group, value } = e.target.dataset;
+      if (e.target.checked) {
+        activeFilters[group].add(value);
+      } else {
+        activeFilters[group].delete(value);
+      }
+      updateHashFromFilters();
+      renderSidebar();
+      renderSkills();
+    });
+
+    document.getElementById("skills-list").addEventListener("click", (e) => {
+      const fileAction = e.target.closest(".source-path-action");
+      if (fileAction) {
+        e.preventDefault();
+        e.stopPropagation();
+        showInFileManager(fileAction.dataset.filePath, fileAction);
+        return;
+      }
+      const jumpBtn = e.target.closest(".step-link");
+      if (jumpBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        jumpToSkill(jumpBtn.dataset.jump);
+        return;
+      }
+      const tag = e.target.closest(".tag");
+      if (!tag) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const { group, value } = tag.dataset;
+      if (activeFilters[group].has(value)) {
+        activeFilters[group].delete(value);
+      } else {
+        activeFilters[group].add(value);
+      }
+      updateHashFromFilters();
+      renderSidebar();
+      renderSkills();
+    });
+
+    document.getElementById("sidebar").addEventListener("input", (e) => {
+      if (e.target.id !== "search-box") return;
+      searchQuery = e.target.value.trim();
+      renderSkills();
+    });
+
+    document.getElementById("expand-skills").addEventListener("change", (e) => {
+      expandAllSkills = e.target.checked;
+      document.querySelectorAll(".skill-card:not(.hidden)").forEach(card => {
+        card.open = expandAllSkills;
+      });
+    });
+
+    document.getElementById("view-tabs").addEventListener("click", (e) => {
+      const btn = e.target.closest(".view-tab");
+      if (!btn || !btn.dataset.view) return;
+      switchView(btn.dataset.view);
+    });
+
+    document.getElementById("maintain-search").addEventListener("input", (e) => {
+      maintainFilters.search = e.target.value.trim();
+      renderMaintain();
+    });
+
+    document.getElementById("filter-broken").addEventListener("change", (e) => {
+      maintainFilters.broken = e.target.checked;
+      renderMaintain();
+    });
+
+    document.getElementById("filter-duplicates").addEventListener("change", (e) => {
+      maintainFilters.duplicates = e.target.checked;
+      renderMaintain();
+    });
+
+    document.getElementById("filter-stale").addEventListener("change", (e) => {
+      maintainFilters.stale = e.target.checked;
+      renderMaintain();
+    });
+
+    document.querySelectorAll("#maintain-table th[data-sort]").forEach(th => {
+      th.addEventListener("click", () => {
+        const col = th.dataset.sort;
+        if (maintainSort.column === col) {
+          maintainSort.direction = maintainSort.direction === "asc" ? "desc" : "asc";
+        } else {
+          maintainSort.column = col;
+          maintainSort.direction = "asc";
+        }
+        renderMaintain();
+      });
+    });
+  }
+
+  async function showInFileManager(filePath, button) {
+    const status = button.closest(".skill-details").querySelector(".source-action-status");
+    button.disabled = true;
+    status.hidden = false;
+    status.textContent = "Opening your file manager…";
+    try {
+      const response = await fetch(`/__show-in-file-manager?path=${encodeURIComponent(filePath)}`, {
+        headers: { "X-Explorer-Action": "reveal" }
+      });
+      const result = await response.json();
+      if (!response.ok || !result.ok) throw new Error("Could not show the source");
+      status.textContent = "";
+      status.hidden = true;
+    } catch (error) {
+      status.textContent = `Could not show the source in your file manager. You can open this file directly: ${filePath}`;
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  function updateHashFromFilters() {
+    if (areAllFiltersSelected()) {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+      return;
+    }
+    const parts = ["v=2"];
+    for (const [group, values] of Object.entries(activeFilters)) {
+      if (values.size > 0) {
+        parts.push(`${group}=${[...values].join(",")}`);
+      }
+    }
+    window.location.hash = parts.join("&");
+  }
+
+  function loadFiltersFromHash() {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    const taskValuesFromHash = new Set();
+    const movedTaskValues = new Set();
+    let normalizeHash = false;
+    for (const part of hash.split("&")) {
+      const [group, vals] = part.split("=");
+      if (activeFilters[group] && vals) {
+        for (const v of vals.split(",")) {
+          const options = getFilterOptions(group);
+          if (group === "repository" && v === "Unclassified" && !options.includes(v) && options.includes(".agent")) {
+            activeFilters[group].add(".agent");
+            normalizeHash = true;
+          } else if (group === "task" && options.includes(v)) {
+            taskValuesFromHash.add(v);
+            activeFilters[group].add(v);
+          } else if (group === "tool" && MOVED_TOOL_TO_TASK[v]) {
+            const task = MOVED_TOOL_TO_TASK[v];
+            if (getFilterOptions("task").includes(task)) movedTaskValues.add(task);
+          } else if (options.includes(v)) {
+            activeFilters[group].add(v);
+          }
+        }
+      }
+    }
+    const priorTaskOptions = getFilterOptions("task").filter(value => !MOVED_TASK_OPTIONS.has(value));
+    const priorTaskWasAll = priorTaskOptions.length > 0 && priorTaskOptions.every(value => taskValuesFromHash.has(value));
+    if (movedTaskValues.size) {
+      // If the old Task Type set was unrestricted, the moved Tool selection
+      // becomes the new restriction; otherwise preserve the existing subset.
+      if (priorTaskWasAll) activeFilters.task.clear();
+      movedTaskValues.forEach(value => activeFilters.task.add(value));
+      if (activeFilters.tool.size === 0) getFilterOptions("tool").forEach(value => activeFilters.tool.add(value));
+      normalizeHash = true;
+    } else if (priorTaskWasAll) {
+      // New Task Type values should remain selected in older all-selected links.
+      for (const value of MOVED_TASK_OPTIONS) {
+        if (getFilterOptions("task").includes(value) && !activeFilters.task.has(value)) {
+          activeFilters.task.add(value);
+          normalizeHash = true;
+        }
+      }
+    }
+    // Older all-selected links predate the script task categories. Keep that
+    // state all-selected after a refresh without overriding newer filtered links.
+    if (!hash.split("&").includes("v=2")) {
+      const missingTasks = getFilterOptions("task").filter(value => !activeFilters.task.has(value));
+      const otherGroupsComplete = Object.entries(activeFilters).every(([group, values]) =>
+        group === "task" || getFilterOptions(group).every(value => values.has(value))
+      );
+      if (missingTasks.length && missingTasks.every(value => NEW_TASK_OPTIONS.has(value)) && otherGroupsComplete) {
+        setAllFilters(true);
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
+    }
+    if (normalizeHash) updateHashFromFilters();
+  }
+
+  function formatLabel(slug, group) {
+    if (group === "status" && STATUS_LABELS[slug]) return STATUS_LABELS[slug];
+    if (group === "repository") return slug;
+    if (slug === UNCLASSIFIED_VALUE) return group === "type" ? "Unclassified" : "Other";
+    if (group === "phase" && PHASE_LABELS[slug]) return PHASE_LABELS[slug];
+    if (group === "stage" && STAGE_LABELS[slug]) return STAGE_LABELS[slug];
+    return slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement("div");
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function escapeAttr(str) {
+    return escapeHtml(String(str)).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  init().catch(() => {
+    document.getElementById("browse-view").hidden = true;
+    document.getElementById("maintain-view").hidden = true;
+    document.querySelectorAll("button[data-view]").forEach(button => { button.hidden = true; });
+    document.getElementById("catalog-notice").hidden = false;
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -4,10 +4,13 @@ pages:
     - itup-alm-x86
   script:
     - mkdir -p public
-    - cp index.html public/index.html
-    - cp ai-asset-mess.jpeg public/ || true
-    - cp ai-assets-sot.jpeg public/ || true
-    - cp ai-asset-methodology-favicon.svg public/ || true
+    - cp -r pages/. public/
+    - mkdir -p public/skills
+    - cp -r skills/. public/skills/
+    - mkdir -p public/docs
+    - cp docs/configuration-contract.md public/docs/
+    - mkdir -p public/skills-explorer
+    - cp skills-explorer/index.html skills-explorer/about.html skills-explorer/sample-skills.json skills-explorer/sample-scripts.json public/skills-explorer/
   artifacts:
     paths:
       - public

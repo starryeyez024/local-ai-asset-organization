@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Asset Explorer — Browse Mockup</title>
+  <link rel="icon" type="image/svg+xml" href="../pages/favicon.svg">
+  <link rel="stylesheet" href="https://static.redhat.com/libs/redhat/redhat-font/latest/webfonts/red-hat-font.min.css">
+  <style>
+    :root { --ink: #151515; --muted: #687078; --paper: #f0f0f0; --card: #fff; --border: #d2d2d2; --dark: #151528; --blue: #0066cc; --green: #2f7a4f; --purple: #6753ac; --amber: #a35a00; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: RedHatText, "Red Hat Text", system-ui, sans-serif; line-height: 1.5; }
+    header { padding: 24px 32px; background: var(--dark); color: #fff; }
+    header h1 { margin: 0; font: 700 1.35rem/1.2 RedHatDisplay, "Red Hat Display", system-ui, sans-serif; }
+    header p { margin: 6px 0 0; color: #d8d8e2; font-size: .92rem; }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 56px; }
+    .mockup-note { margin-bottom: 28px; padding: 16px 18px; border-left: 4px solid var(--blue); background: #e7f1fa; color: #243746; }
+    .mockup-note strong { color: var(--ink); }
+    h2 { margin: 0 0 18px; font: 700 clamp(1.7rem, 4vw, 2.5rem)/1.15 RedHatDisplay, "Red Hat Display", system-ui, sans-serif; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+    .toolbar input { flex: 1 1 300px; min-width: 220px; padding: 11px 13px; border: 1px solid var(--border); border-radius: 6px; background: #fff; font: inherit; }
+    .filter { padding: 9px 13px; border: 0; border-radius: 18px; background: #fff; color: #3c3f42; font-weight: 600; }
+    .filter.active { background: var(--dark); color: #fff; }
+    .results { margin: 0 0 12px; color: var(--muted); font-size: .92rem; }
+    .asset-card { margin-bottom: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); overflow: hidden; }
+    .asset-card summary { display: flex; align-items: flex-start; gap: 12px; padding: 18px 20px; cursor: pointer; list-style: none; }
+    .asset-card summary::-webkit-details-marker { display: none; }
+    .arrow { flex: 0 0 18px; width: 18px; margin-top: 4px; color: #687078; font-size: .9rem; transition: transform .15s; }
+    details[open] .arrow { transform: rotate(90deg); }
+    .summary-copy { min-width: 0; }
+    .asset-name { display: block; font: 700 1.2rem/1.25 RedHatDisplay, "Red Hat Display", system-ui, sans-serif; }
+    .asset-summary { display: block; margin-top: 5px; color: var(--muted); }
+    .badges { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 20px 18px 50px; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 14px; font-size: .78rem; font-weight: 700; }
+    .badge.type { background: #eeece7; color: #5f6368; text-transform: uppercase; letter-spacing: .04em; }
+    .badge.phase { background: #e0f3f2; color: #005f60; }
+    .badge.stage { background: #fbead2; color: var(--amber); }
+    .badge.tool { background: #e7f1fa; color: var(--blue); }
+    .details { margin: 0 20px 20px 50px; padding-top: 16px; border-top: 1px solid #e5e5e5; }
+    .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 28px; color: #3c3f42; font-size: .9rem; }
+    .detail-grid strong { color: var(--ink); }
+    .finder-link { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; margin-left: 6px; padding: 0; border: 0; background: transparent; color: var(--blue); font-size: 1.55rem; line-height: 1; cursor: pointer; vertical-align: middle; }
+    .finder-link:hover, .finder-link:focus-visible { color: #004b8d; outline: 2px solid #99c2e8; outline-offset: 2px; }
+    code { padding: 2px 5px; border-radius: 4px; background: #eeece7; font-family: RedHatMono, ui-monospace, monospace; font-size: .9em; }
+    .source { margin-top: 14px; color: var(--muted); font: .86rem RedHatMono, ui-monospace, monospace; overflow-wrap: anywhere; }
+    .comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 42px; }
+    .comparison article { padding: 18px; border-radius: 8px; background: #fff; border: 1px solid var(--border); }
+    .comparison h3 { margin: 0 0 8px; font: 700 1.05rem/1.2 RedHatDisplay, "Red Hat Display", system-ui, sans-serif; }
+    .comparison p { margin: 0; color: var(--muted); font-size: .92rem; }
+    @media (max-width: 640px) { header { padding: 20px; } main { width: min(100% - 28px, 980px); padding-top: 24px; } .detail-grid, .comparison { grid-template-columns: 1fr; } .asset-card summary { padding: 16px; } .badges, .details { margin-left: 46px; margin-right: 16px; } }
+  </style>
+</head>
+<body>
+  <header><h1>AI Asset Explorer</h1><p>Browse mockup — proposed simplified asset card layout</p></header>
+  <main>
+    <div class="mockup-note"><strong>This is a mockup, not the live explorer.</strong> It demonstrates a quieter Browse view: identity appears once, tags remain useful, and technical provenance moves into the expanded details.</div>
+    <h2>Browse skills</h2>
+    <div class="toolbar"><input type="search" placeholder="Search skills by name or description"><button class="filter active">All skills</button><button class="filter">Planning</button><button class="filter">Jira</button><button class="filter">example/personal-skills</button></div>
+    <p class="results">Showing 28 of 285 skills</p>
+
+    <details class="asset-card">
+      <summary><span class="arrow" aria-hidden="true">▶</span><span class="summary-copy"><span class="asset-name">DEPP Roadmap</span><span class="asset-summary">Launch and edit the DEPP roadmap locally.</span></span></summary>
+      <div class="badges"><span class="badge type">Atomic skill</span><span class="badge phase">Planning</span><span class="badge stage">Produce</span><span class="badge tool">Jira</span></div>
+      <div class="details"><div class="detail-grid"><span><strong>Repository:</strong> <code>example/personal-skills</code><button class="finder-link" type="button" title="Show source in file manager" aria-label="Show source in file manager">↗</button></span><span><strong>Name:</strong> <code>depp-roadmap</code></span></div></div>
+    </details>
+
+    <details class="asset-card" open>
+      <summary><span class="arrow" aria-hidden="true">▶</span><span class="summary-copy"><span class="asset-name">DEPP WSJF</span><span class="asset-summary">Score DEPP epics using the 10-category WSJF method.</span></span></summary>
+      <div class="badges"><span class="badge type">Atomic skill</span><span class="badge phase">Planning</span><span class="badge stage">Produce</span><span class="badge tool">Jira</span></div>
+      <div class="details"><div class="detail-grid"><span><strong>Repository:</strong> <code>example/personal-skills</code><button class="finder-link" type="button" title="Show source in file manager" aria-label="Show source in file manager">↗</button></span><span><strong>Name:</strong> <code>depp-wsjf</code></span></div></div>
+    </details>
+
+    <div class="comparison"><article><h3>Browse view</h3><p>Optimized for recognition and discovery. It avoids repeating module, repository, ID, and path information in every visible row.</p></article><article><h3>Expanded / Audit view</h3><p>Technical provenance remains available when someone needs to audit or find the underlying file.</p></article></div>
+  </main>
+</body>
+</html>
