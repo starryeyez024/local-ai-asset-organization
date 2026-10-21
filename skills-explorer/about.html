@@ -181,9 +181,9 @@
   </section>
   <section id="local-about">
   <h2>About</h2>
-  <p>The Explorer scans your configured skills directory and reads your private script catalog when you generate or refresh it. It also reads local launchd and cron definitions for direct script references. It does not watch folders or update automatically. Ask your assistant to refresh your AI Asset Explorer after changes.</p>
+  <p>The Explorer scans your configured skills directory (usually <code>~/.agents/skills/</code>), the local folder where skill directories and symlinks are collected. It reads your private script catalog when you generate or refresh it, and local launchd and cron definitions for direct script references. It does not watch folders or update automatically. Ask your assistant to refresh your AI Asset Explorer after changes.</p>
   <p id="scan-directory" hidden><strong>Directory scanned:</strong> <code id="scan-directory-path"></code></p>
-  <p>The scan includes skill folders in that directory and follows symlinks to their original sources. It does not independently search <code>~/.claude/skills/</code>, <code>~/.codex/skills/</code>, project folders, or marketplace caches. Setup’s asset audit can discover skills outside this catalog.</p>
+  <p>The scan includes skill folders in that directory and follows symlinks to their targets. For a linked skill, <strong>Source</strong> identifies the repository the link points into. It does not independently search <code>~/.claude/skills/</code>, <code>~/.codex/skills/</code>, project folders, or marketplace caches. Setup’s asset audit can discover skills outside this catalog.</p>
   <p><strong>Browse Assets</strong> lets you filter Skills and Scripts and narrow scripts to those with a matched job definition. <strong>Audit Skills</strong> shows local skill entries, broken links, duplicate names, and file age. Browsing does not install, edit, or run anything.</p>
   <p>Keep marketplace installations where their installers expect them; do not link managed caches into the skills directory just to include them here.</p>
 

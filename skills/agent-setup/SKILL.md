@@ -180,8 +180,9 @@ Inspect the resulting Git diff for unintended changes and sensitive content.
 
 Check required keys in the actual scripts and resolved installed skill targets,
 as well as examples and fixtures. When keys change, update these consumers
-together. Confirm overlapping context-root settings resolve to the same path;
-preserve compatibility keys until their consumers are migrated. Distinguish
+together. Use `directories.context_root` as the only personal-context folder
+setting; migrate consumers of duplicate roots and remove the unused keys and
+fallbacks in the same change. Distinguish
 temporary shell bindings and output placeholders from TOML settings. Do not
 claim runtime verification from a successful TOML parse alone.
 
