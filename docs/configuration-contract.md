@@ -50,11 +50,11 @@ Expand `~` in path settings. Resolve relative `obsidian_vault` paths against
 vault. Script catalog paths have their own base rules in the
 [script procedure](../skills/ai-asset-auditor/references/scripts.md).
 
-For an existing setup, retain compatibility keys such as
-`obsidian_vault.personal_context.root` while consumers still need them. Check
-that overlapping root settings resolve to the same location; do not delete
-aliases or move context just to match the recommended layout. Use configured
-individual context files where available, and load only the files the task needs.
+Use one setting for the personal-context folder: `directories.context_root`.
+When duplicate root settings exist, locate their consumers, migrate those
+consumers to this key, and remove the redundant settings and fallback instructions
+in the same change. Do not retain unused aliases. Keep configured individual
+context-file paths where needed, and load only the files the task needs.
 
 ## Keep native application settings in native files
 
@@ -83,7 +83,7 @@ before changing authentication or runtime behavior.
 ## Verify a change
 
 Parse the canonical file and examples. Confirm every required dotted key exists;
-check resolved paths and overlapping aliases. Inspect the actual targets of
+check resolved paths and confirm redundant aliases have no remaining consumers. Inspect the actual targets of
 installed skill links: editing an unlinked source copy does not update the active
 skill. Search maintained consumers for the old key and run relevant offline
 configuration tests with alternate values. Keep personal values and credentials
