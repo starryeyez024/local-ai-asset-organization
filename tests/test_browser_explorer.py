@@ -165,10 +165,25 @@ class ExplorerBrowser(unittest.TestCase):
                 self.assertIn("Continue in the same setup conversation", cta.inner_text())
                 self.assertEqual(cta.get_by_role("link", name="Audit and organize your assets")
                                  .get_attribute("href"), "asset-organization.html")
-                self.assertEqual(cta.get_by_role("link", name="See the full workflow")
-                                 .get_attribute("href"), "index.html#start-here")
+                self.assertEqual(cta.get_by_role("link", name="See the full workflow").count(), 0)
                 self.assertNotIn("Continue in the same setup conversation", page.locator("footer").inner_text())
                 self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width)
+
+    def test_guides_follow_linear_next_steps(self):
+        for width in (390, 1280):
+            with self.subTest(width=width):
+                page = self.page(width)
+                page.goto(self.demo_url + "/pages/index.html")
+                page.locator("main").get_by_role("link", name="Agentic setup", exact=True).click()
+                self.assertTrue(page.url.endswith("/pages/agentic-setup.html"))
+                agentic_cta = page.locator("main .final-cta")
+                self.assertEqual(agentic_cta.get_by_role("link").count(), 1)
+                agentic_cta.get_by_role("link").click()
+                self.assertTrue(page.url.endswith("/pages/asset-organization.html"))
+                asset_cta = page.locator("main .final-cta")
+                self.assertEqual(asset_cta.get_by_role("link").count(), 1)
+                asset_cta.get_by_role("link").click()
+                self.assertTrue(page.url.endswith("/pages/skills-explorer-guide.html"))
 
     def test_guide_call_to_action_and_footer_theme(self):
         for width in (390, 1280):

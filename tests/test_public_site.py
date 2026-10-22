@@ -73,7 +73,7 @@ class PublicSite(unittest.TestCase):
         self.assertIn('<section class="final-cta">', main)
         self.assertIn("Continue in the same setup conversation", main)
         self.assertIn('href="asset-organization.html">Audit and organize your assets</a>', main)
-        self.assertIn('href="index.html#start-here">See the full workflow</a>', main)
+        self.assertNotIn('>See the full workflow</a>', main)
         self.assertNotIn("Continue in the same setup conversation", footer)
 
     def test_demo_catalog_is_fictional_and_has_no_private_paths(self):
