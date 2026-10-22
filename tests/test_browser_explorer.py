@@ -132,15 +132,31 @@ class ExplorerBrowser(unittest.TestCase):
                 page.goto(self.demo_url + "/pages/index.html")
                 primary = page.get_by_role("navigation", name="Primary navigation")
                 self.assertEqual(primary.get_by_role("link", name="Quick reference").count(), 0)
-                dividers = primary.locator(".site-links a").evaluate_all(
-                    "links => links.map(link => getComputedStyle(link).borderLeftStyle)")
-                self.assertEqual(dividers[0], "none")
-                self.assertEqual(dividers[1], "solid")
-                self.assertEqual(dividers[2], "none" if width == 390 else "solid")
-                self.assertEqual(dividers[3], "solid")
+                styles = primary.locator(".site-links a").evaluate_all("""links => links.map(link => {
+                    const css = getComputedStyle(link);
+                    return {border: css.borderRightStyle, width: css.borderRightWidth,
+                            margin: parseFloat(css.marginRight), padding: parseFloat(css.paddingRight)};
+                })""")
+                self.assertEqual(styles[0]["border"], "solid")
+                self.assertEqual(styles[0]["width"], "2px")
+                self.assertGreaterEqual(styles[0]["margin"], 18)
+                self.assertGreaterEqual(styles[0]["padding"], 18)
+                self.assertEqual(styles[1]["border"], "none" if width == 390 else "solid")
+                self.assertEqual(styles[2]["border"], "solid")
+                self.assertEqual(styles[3]["border"], "none")
                 self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width)
                 footer = page.get_by_role("navigation", name="Footer navigation")
                 self.assertEqual(footer.get_by_role("link", name="Contribute").count(), 1)
+                footer_styles = footer.locator("a").evaluate_all("""links => links.map(link => {
+                    const css = getComputedStyle(link);
+                    return {border: css.borderRightStyle, margin: parseFloat(css.marginRight),
+                            padding: parseFloat(css.paddingRight)};
+                })""")
+                self.assertEqual(footer_styles[0]["border"], "solid")
+                self.assertGreaterEqual(footer_styles[0]["margin"], 22)
+                self.assertGreaterEqual(footer_styles[0]["padding"], 22)
+                self.assertEqual(footer_styles[1]["border"], "none" if width == 390 else "solid")
+                self.assertEqual(footer_styles[2]["border"], "none")
                 footer.get_by_role("link", name="Quick reference").click()
                 self.assertIn("Quick reference", page.locator("h1").inner_text())
                 self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width)
