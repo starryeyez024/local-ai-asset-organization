@@ -174,7 +174,9 @@ class ExplorerBrowser(unittest.TestCase):
             with self.subTest(width=width):
                 page = self.page(width)
                 page.goto(self.demo_url + "/pages/index.html")
-                page.locator("main").get_by_role("link", name="Agentic setup", exact=True).click()
+                overview_cta = page.locator("main .final-cta")
+                self.assertEqual(overview_cta.get_by_role("link").count(), 1)
+                overview_cta.get_by_role("link", name="Explore Agentic Config").click()
                 self.assertTrue(page.url.endswith("/pages/agentic-setup.html"))
                 agentic_cta = page.locator("main .final-cta")
                 self.assertEqual(agentic_cta.get_by_role("link").count(), 1)
