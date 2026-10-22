@@ -186,8 +186,10 @@ class ExplorerBrowser(unittest.TestCase):
                 self.assertEqual(asset_cta.get_by_role("link").count(), 1)
                 asset_cta.get_by_role("link").click()
                 self.assertTrue(page.url.endswith("/pages/skills-explorer-guide.html"))
-                self.assertEqual(page.locator("main .final-cta .cta-link").get_attribute("href"),
-                                 "../skills/agent-setup/SKILL.md")
+                page.locator("main .final-cta .cta-link").click()
+                self.assertTrue(page.url.endswith("/pages/index.html#start-here"))
+                self.assertIn("One conversation, from setup to a working catalog",
+                              page.locator("#start-here h2").inner_text())
 
     def test_guide_call_to_action_and_footer_theme(self):
         for width in (390, 1280):
@@ -209,8 +211,8 @@ class ExplorerBrowser(unittest.TestCase):
                 self.assertLessEqual(hero_size, 35 if width == 390 else 47)
                 cta = page.locator("main .final-cta")
                 self.assertIn("Create your personal Explorer", cta.inner_text())
-                self.assertEqual(cta.get_by_role("link", name="View the agent-setup skill")
-                                 .get_attribute("href"), "../skills/agent-setup/SKILL.md")
+                self.assertEqual(cta.get_by_role("link", name="Get the setup request on Overview")
+                                 .get_attribute("href"), "index.html#start-here")
                 footer = page.locator("footer")
                 self.assertNotIn("Create your personal Explorer", footer.inner_text())
                 theme = footer.evaluate("""el => {

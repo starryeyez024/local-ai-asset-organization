@@ -53,6 +53,7 @@ p, ul, ol, table, figure, .card, .callout, pre { margin-top: var(--paragraph-spa
 .hype {color: #c00;}
 section { padding: 48px 0; }
 section.band { background: #f1f5fa; }
+#start-here { scroll-margin-top: 64px; }
 .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .code-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
 .card { padding: 22px; background: #fff; border: 1px solid var(--border); border-radius: 12px; }
@@ -105,6 +106,7 @@ footer a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
 .footer-nav a:last-child { margin-right: 0; padding-right: 0; border-right: 0; }
 .footer-nav a[aria-current="page"] { color: #fff; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 @media (max-width: 760px) { .site-nav-inner { align-items: flex-start; flex-direction: column; padding: 12px 0; } .site-links { justify-content: flex-start; } .hero-grid { grid-template-columns: 1fr; gap: 28px; } .card-grid, .code-grid { grid-template-columns: 1fr; } .table-scroll { overflow-x: auto; } section { padding: 34px 0; } }
+@media (max-width: 760px) { #start-here { scroll-margin-top: 124px; } }
 @media (max-width: 760px) { .site-links { display: grid; grid-template-columns: repeat(2, max-content); } .site-links a:nth-child(even) { margin-right: 0; padding-right: 0; } }
 @media (max-width: 600px) { .footer-nav { display: grid; grid-template-columns: repeat(2, max-content); } .footer-nav a:nth-child(even) { margin-right: 0; padding-right: 0; border-right: 0; } .footer-nav a:last-child { grid-column: 1 / -1; justify-self: center; } }
 @media (max-width: 420px) { .wrap { width: min(100% - 28px, 960px); } .hero { padding: 48px 0; } pre { padding: 16px; font-size: .8rem; } }

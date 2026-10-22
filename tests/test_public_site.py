@@ -63,7 +63,7 @@ class PublicSite(unittest.TestCase):
         footer = source.split("<footer>", 1)[1].split("</footer>", 1)[0]
         self.assertIn('<section class="final-cta">', main)
         self.assertIn("Create your personal Explorer", main)
-        self.assertIn('href="skills/agent-setup/SKILL.md"', main)
+        self.assertIn('href="index.html#start-here">Get the setup request on Overview</a>', main)
         self.assertNotIn("Create your personal Explorer", footer)
 
     def test_agentic_setup_next_guide_is_above_footer(self):
