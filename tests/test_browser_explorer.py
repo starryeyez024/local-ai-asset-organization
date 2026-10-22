@@ -156,17 +156,17 @@ class ExplorerBrowser(unittest.TestCase):
                     "el => getComputedStyle(el).color"), "rgb(186, 213, 244)")
                 self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width)
 
-    def test_agentic_setup_continuation_is_a_call_to_action(self):
+    def test_agentic_setup_next_guide_is_a_call_to_action(self):
         for width in (390, 1280):
             with self.subTest(width=width):
                 page = self.page(width)
                 page.goto(self.demo_url + "/pages/agentic-setup.html")
                 cta = page.locator("main .final-cta")
-                self.assertIn("Continue in the same setup conversation", cta.inner_text())
-                self.assertEqual(cta.get_by_role("link", name="Audit and organize your assets")
+                self.assertIn("Check the assets you already have", cta.inner_text())
+                self.assertEqual(cta.get_by_role("link", name="Read the asset organization guide")
                                  .get_attribute("href"), "asset-organization.html")
                 self.assertEqual(cta.get_by_role("link", name="See the full workflow").count(), 0)
-                self.assertNotIn("Continue in the same setup conversation", page.locator("footer").inner_text())
+                self.assertNotIn("Check the assets you already have", page.locator("footer").inner_text())
                 self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width)
 
     def test_guides_follow_linear_next_steps(self):
@@ -176,7 +176,7 @@ class ExplorerBrowser(unittest.TestCase):
                 page.goto(self.demo_url + "/pages/index.html")
                 overview_cta = page.locator("main .final-cta")
                 self.assertEqual(overview_cta.get_by_role("link").count(), 1)
-                overview_cta.get_by_role("link", name="Explore Agentic Config").click()
+                overview_cta.get_by_role("link", name="Read the Agentic Config guide").click()
                 self.assertTrue(page.url.endswith("/pages/agentic-setup.html"))
                 agentic_cta = page.locator("main .final-cta")
                 self.assertEqual(agentic_cta.get_by_role("link").count(), 1)
@@ -186,6 +186,8 @@ class ExplorerBrowser(unittest.TestCase):
                 self.assertEqual(asset_cta.get_by_role("link").count(), 1)
                 asset_cta.get_by_role("link").click()
                 self.assertTrue(page.url.endswith("/pages/skills-explorer-guide.html"))
+                self.assertEqual(page.locator("main .final-cta .cta-link").get_attribute("href"),
+                                 "../skills/agent-setup/SKILL.md")
 
     def test_guide_call_to_action_and_footer_theme(self):
         for width in (390, 1280):
@@ -206,11 +208,11 @@ class ExplorerBrowser(unittest.TestCase):
                     "el => parseFloat(getComputedStyle(el).fontSize)")
                 self.assertLessEqual(hero_size, 35 if width == 390 else 47)
                 cta = page.locator("main .final-cta")
-                self.assertIn("Ready to begin?", cta.inner_text())
-                self.assertEqual(cta.get_by_role("link", name="Start the guided setup").get_attribute("href"),
-                                 "index.html#start-here")
+                self.assertIn("Create your personal Explorer", cta.inner_text())
+                self.assertEqual(cta.get_by_role("link", name="View the agent-setup skill")
+                                 .get_attribute("href"), "../skills/agent-setup/SKILL.md")
                 footer = page.locator("footer")
-                self.assertNotIn("Ready to begin?", footer.inner_text())
+                self.assertNotIn("Create your personal Explorer", footer.inner_text())
                 theme = footer.evaluate("""el => {
                     const css = getComputedStyle(el);
                     return {background: css.backgroundColor, color: css.color,

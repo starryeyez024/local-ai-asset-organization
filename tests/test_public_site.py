@@ -62,19 +62,19 @@ class PublicSite(unittest.TestCase):
         main = source.split("<main>", 1)[1].split("</main>", 1)[0]
         footer = source.split("<footer>", 1)[1].split("</footer>", 1)[0]
         self.assertIn('<section class="final-cta">', main)
-        self.assertIn("Ready to begin?", main)
-        self.assertIn('href="index.html#start-here">Start the guided setup</a>', main)
-        self.assertNotIn("Ready to begin?", footer)
+        self.assertIn("Create your personal Explorer", main)
+        self.assertIn('href="skills/agent-setup/SKILL.md"', main)
+        self.assertNotIn("Create your personal Explorer", footer)
 
-    def test_agentic_setup_continuation_is_above_footer(self):
+    def test_agentic_setup_next_guide_is_above_footer(self):
         source = (PAGES / "agentic-setup.html").read_text()
         main = source.split("<main>", 1)[1].split("</main>", 1)[0]
         footer = source.split("<footer>", 1)[1].split("</footer>", 1)[0]
         self.assertIn('<section class="final-cta">', main)
-        self.assertIn("Continue in the same setup conversation", main)
-        self.assertIn('href="asset-organization.html">Audit and organize your assets</a>', main)
+        self.assertIn("Check the assets you already have", main)
+        self.assertIn('href="asset-organization.html">Read the asset organization guide</a>', main)
         self.assertNotIn('>See the full workflow</a>', main)
-        self.assertNotIn("Continue in the same setup conversation", footer)
+        self.assertNotIn("Check the assets you already have", footer)
 
     def test_demo_catalog_is_fictional_and_has_no_private_paths(self):
         skills = json.loads((EXPLORER / "sample-skills.json").read_text())
