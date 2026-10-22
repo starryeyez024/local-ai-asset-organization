@@ -92,7 +92,7 @@ code.inline { padding: 2px 5px; background: #eeece7; border-radius: 4px; font-fa
 .muted { color: var(--muted); }
 footer { padding: 30px 0 50px; color: var(--muted); font-size: .9rem; }
 .footer-note { margin: 0 0 18px; }
-.footer-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 0; }
+.footer-nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 0; }
 .footer-nav a { margin-right: 22px; padding-right: 22px; border-right: 2px solid #85858c; font-weight: 600; line-height: 1.4; }
 .footer-nav a:last-child { margin-right: 0; padding-right: 0; border-right: 0; }
 .footer-nav a[aria-current="page"] { color: var(--ink); text-decoration-thickness: 2px; text-underline-offset: 4px; }

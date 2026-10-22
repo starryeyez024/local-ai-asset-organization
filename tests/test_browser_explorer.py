@@ -157,6 +157,14 @@ class ExplorerBrowser(unittest.TestCase):
                 self.assertGreaterEqual(footer_styles[0]["padding"], 22)
                 self.assertEqual(footer_styles[1]["border"], "none" if width == 390 else "solid")
                 self.assertEqual(footer_styles[2]["border"], "none")
+                alignment = footer.evaluate("""nav => {
+                    const navBox = nav.getBoundingClientRect();
+                    const links = [...nav.querySelectorAll('a')].map(link => link.getBoundingClientRect());
+                    const groupCenter = (Math.min(...links.map(box => box.left)) +
+                                         Math.max(...links.map(box => box.right))) / 2;
+                    return Math.abs(groupCenter - (navBox.left + navBox.right) / 2);
+                }""")
+                self.assertLessEqual(alignment, 2)
                 footer.get_by_role("link", name="Quick reference").click()
                 self.assertIn("Quick reference", page.locator("h1").inner_text())
                 self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width)
