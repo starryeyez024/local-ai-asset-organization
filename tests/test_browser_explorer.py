@@ -132,18 +132,28 @@ class ExplorerBrowser(unittest.TestCase):
                 page.goto(self.demo_url + "/pages/index.html")
                 primary = page.get_by_role("navigation", name="Primary navigation")
                 self.assertEqual(primary.get_by_role("link", name="Quick reference").count(), 0)
+                self.assertEqual(primary.get_by_role("link", name="Agentic Config").count(), 1)
                 styles = primary.locator(".site-links a").evaluate_all("""links => links.map(link => {
                     const css = getComputedStyle(link);
                     return {border: css.borderRightStyle, width: css.borderRightWidth,
-                            margin: parseFloat(css.marginRight), padding: parseFloat(css.paddingRight)};
+                            margin: parseFloat(css.marginRight), padding: parseFloat(css.paddingRight),
+                            color: css.color, transform: css.textTransform,
+                            decoration: css.textDecorationLine, thickness: css.textDecorationThickness,
+                            offset: css.textUnderlineOffset};
                 })""")
-                self.assertEqual(styles[0]["border"], "solid")
-                self.assertEqual(styles[0]["width"], "2px")
-                self.assertGreaterEqual(styles[0]["margin"], 18)
-                self.assertGreaterEqual(styles[0]["padding"], 18)
-                self.assertEqual(styles[1]["border"], "none" if width == 390 else "solid")
-                self.assertEqual(styles[2]["border"], "solid")
-                self.assertEqual(styles[3]["border"], "none")
+                self.assertTrue(all(style["border"] == "none" and style["width"] == "0px"
+                                    for style in styles))
+                self.assertEqual(styles[0]["margin"], 11)
+                self.assertEqual(styles[0]["padding"], 12)
+                self.assertEqual(styles[1]["color"], "rgb(145, 189, 240)")
+                self.assertTrue(all(style["transform"] == "uppercase" for style in styles))
+                self.assertEqual(styles[0]["color"], "rgb(186, 213, 244)")
+                self.assertEqual(styles[0]["decoration"], "underline")
+                self.assertEqual(styles[0]["thickness"], "1px")
+                self.assertEqual(styles[0]["offset"], "7px")
+                primary.get_by_role("link", name="Agentic Config").hover()
+                self.assertEqual(primary.get_by_role("link", name="Agentic Config").evaluate(
+                    "el => getComputedStyle(el).color"), "rgb(186, 213, 244)")
                 self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width)
 
     def test_agentic_setup_continuation_is_a_call_to_action(self):
@@ -171,7 +181,7 @@ class ExplorerBrowser(unittest.TestCase):
                 self.assertIn("RedHatDisplay", brand.evaluate("el => getComputedStyle(el).fontFamily"))
                 weights = page.locator(".site-links a").evaluate_all(
                     "links => links.map(link => getComputedStyle(link).fontWeight)")
-                self.assertTrue(all(weight == "700" for weight in weights))
+                self.assertTrue(all(weight == "500" for weight in weights))
                 main_fonts = page.locator(".site-links a").evaluate_all(
                     "links => links.map(link => getComputedStyle(link).fontFamily)")
                 self.assertTrue(all("RedHatDisplay" in family for family in main_fonts))
