@@ -26,8 +26,10 @@ a:hover, a:focus { color: var(--blue); }
 .site-nav { position: sticky; top: 0; z-index: 10; background: rgba(21, 21, 40, .97); border-bottom: 1px solid #3a3a57; }
 .site-nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 58px; }
 .site-brand { color: rgb(231, 231, 240); font-family: RedHatDisplay, "Red Hat Display", system-ui, sans-serif; font-weight: 700; text-decoration: none; white-space: nowrap; }
-.site-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 18px; }
-.site-links a { color: rgb(231, 231, 240); font-size: .92rem; text-decoration: none; }
+.site-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 0; }
+.site-links a { padding: 0 14px; color: rgb(231, 231, 240); font-size: .92rem; text-decoration: none; }
+.site-links a:first-child { padding-left: 0; }
+.site-links a + a { border-left: 1px solid #77778c; }
 .site-nav a:hover, .site-nav a:focus-visible, .site-links a[aria-current="page"] { color: #fff; text-decoration: underline; text-decoration-color: #b8b8c4; text-decoration-thickness: 2px; text-underline-offset: 5px; }
 .hero { padding: 72px 0 64px; background: var(--navy); color: #fff; }
 .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 42px; }
@@ -90,5 +92,10 @@ code.inline { padding: 2px 5px; background: #eeece7; border-radius: 4px; font-fa
 .steps li + li { margin-top: 12px; }
 .muted { color: var(--muted); }
 footer { padding: 30px 0 50px; color: var(--muted); font-size: .9rem; }
+.footer-note { margin: 0 0 18px; }
+.footer-nav { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.footer-nav a { font-weight: 600; }
+.footer-nav a[aria-current="page"] { color: var(--ink); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 @media (max-width: 760px) { .site-nav-inner { align-items: flex-start; flex-direction: column; padding: 12px 0; } .site-links { justify-content: flex-start; } .hero-grid { grid-template-columns: 1fr; gap: 28px; } .card-grid, .code-grid { grid-template-columns: 1fr; } .table-scroll { overflow-x: auto; } section { padding: 34px 0; } }
+@media (max-width: 760px) { .site-links { display: grid; grid-template-columns: repeat(2, max-content); } .site-links a:nth-child(odd) { padding-left: 0; border-left: 0; } }
 @media (max-width: 420px) { .wrap { width: min(100% - 28px, 960px); } .hero { padding: 48px 0; } pre { padding: 16px; font-size: .8rem; } }

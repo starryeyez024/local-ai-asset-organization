@@ -94,7 +94,7 @@ make run
 # open http://localhost:8980
 ```
 
-`make run` reads the skill directory and private script catalog from the same configuration, prepares the app and catalogs in `~/.local/share/ai-assets-explorer/`, and starts its local server on port 8980. Stop it with Ctrl+C in the running terminal or by closing that terminal. Use `CONFIG=/path/to/agent-config.toml` for another configuration or `EXPLORER_DIR=/path/to/local/explorer` for another output folder. All three generated JSON files stay local and are excluded from Git. GitLab Pages publishes the guides, skills, and an Explorer demo using only fictional sample data. See the [Explorer README](skills-explorer/README.md) for individual commands.
+`make run` reads the skill directory and private script catalog from the same configuration, prepares the app and catalogs in `~/.local/share/ai-assets-explorer/`, and starts its local server on port 8980 by default. Stop it with Ctrl+C in the running terminal or by closing that terminal. Use `CONFIG=/path/to/agent-config.toml` for another configuration, `EXPLORER_DIR=/path/to/local/explorer` for another output folder, or `PORT=8990` to save a different local port. Refreshes keep that port unless you choose another. All three generated JSON files stay local and are excluded from Git. GitLab Pages publishes the guides, skills, and an Explorer demo using only fictional sample data. See the [Explorer README](skills-explorer/README.md) for individual commands.
 
 The Explorer scans one directory, not plugin registries or every tool's skills roots. It does not establish which skills are enabled or running. Do not add links into managed plugin caches just to include them in the catalog.
 
@@ -113,3 +113,5 @@ Use the package manager's install, update, and removal controls. A plugin can al
 ## Check the setup workflow
 
 Run `python3 -B -m unittest discover -s tests -v` from the repository root. The tests use temporary repositories, configurations, and skill folders; they do not change installed tools or user configuration.
+
+With Playwright and its Chromium browser installed, run the rendered browser checks with `RUN_BROWSER_TESTS=1 python3 -B -m unittest discover -s tests -p test_browser_explorer.py -v`. Without that opt-in, the standard suite skips the five browser cases.

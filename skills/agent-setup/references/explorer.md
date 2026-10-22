@@ -9,7 +9,7 @@ inspect the existing config first; do not migrate it. Inspect `SKILLS_ROOT` if s
 and resolve its conflict with the chosen config rather than scanning an unintended
 folder. Pass the chosen configuration explicitly during guided setup; the helper also supports the recommended or legacy default configuration for direct use. It rejects the environment override to avoid scanning the wrong folder.
 
-Run the helper from the repository root, substituting the actual configuration:
+Run the helper from the repository root, substituting the actual configuration. Add `--port 8990` if the user has chosen another port; later refreshes keep that choice:
 
 ```bash
 python3 skills/agent-setup/scripts/prepare-explorer.py --config ~/.config/agent-tools/agent-config.toml
@@ -28,9 +28,9 @@ Start the copied server in a managed terminal or process session:
 python3 ~/.local/share/ai-assets-explorer/serve.py
 ```
 
-The Explorer uses port 8980 only. If it is occupied, check whether it is this
+The Explorer uses port 8980 by default and saves a chosen port in its local output directory. If the selected port is occupied, check whether it is this
 user's existing Explorer and reuse it when appropriate. If another process owns
-the port, report the conflict instead of selecting a different port. Do not stop
+the port, report the conflict and ask which free port to use. Do not stop
 an unrelated process. The server binds only to loopback and serves the generated
 Explorer directory, not the home folder or personal context. Record the process
 session, URL, and directory in setup progress. Closing its terminal stops it;

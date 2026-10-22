@@ -1,5 +1,6 @@
 """Local preview server with a cross-platform file-manager action."""
 
+import argparse
 import json
 import platform
 import subprocess
@@ -9,7 +10,22 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 EXPLORER_DIR = Path(__file__).resolve().parent
-PORT = 8980
+DEFAULT_PORT = 8980
+
+
+def selected_port(override=None):
+    if override is not None:
+        port = override
+    elif (EXPLORER_DIR / ".explorer-port").is_file():
+        try:
+            port = int((EXPLORER_DIR / ".explorer-port").read_text().strip())
+        except ValueError as error:
+            raise ValueError("Invalid saved Explorer port") from error
+    else:
+        port = DEFAULT_PORT
+    if not 1 <= port <= 65535:
+        raise ValueError("Explorer port must be between 1 and 65535")
+    return port
 
 
 class SkillsExplorerHandler(SimpleHTTPRequestHandler):
@@ -72,9 +88,13 @@ class SkillsExplorerHandler(SimpleHTTPRequestHandler):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--port", type=int, help="Override the saved port for this server run")
+    args = parser.parse_args()
+    port = selected_port(args.port)
     handler = partial(SkillsExplorerHandler, directory=str(EXPLORER_DIR))
-    server = ThreadingHTTPServer(("127.0.0.1", PORT), handler)
-    print(f"Serving at http://localhost:{PORT} -- press Ctrl+C to stop")
+    server = ThreadingHTTPServer(("127.0.0.1", port), handler)
+    print(f"Serving at http://localhost:{port} -- press Ctrl+C to stop")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
