@@ -31,6 +31,8 @@ class PublicSite(unittest.TestCase):
             with self.subTest(page=name):
                 source = (PAGES / name).read_text()
                 self.assertIn('name="viewport"', source)
+                self.assertIn('<span class="site-brand">AI Asset Navigation</span>', source)
+                self.assertIn("AI Asset Navigation</title>", source)
                 self.assertIn("Quick reference", source)
                 self.assertTrue("agent-setup" in source or "index.html#start-here" in source)
                 primary = source.split('<nav class="site-nav"', 1)[1].split("</nav>", 1)[0]
@@ -54,6 +56,25 @@ class PublicSite(unittest.TestCase):
                                     f"{name}: broken local link {local}")
         self.assertNotIn("A general methodology for organizing AI agent assets across multiple tools and runtimes",
                          (PAGES / "index.html").read_text())
+
+    def test_explorer_guide_ends_with_call_to_action_before_footer(self):
+        source = (PAGES / "skills-explorer-guide.html").read_text()
+        main = source.split("<main>", 1)[1].split("</main>", 1)[0]
+        footer = source.split("<footer>", 1)[1].split("</footer>", 1)[0]
+        self.assertIn('<section class="final-cta">', main)
+        self.assertIn("Ready to begin?", main)
+        self.assertIn('href="index.html#start-here">Start the guided setup</a>', main)
+        self.assertNotIn("Ready to begin?", footer)
+
+    def test_agentic_setup_continuation_is_above_footer(self):
+        source = (PAGES / "agentic-setup.html").read_text()
+        main = source.split("<main>", 1)[1].split("</main>", 1)[0]
+        footer = source.split("<footer>", 1)[1].split("</footer>", 1)[0]
+        self.assertIn('<section class="final-cta">', main)
+        self.assertIn("Continue in the same setup conversation", main)
+        self.assertIn('href="asset-organization.html">Audit and organize your assets</a>', main)
+        self.assertIn('href="index.html#start-here">See the full workflow</a>', main)
+        self.assertNotIn("Continue in the same setup conversation", footer)
 
     def test_demo_catalog_is_fictional_and_has_no_private_paths(self):
         skills = json.loads((EXPLORER / "sample-skills.json").read_text())

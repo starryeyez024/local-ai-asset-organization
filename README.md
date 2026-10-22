@@ -114,4 +114,4 @@ Use the package manager's install, update, and removal controls. A plugin can al
 
 Run `python3 -B -m unittest discover -s tests -v` from the repository root. The tests use temporary repositories, configurations, and skill folders; they do not change installed tools or user configuration.
 
-With Playwright and its Chromium browser installed, run the rendered browser checks with `RUN_BROWSER_TESTS=1 python3 -B -m unittest discover -s tests -p test_browser_explorer.py -v`. Without that opt-in, the standard suite skips the five browser cases.
+With Playwright and its Chromium browser installed, run the rendered browser checks with `RUN_BROWSER_TESTS=1 python3 -B -m unittest discover -s tests -p test_browser_explorer.py -v`. Without that opt-in, the standard suite skips the browser cases.

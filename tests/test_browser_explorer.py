@@ -145,6 +145,67 @@ class ExplorerBrowser(unittest.TestCase):
                 self.assertEqual(styles[2]["border"], "solid")
                 self.assertEqual(styles[3]["border"], "none")
                 self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width)
+
+    def test_agentic_setup_continuation_is_a_call_to_action(self):
+        for width in (390, 1280):
+            with self.subTest(width=width):
+                page = self.page(width)
+                page.goto(self.demo_url + "/pages/agentic-setup.html")
+                cta = page.locator("main .final-cta")
+                self.assertIn("Continue in the same setup conversation", cta.inner_text())
+                self.assertEqual(cta.get_by_role("link", name="Audit and organize your assets")
+                                 .get_attribute("href"), "asset-organization.html")
+                self.assertEqual(cta.get_by_role("link", name="See the full workflow")
+                                 .get_attribute("href"), "index.html#start-here")
+                self.assertNotIn("Continue in the same setup conversation", page.locator("footer").inner_text())
+                self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width)
+
+    def test_guide_call_to_action_and_footer_theme(self):
+        for width in (390, 1280):
+            with self.subTest(width=width):
+                page = self.page(width)
+                page.goto(self.demo_url + "/pages/skills-explorer-guide.html")
+                brand = page.locator(".site-brand")
+                self.assertEqual(brand.inner_text(), "AI Asset Navigation")
+                self.assertGreaterEqual(brand.evaluate("el => parseFloat(getComputedStyle(el).fontSize)"), 21)
+                self.assertIn("RedHatDisplay", brand.evaluate("el => getComputedStyle(el).fontFamily"))
+                weights = page.locator(".site-links a").evaluate_all(
+                    "links => links.map(link => getComputedStyle(link).fontWeight)")
+                self.assertTrue(all(weight == "700" for weight in weights))
+                main_fonts = page.locator(".site-links a").evaluate_all(
+                    "links => links.map(link => getComputedStyle(link).fontFamily)")
+                self.assertTrue(all("RedHatDisplay" in family for family in main_fonts))
+                hero_size = page.locator(".hero h1").evaluate(
+                    "el => parseFloat(getComputedStyle(el).fontSize)")
+                self.assertLessEqual(hero_size, 35 if width == 390 else 47)
+                cta = page.locator("main .final-cta")
+                self.assertIn("Ready to begin?", cta.inner_text())
+                self.assertEqual(cta.get_by_role("link", name="Start the guided setup").get_attribute("href"),
+                                 "index.html#start-here")
+                footer = page.locator("footer")
+                self.assertNotIn("Ready to begin?", footer.inner_text())
+                theme = footer.evaluate("""el => {
+                    const css = getComputedStyle(el);
+                    return {background: css.backgroundColor, color: css.color,
+                            top: parseFloat(css.paddingTop), bottom: parseFloat(css.paddingBottom)};
+                }""")
+                self.assertEqual(theme["background"], "rgb(85, 93, 101)")
+                self.assertEqual(theme["color"], "rgb(255, 255, 255)")
+                self.assertGreaterEqual(theme["top"], 64)
+                self.assertGreaterEqual(theme["bottom"], 72)
+                self.assertEqual(footer.locator("a").first.evaluate(
+                    "el => getComputedStyle(el).color"), "rgb(255, 255, 255)")
+                footer_fonts = footer.locator(".footer-nav a").evaluate_all(
+                    "links => links.map(link => getComputedStyle(link).fontFamily)")
+                self.assertTrue(all("RedHatDisplay" in family for family in footer_fonts))
+                if width == 390:
+                    contribute_offset = footer.locator("#feedback-link").evaluate("""link => {
+                        const nav = link.closest('nav').getBoundingClientRect();
+                        const item = link.getBoundingClientRect();
+                        return Math.abs((item.left + item.right) / 2 - (nav.left + nav.right) / 2);
+                    }""")
+                    self.assertLessEqual(contribute_offset, 2)
+                self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), width)
                 footer = page.get_by_role("navigation", name="Footer navigation")
                 self.assertEqual(footer.get_by_role("link", name="Contribute").count(), 1)
                 footer_styles = footer.locator("a").evaluate_all("""links => links.map(link => {
