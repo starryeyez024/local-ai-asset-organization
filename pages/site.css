@@ -25,10 +25,11 @@ a:hover, a:focus { color: var(--blue); }
 .wrap { width: min(960px, calc(100% - 40px)); margin: 0 auto; }
 .site-nav { position: sticky; top: 0; z-index: 10; background: rgba(21, 21, 40, .97); border-bottom: 1px solid #3a3a57; }
 .site-nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 58px; }
-.site-brand { color: rgb(231, 231, 240); font-family: RedHatDisplay, "Red Hat Display", system-ui, sans-serif; font-weight: 700; text-decoration: none; white-space: nowrap; }
-.site-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 18px; }
-.site-links a { color: rgb(231, 231, 240); font-size: .92rem; text-decoration: none; }
-.site-nav a:hover, .site-nav a:focus-visible, .site-links a[aria-current="page"] { color: #fff; text-decoration: underline; text-decoration-color: #b8b8c4; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.site-brand { color: rgb(231, 231, 240); font-family: RedHatDisplay, "Red Hat Display", system-ui, sans-serif; font-size: 1.35rem; font-weight: 700; line-height: 1.2; text-decoration: none; white-space: nowrap; }
+.site-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 0; }
+.site-links a { margin-right: 11px; padding-right: 12px; color: #91bdf0; font-family: RedHatDisplay, "Red Hat Display", system-ui, sans-serif; font-size: .92rem; font-weight: 500; line-height: 1.4; text-decoration: none; text-transform: uppercase; }
+.site-links a:last-child { margin-right: 0; padding-right: 0; }
+.site-nav a:hover, .site-nav a:focus-visible, .site-links a[aria-current="page"] { color: #bad5f4; text-decoration: underline; text-decoration-color: #b8b8c4; text-decoration-thickness: 1px; text-underline-offset: 7px; }
 .hero { padding: 72px 0 64px; background: var(--navy); color: #fff; }
 .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 42px; }
 .hero-image { overflow: hidden; border: 1px solid #45455f; border-radius: 14px; background: #202034; }
@@ -39,6 +40,7 @@ figcaption { margin-top: 10px; font-size: .9rem; }
 .section-label { color: var(--blue-dark); }
 h1, h2, h3, h4 { font-family: RedHatDisplay, "Red Hat Display", system-ui, sans-serif; line-height: 1.2; }
 h1 { margin: 0; font-size: clamp(2.3rem, 4vw, 4.5rem); }
+.hero h1 { font-size: clamp(2.15rem, 3.6vw, 4rem); }
 h2 { margin: var(--heading-space-before) 0 var(--paragraph-spacing); font-size: clamp(1.7rem, 4vw, 2.5rem); }
 h3 { margin: var(--heading-space-before) 0 var(--paragraph-spacing); font-size: 1.35rem; }
 h4 { margin: var(--paragraph-spacing) 0 8px; font-size: 1.05rem; }
@@ -51,6 +53,7 @@ p, ul, ol, table, figure, .card, .callout, pre { margin-top: var(--paragraph-spa
 .hype {color: #c00;}
 section { padding: 48px 0; }
 section.band { background: #f1f5fa; }
+#start-here { scroll-margin-top: 64px; }
 .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .code-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
 .card { padding: 22px; background: #fff; border: 1px solid var(--border); border-radius: 12px; }
@@ -89,6 +92,22 @@ code.inline { padding: 2px 5px; background: #eeece7; border-radius: 4px; font-fa
 .steps { padding-left: 24px; }
 .steps li + li { margin-top: 12px; }
 .muted { color: var(--muted); }
-footer { padding: 30px 0 50px; color: var(--muted); font-size: .9rem; }
+section.final-cta { padding: 72px 0 80px; background: #d6e8fc; text-align: center; }
+.final-cta p:not(.section-label) { max-width: 600px; margin-left: auto; margin-right: auto; }
+.final-cta .cta-link { display: inline-block; padding: 13px 22px; border-radius: 6px; background: var(--navy); color: #fff; font-weight: 700; text-decoration: none; }
+.final-cta .cta-link:hover { background: var(--navy-2); color: #fff; }
+.final-cta .cta-link:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+footer { padding: 80px 0 96px; background: #555d65; color: #fff; font-size: .95rem; }
+footer a, footer a:hover, footer a:focus { color: #fff; }
+footer a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+.footer-note { margin: 0 0 18px; }
+.footer-nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 0; }
+.footer-nav a { margin-right: 22px; padding-right: 22px; border-right: 2px solid rgba(255, 255, 255, .75); font-family: RedHatDisplay, "Red Hat Display", system-ui, sans-serif; font-weight: 600; line-height: 1.4; }
+.footer-nav a:last-child { margin-right: 0; padding-right: 0; border-right: 0; }
+.footer-nav a[aria-current="page"] { color: #fff; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 @media (max-width: 760px) { .site-nav-inner { align-items: flex-start; flex-direction: column; padding: 12px 0; } .site-links { justify-content: flex-start; } .hero-grid { grid-template-columns: 1fr; gap: 28px; } .card-grid, .code-grid { grid-template-columns: 1fr; } .table-scroll { overflow-x: auto; } section { padding: 34px 0; } }
+@media (max-width: 760px) { #start-here { scroll-margin-top: 124px; } }
+@media (max-width: 760px) { .site-links { display: grid; grid-template-columns: repeat(2, max-content); } .site-links a:nth-child(even) { margin-right: 0; padding-right: 0; } }
+@media (max-width: 600px) { .footer-nav { display: grid; grid-template-columns: repeat(2, max-content); } .footer-nav a:nth-child(even) { margin-right: 0; padding-right: 0; border-right: 0; } .footer-nav a:last-child { grid-column: 1 / -1; justify-self: center; } }
 @media (max-width: 420px) { .wrap { width: min(100% - 28px, 960px); } .hero { padding: 48px 0; } pre { padding: 16px; font-size: .8rem; } }
+@media (max-width: 420px) { footer { padding: 64px 0 72px; } section.final-cta { padding: 56px 0 64px; } }

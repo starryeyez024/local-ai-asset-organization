@@ -16,9 +16,11 @@ MARKER = ".agent-setup-explorer"
 MARKER_CONTENT = "AI Assets Explorer local output v1\n"
 VIEWER_FILES = ("index.html", "about.html", "serve.py")
 GENERATED_FILES = ("skills.json", "skills-local.json", "scripts-local.json")
+PORT_FILE = ".explorer-port"
+DEFAULT_PORT = 8980
 
 
-def prepare(config, output):
+def prepare(config, output, port=None):
     config = config.expanduser().resolve()
     output = output.expanduser().resolve()
     if output == REPO or REPO in output.parents:
@@ -33,7 +35,16 @@ def prepare(config, output):
             raise ValueError(f"Output is not a directory: {output}")
         if any(output.iterdir()) and (not marker.is_file() or marker.read_text() != MARKER_CONTENT):
             raise ValueError(f"Existing directory is not managed by agent-setup: {output}")
-    for name in (*VIEWER_FILES, *GENERATED_FILES, MARKER):
+    if port is None and (output / PORT_FILE).is_file():
+        try:
+            port = int((output / PORT_FILE).read_text().strip())
+        except ValueError as error:
+            raise ValueError("Invalid saved Explorer port") from error
+    if port is None:
+        port = DEFAULT_PORT
+    if not 1 <= port <= 65535:
+        raise ValueError("Explorer port must be between 1 and 65535")
+    for name in (*VIEWER_FILES, *GENERATED_FILES, MARKER, PORT_FILE):
         target = output / name
         if target.is_symlink() or (target.exists() and not target.is_file()):
             raise ValueError(f"Refusing to replace a link or directory: {target}")
@@ -52,11 +63,13 @@ def prepare(config, output):
         for name in VIEWER_FILES:
             shutil.copyfile(REPO / "skills-explorer" / name, staging / name)
         (staging / MARKER).write_text(MARKER_CONTENT)
+        (staging / PORT_FILE).write_text(f"{port}\n")
         output.mkdir(parents=True, exist_ok=True)
-        for name in (*VIEWER_FILES, *GENERATED_FILES, MARKER):
+        for name in (*VIEWER_FILES, *GENERATED_FILES, MARKER, PORT_FILE):
             shutil.copyfile(staging / name, output / name)
     print(f"Explorer prepared at {output}")
     print(f"Start its local server with Python: {output / 'serve.py'}")
+    print(f"Open http://localhost:{port}")
 
 
 def main():
@@ -65,9 +78,10 @@ def main():
                         help="Setup configuration (default: recommended location or existing legacy config)")
     parser.add_argument("--output-dir", type=Path,
                         default=Path.home() / ".local/share/ai-assets-explorer")
+    parser.add_argument("--port", type=int, help="Local server port; refreshes keep the saved choice")
     args = parser.parse_args()
     try:
-        prepare(args.config, args.output_dir)
+        prepare(args.config, args.output_dir, args.port)
     except (ValueError, OSError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Error: {error}\n")
 

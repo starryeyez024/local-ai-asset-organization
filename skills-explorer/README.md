@@ -19,7 +19,7 @@ make run
 # open http://localhost:8980
 ```
 
-`make run` prepares or refreshes the app and catalogs in `~/.local/share/ai-assets-explorer/`, then starts the copied server on `127.0.0.1:8980`. The Explorer uses port 8980 only. Stop the server with Ctrl+C in the running terminal or by closing that terminal. It uses your existing setup configuration; if none exists, start with agent-setup. You can run the steps separately:
+`make run` prepares or refreshes the app and catalogs in `~/.local/share/ai-assets-explorer/`, then starts the copied server on `127.0.0.1:8980` by default. Use `make run PORT=8990` to save another port; later refreshes and launches reuse it. Stop the server with Ctrl+C in the running terminal or by closing that terminal. It uses your existing setup configuration; if none exists, start with agent-setup. You can run the steps separately:
 
 ```bash
 make regen

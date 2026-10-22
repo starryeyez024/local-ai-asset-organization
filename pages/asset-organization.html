@@ -3,20 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Asset Organization | AI Asset Organization</title>
+  <title>Asset Organization | AI Asset Navigation</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="https://static.redhat.com/libs/redhat/redhat-font/latest/webfonts/red-hat-font.min.css">
-  <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="site.css?v=setup-anchor-10">
 </head>
 <body>
   <nav class="site-nav" aria-label="Primary navigation">
     <div class="wrap site-nav-inner">
-      <span class="site-brand">AI Asset Organization</span>
+      <span class="site-brand">AI Asset Navigation</span>
       <div class="site-links">
         <a href="index.html">Overview</a>
-        <a href="agentic-setup.html">Agentic setup</a>
+        <a href="agentic-setup.html">Agentic Config</a>
         <a href="asset-organization.html" aria-current="page">Asset organization</a>
-        <a href="tool-compatibility.html">Compatibility</a>
         <a href="skills-explorer-guide.html">AI Asset Explorer</a>
       </div>
     </div>
@@ -120,9 +119,10 @@ build-automation          <span class="tree-mark">→</span> <span class="tree g
         <p>For the folder layout, see the <a href="index.html">overview</a>. For differences between local tools and hosted runtimes, use the <a href="tool-compatibility.html">compatibility guide</a>.</p>
       </div>
     </section>
+    <section class="final-cta"><div class="wrap"><p class="section-label">Next guide</p><h2>Turn your assets into a browsable catalog</h2><p>Learn how your assistant creates a private Explorer from your skills and registered scripts, then keeps it current.</p><p><a class="cta-link" href="skills-explorer-guide.html">Read the AI Asset Explorer guide</a></p></div></section>
   </main>
 
-  <footer><div class="wrap">Next in guided setup: your assistant prepares and opens the <a href="skills-explorer-guide.html">AI Asset Explorer</a>. <a href="index.html#start-here">See the full workflow</a>. · <a href="quick-reference.html">Quick reference</a><p>Have feedback or an idea? <a id="feedback-link" href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization/-/work_items?sort=created_date&amp;state=opened&amp;first_page_size=20" target="_blank" rel="noopener noreferrer">Share feedback in the repository</a>.</p></div></footer>
+  <footer><div class="wrap"><nav class="footer-nav" aria-label="Footer navigation"><a href="tool-compatibility.html">Compatibility</a><a href="quick-reference.html">Quick reference</a><a id="feedback-link" href="https://gitlab.cee.redhat.com/ktotten/local-ai-asset-organization/-/work_items?sort=created_date&amp;state=opened&amp;first_page_size=20" target="_blank" rel="noopener noreferrer">Contribute</a></nav></div></footer>
   <script>
     // Source checkout keeps skills/ beside pages/; the published site places both at its root.
     if (location.pathname.includes('/pages/')) {

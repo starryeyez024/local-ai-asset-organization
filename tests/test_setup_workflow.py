@@ -46,7 +46,8 @@ class SetupWorkflow(unittest.TestCase):
 
     def test_documented_config_links_and_explorer_reads_same_folder(self):
         original = (self.source / "SKILL.md").read_bytes()
-        self.run_linker("--dry-run", "example/skills", "report")
+        preview = self.run_linker("--dry-run", "example/skills", "report")
+        self.assertIn(f"Would link: {self.hub / 'report'} -> {self.source}", preview.stdout)
         self.assertFalse(self.hub.exists())
         self.run_linker("example/skills", "report")
         self.assertEqual((self.hub / "report").resolve(), self.source)
@@ -117,6 +118,9 @@ class SetupWorkflow(unittest.TestCase):
         source = self.root / "existing checkout/humanizer"
         self.skill(source, "humanizer")
         target = self.root / "native/.claude/skills"
+        preview = self.run_linker("--dry-run", "--target-dir", target, source, "humanizer")
+        self.assertIn(f"Would link: {target / 'humanizer'} -> {source}", preview.stdout)
+        self.assertFalse(target.exists())
         self.run_linker("--target-dir", target, source, "humanizer")
         self.assertEqual((target / "humanizer").resolve(), source)
         self.assertFalse(self.hub.exists())
@@ -169,6 +173,54 @@ class SetupWorkflow(unittest.TestCase):
         ], capture_output=True, text=True, env=env)
         self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
         return result
+
+    def test_audit_reports_broken_links_and_both_duplicate_types(self):
+        self.hub.mkdir()
+        (self.hub / "report").symlink_to(self.source)
+        (self.hub / "report-alias").symlink_to(self.source)
+        second = self.assets / "another/skills/different-folder"
+        self.skill(second, "report")
+        (self.hub / "other-report").symlink_to(second)
+        (self.hub / "missing").symlink_to(self.root / "missing-skill")
+        output = self.root / "audit viewer"
+        self.prepare_explorer(output)
+        local = json.loads((output / "skills-local.json").read_text())
+        entries = {entry["name"]: entry for entry in local["inventory"]}
+        self.assertEqual(local["inventoryStats"]["broken"], 1)
+        self.assertEqual(local["inventoryStats"]["duplicateIssues"], 3)
+        self.assertTrue(entries["missing"]["broken"])
+        self.assertEqual(entries["report"]["duplicates"]["redundantSymlinks"], ["report-alias"])
+        self.assertIn("other-report", entries["report"]["duplicates"]["nameCollisions"])
+
+    def test_chosen_port_survives_refresh_without_changing_configuration(self):
+        self.hub.mkdir()
+        output = self.root / "port viewer"
+        original_config = self.config.read_bytes()
+        command = [sys.executable, "-B", str(PREPARE_EXPLORER), "--config", str(self.config),
+                   "--output-dir", str(output), "--port", "8990"]
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((output / ".explorer-port").read_text(), "8990\n")
+        self.assertIn("http://localhost:8990", result.stdout)
+        self.prepare_explorer(output)
+        self.assertEqual((output / ".explorer-port").read_text(), "8990\n")
+        self.assertEqual(self.config.read_bytes(), original_config)
+        server_spec = importlib.util.spec_from_file_location("copied_server", output / "serve.py")
+        copied_server = importlib.util.module_from_spec(server_spec)
+        server_spec.loader.exec_module(copied_server)
+        self.assertEqual(copied_server.selected_port(), 8990)
+        self.assertEqual(copied_server.selected_port(8991), 8991)
+
+    def test_invalid_port_preserves_previously_generated_catalog(self):
+        self.hub.mkdir()
+        output = self.root / "port viewer"
+        self.prepare_explorer(output)
+        original = (output / "skills.json").read_bytes()
+        result = subprocess.run([sys.executable, "-B", str(PREPARE_EXPLORER),
+                                 "--config", str(self.config), "--output-dir", str(output),
+                                 "--port", "70000"], capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual((output / "skills.json").read_bytes(), original)
 
     def test_onboarding_prepares_and_refreshes_isolated_explorer(self):
         self.assertFalse((REPO / "skills-explorer/skills.json").exists())
