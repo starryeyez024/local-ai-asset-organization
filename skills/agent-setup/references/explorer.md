@@ -48,6 +48,17 @@ give the user the URL, recording the visual check as pending. Do not claim a bro
 check succeeded when only generation succeeded. Keep the process alive for their
 session, or clearly report if the environment cannot retain it.
 
+After verifying the Explorer, offer an optional shell shortcut for starting its local
+server in a future terminal. Ask whether the user wants one before editing a shell
+startup file. If yes, identify the active shell and its established startup file; ask
+if that is unclear. Check for an existing `ai-explorer` definition before adding
+one, and preserve the file's existing content. Point the shortcut at the actual
+`EXPLORER_DIR/serve.py` (the default is
+`~/.local/share/ai-assets-explorer/serve.py`) and use the selected Python
+interpreter. Do not hard-code a repository checkout path or rerun catalog
+generation on each launch. Validate the relevant shell syntax without starting
+another server. If the user declines, skip this step.
+
 At handoff, tell the user they can ask “open my AI Asset Explorer” or “refresh my
 asset catalog.” On either request, read their saved configuration, rerun the helper
 when a refresh is needed, and open or restart their local server. All three generated
